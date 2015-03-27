@@ -1,148 +1,108 @@
 package com.datastax.sparkstress
 
 import com.datastax.driver.core.Cluster
-import org.apache.spark.SparkContext
+import com.datastax.spark.connector.cql.CassandraConnector
 import org.apache.spark.rdd.RDD
-import org.apache.spark.storage.StorageLevel
+import org.apache.spark.{SparkConf, SparkContext}
 
 import com.datastax.spark.connector._
-import java.util.Random
-import java.util
 
-/**
- * Created by russellspitzer on 5/19/14.
- * For great justice and Datastax
- */
-abstract class WriteTask extends StressTask {
+object WriteTask {
+  val ValidTasks = Set(
+    "writeshortrow",
+    "writeperfrow",
+    "writewiderow",
+    "writerandomwiderow"
+  )
+}
 
-
-  var config = Config()
+abstract class WriteTask( var config: Config, val sc: SparkContext) extends StressTask {
 
   def setupCQL() = {
-    val ipReg = """\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}""".r
-    val ip:String = ipReg findFirstIn(config.master) match {
-      case Some(ipReg) => ipReg
-      case None => "127.0.0.1"
-    }
-    val cluster = Cluster.builder().addContactPoint(ip).build()
-    val session = cluster.connect()
-    printf("Connected to Cassandra at %s\n", ip)
-    val ksCreate = getKeyspaceDef()
-    val tabCreate = getTableDef()
-    if (config.deleteKeyspace){
+    CassandraConnector(sc.getConf).withSessionDo{ session =>
+      if (config.deleteKeyspace){
       println("Destroying Keyspace")
-      session.execute("DROP KEYSPACE "+ksCreate.keyspace)
+      session.execute(s"DROP KEYSPACE IF EXISTS ${config.keyspace}")
+      }
+      val kscql = getKeyspaceCql(config.keyspace)
+      val tbcql = getTableCql(config.table)
+      println(s"Running the following create statements\n$kscql\n$tbcql")
+      session.execute(kscql)
+      session.execute(tbcql)
     }
-    printf("Running the following create statements\n%s\n%s\n",
-      ksCreate.getCqlCreateRepresentation(),
-      tabCreate.getCqlCreateRepresentation()
-    )
-    session.execute(ksCreate.getCqlCreateRepresentation())
-    session.execute(tabCreate.getCqlCreateRepresentation())
-    session.close()
-    cluster.close()
     printf("Done Setting up CQL Keyspace/Table\n")
   }
 
-  def getKeyspaceDef(): KeyspaceDef
+  def getKeyspaceCql(ksName: String): String = s"CREATE KEYSPACE IF NOT EXISTS $ksName WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1 }"
 
-  def getTableDef(): CqlTableDef
+  def getTableCql(tbName: String): String
 
-  def run(sc: SparkContext)
-
-  def setConfig(c:Config){
-    config=c
+  def run(sc: SparkContext) : Unit = {
+    setupCQL()
+    getRDD().saveToCassandra(config.keyspace, config.table)
   }
 
-
+  def setConfig(c: Config): Unit  = {
+    config = c
+  }
 
   def runTrials(sc: SparkContext): Seq[Long] = {
     println("About to Start Trials")
     for (trial <- 1 to config.trials) yield {setupCQL(); time(run(sc))}
   }
 
+  def getRDD(): RDD[_]
 
 }
 
 
-class WriteShortRow extends WriteTask {
+class WriteShortRow(config: Config, sc: SparkContext) extends WriteTask(config, sc) {
 
-  var keyspaceDef = new KeyspaceDef()
-  var tableDef = new CqlTableDef(columns = Seq(("key", "bigint"), ("col1", "text"), ("col2", "text"), ("col3", "text")))
+  def getTableCql(tbName: String): String =
+    s"""CREATE TABLE IF NOT EXISTS $tbName
+       |(key bigint, col1 text, col2 text, col3 text, PRIMARY KEY(key))""".stripMargin
 
-  override def run(sc: SparkContext) = {
-    setupCQL()
-    val rdd = RowGenerator.getShortRowRDD(sc, config.numPartitions, config.totalOps)
-    rdd.saveToCassandra(tableDef.keyspace, tableDef.table)
-  }
-
-  override def getKeyspaceDef(): KeyspaceDef = {
-    keyspaceDef
-  }
-
-  override def getTableDef(): CqlTableDef = {
-    tableDef
-  }
+  def getRDD(): RDD[_] = RowGenerator.getShortRowRDD(sc, config.numPartitions, config.totalOps)
 }
 
-class WritePerfRow extends WriteTask {
+class WritePerfRow(config: Config, sc: SparkContext) extends WriteTask(config, sc) {
 
-  var keyspaceDef = new KeyspaceDef()
-  var tableDef = new CqlTableDef(columns =
-    Seq(("key", "text"), ("size","text"), ("qty","int"), ("time","timestamp"),("color","text"),
-    ("col1", "text"), ("col2", "text"), ("col3", "text"), ("col4","text"),("col5","text"),
-    ("col6", "text"), ("col7", "text"), ("col8", "text"), ("col9","text"),("col10","text")
-    )
-  )
+  def getTableCql(tbName: String): String =
+    s"""CREATE TABLE IF NOT EXISTS $tbName
+       |(key text, size text, qty int, time timestamp, color text,
+       |col1 text, col2 text, col3 text, col4 text, col5 text,
+       |col6 text, col7 text, col8 text, col9 text, col10text,
+       |PRIMARY KEY (key))}
+     """.stripMargin
 
-  override def run(sc: SparkContext) = {
-    val rdd = RowGenerator.getPerfRowRdd(sc, config.numPartitions, config.totalOps)
-    rdd.saveToCassandra(tableDef.keyspace, tableDef.table)
-  }
+  def getRDD(): RDD[_] =
+    RowGenerator
+      .getPerfRowRdd(sc, config.numPartitions, config.totalOps)
 
-  override def getKeyspaceDef(): KeyspaceDef = {
-    keyspaceDef
-  }
-
-  override def getTableDef(): CqlTableDef = {
-    tableDef
-  }
 }
 
-class WriteWideRow extends WriteTask {
+class WriteWideRow(config: Config, sc: SparkContext) extends WriteTask( config, sc){
 
-  var keyspaceDef = new KeyspaceDef()
-  var tableDef = new CqlTableDef(columns = Seq(("key", "int"), ("col1", "text"), ("col2", "text"), ("col3", "text")), clskeys = Seq("col1"))
+  def getTableCql(tbName: String): String =
+    s"""CREATE TABLE IF NOT EXISTS $tbName
+      |(key int, col1 text, col2 text, col3 text,
+      |PRIMARY KEY (key, col1))
+    """.stripMargin
 
-  override def run(sc: SparkContext) = {
-    val rdd = RowGenerator.getWideRowRdd(sc, config.numPartitions, config.totalOps, config.numTotalKeys)
-    rdd.saveToCassandra(tableDef.keyspace, tableDef.table)
-  }
-
-  override def getKeyspaceDef(): KeyspaceDef = {
-    keyspaceDef
-  }
-
-  override def getTableDef(): CqlTableDef = {
-    tableDef
-  }
+  def getRDD(): RDD[_] =
+    RowGenerator
+      .getWideRowRdd(sc, config.numPartitions, config.totalOps, config.numTotalKeys)
 }
 
-class WriteRandomWideRow extends WriteTask {
+class WriteRandomWideRow(config: Config, sc: SparkContext) extends WriteTask(config, sc){
 
-  val keyspaceDef = new KeyspaceDef()
-  val tableDef = new CqlTableDef(columns = Seq(("key", "int"), ("col1", "text"), ("col2", "text"), ("col3", "text")), clskeys = Seq("col1"))
+  def getTableCql(tbName: String): String =
+    s"""CREATE TABLE IF NOT EXISTS $tbName
+       |(key int, col1 text, col2 text, col3 text,
+       |PRIMARY KEY (key, col1))
+     """.stripMargin
 
-  override def run(sc: SparkContext) = {
-    val rdd = RowGenerator.getRandomWideRow(sc, config.numPartitions, config.totalOps, config.numTotalKeys)
-    rdd.saveToCassandra(tableDef.keyspace, tableDef.table)
-  }
+  def getRDD(): RDD[_] =
+    RowGenerator.getRandomWideRow(sc, config.numPartitions, config.totalOps, config.numTotalKeys)
 
-  override def getKeyspaceDef(): KeyspaceDef = {
-    keyspaceDef
-  }
-
-  override def getTableDef(): CqlTableDef = {
-    tableDef
-  }
 }

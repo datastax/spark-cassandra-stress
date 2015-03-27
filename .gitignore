@@ -18,4 +18,8 @@ project/plugins/project/
 .idea
 .idea_modules
 
+# Gradle
+.gradle
+build/
+
 checkpoint
