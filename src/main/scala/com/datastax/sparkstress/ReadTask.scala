@@ -2,9 +2,7 @@ package com.datastax.sparkstress
 
 import org.apache.spark.SparkContext
 import com.datastax.spark.connector._
-/**
- * Created by russellspitzer on 6/6/14.
- */
+
 abstract class ReadTask extends StressTask{
   var config = Config()
 

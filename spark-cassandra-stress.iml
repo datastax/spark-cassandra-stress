@@ -21,10 +21,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/dse/lib/antlr-2.7.7.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/antlr-2.7.7.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/antlr-2.7.7.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/antlr-2.7.7.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/antlr-2.7.7.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/antlr-2.7.7.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -33,10 +29,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: antlr-3.2">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/dse/lib/antlr-3.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/antlr-3.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/antlr-3.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/antlr-3.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/antlr-3.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/antlr-3.2.jar!/" />
         </CLASSES>
@@ -49,10 +41,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/dse/lib/antlr-runtime-3.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/antlr-runtime-3.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/antlr-runtime-3.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/antlr-runtime-3.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/antlr-runtime-3.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/antlr-runtime-3.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -61,10 +49,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: aopalliance-1.0">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/dse/lib/aopalliance-1.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/aopalliance-1.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/aopalliance-1.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/aopalliance-1.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/aopalliance-1.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/aopalliance-1.0.jar!/" />
         </CLASSES>
@@ -77,10 +61,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/dse/lib/api-asn1-api-1.0.0-M24.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/api-asn1-api-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-asn1-api-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-asn1-api-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-asn1-api-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-asn1-api-1.0.0-M24.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -89,10 +69,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: api-asn1-ber-1.0.0-M24">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-asn1-ber-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-asn1-ber-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-asn1-ber-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-asn1-ber-1.0.0-M24.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/api-asn1-ber-1.0.0-M24.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/api-asn1-ber-1.0.0-M24.jar!/" />
         </CLASSES>
@@ -105,10 +81,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/dse/lib/api-i18n-1.0.0-M24.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/api-i18n-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-i18n-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-i18n-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-i18n-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-i18n-1.0.0-M24.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -117,10 +89,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: api-ldap-client-api-1.0.0-M24">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-client-api-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-client-api-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-client-api-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-client-api-1.0.0-M24.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-client-api-1.0.0-M24.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-client-api-1.0.0-M24.jar!/" />
         </CLASSES>
@@ -133,10 +101,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-codec-core-1.0.0-M24.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-codec-core-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-codec-core-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-codec-core-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-codec-core-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-codec-core-1.0.0-M24.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -145,10 +109,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: api-ldap-codec-standalone-1.0.0-M24">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-codec-standalone-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-codec-standalone-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-codec-standalone-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-codec-standalone-1.0.0-M24.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-codec-standalone-1.0.0-M24.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-codec-standalone-1.0.0-M24.jar!/" />
         </CLASSES>
@@ -161,10 +121,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-extras-codec-1.0.0-M24.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-extras-codec-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-extras-codec-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-extras-codec-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-extras-codec-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-extras-codec-1.0.0-M24.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -173,10 +129,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: api-ldap-extras-codec-api-1.0.0-M24">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-extras-codec-api-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-extras-codec-api-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-extras-codec-api-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-extras-codec-api-1.0.0-M24.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-extras-codec-api-1.0.0-M24.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-extras-codec-api-1.0.0-M24.jar!/" />
         </CLASSES>
@@ -189,10 +141,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-model-1.0.0-M24.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-model-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-model-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-model-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-model-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-model-1.0.0-M24.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -201,10 +149,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: api-ldap-net-mina-1.0.0-M24">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-net-mina-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-net-mina-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-net-mina-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-net-mina-1.0.0-M24.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-net-mina-1.0.0-M24.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/api-ldap-net-mina-1.0.0-M24.jar!/" />
         </CLASSES>
@@ -217,10 +161,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/dse/lib/api-util-1.0.0-M24.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/api-util-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-util-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-util-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-util-1.0.0-M24.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/api-util-1.0.0-M24.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -231,10 +171,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/dse/lib/commons-codec-1.9.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/commons-codec-1.9.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/commons-codec-1.9.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/commons-codec-1.9.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/commons-codec-1.9.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/commons-codec-1.9.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -243,10 +179,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: commons-collections-3.2.1">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/dse/lib/commons-collections-3.2.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/commons-collections-3.2.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/commons-collections-3.2.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/commons-collections-3.2.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/commons-collections-3.2.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/commons-collections-3.2.1.jar!/" />
         </CLASSES>
@@ -259,10 +191,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/dse/lib/commons-compiler-2.6.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/commons-compiler-2.6.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/commons-compiler-2.6.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/commons-compiler-2.6.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/commons-compiler-2.6.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/commons-compiler-2.6.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -273,10 +201,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/dse/lib/commons-io-2.4.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/commons-io-2.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/commons-io-2.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/commons-io-2.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/commons-io-2.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/commons-io-2.4.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -285,10 +209,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: commons-lang-2.6">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/dse/lib/commons-lang-2.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/commons-lang-2.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/commons-lang-2.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/commons-lang-2.6.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/commons-lang-2.6.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/commons-lang-2.6.jar!/" />
         </CLASSES>
@@ -301,10 +221,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/dse/lib/commons-pool-1.6.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/commons-pool-1.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/commons-pool-1.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/commons-pool-1.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/commons-pool-1.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/commons-pool-1.6.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -313,10 +229,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: guava-16.0.1">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/dse/lib/guava-16.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/guava-16.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/guava-16.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/guava-16.0.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/guava-16.0.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/guava-16.0.1.jar!/" />
         </CLASSES>
@@ -329,10 +241,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/dse/lib/guice-3.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/guice-3.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/guice-3.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/guice-3.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/guice-3.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/guice-3.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -341,10 +249,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: guice-multibindings-3.0">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/dse/lib/guice-multibindings-3.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/guice-multibindings-3.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/guice-multibindings-3.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/guice-multibindings-3.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/guice-multibindings-3.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/guice-multibindings-3.0.jar!/" />
         </CLASSES>
@@ -357,10 +261,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/dse/lib/HdrHistogram-1.2.1.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/HdrHistogram-1.2.1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/HdrHistogram-1.2.1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/HdrHistogram-1.2.1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/HdrHistogram-1.2.1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/HdrHistogram-1.2.1.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -369,10 +269,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: jackson-annotations-2.2.2">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/dse/lib/jackson-annotations-2.2.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/jackson-annotations-2.2.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/jackson-annotations-2.2.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/jackson-annotations-2.2.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/jackson-annotations-2.2.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/jackson-annotations-2.2.2.jar!/" />
         </CLASSES>
@@ -385,10 +281,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/dse/lib/jackson-core-2.2.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/jackson-core-2.2.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/jackson-core-2.2.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/jackson-core-2.2.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/jackson-core-2.2.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/jackson-core-2.2.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -397,10 +289,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: jackson-databind-2.2.2">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/dse/lib/jackson-databind-2.2.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/jackson-databind-2.2.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/jackson-databind-2.2.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/jackson-databind-2.2.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/jackson-databind-2.2.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/jackson-databind-2.2.2.jar!/" />
         </CLASSES>
@@ -413,10 +301,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/dse/lib/janino-2.6.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/janino-2.6.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/janino-2.6.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/janino-2.6.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/janino-2.6.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/janino-2.6.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -425,10 +309,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: java-uuid-generator-3.1.3">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/dse/lib/java-uuid-generator-3.1.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/java-uuid-generator-3.1.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/java-uuid-generator-3.1.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/java-uuid-generator-3.1.3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/java-uuid-generator-3.1.3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/java-uuid-generator-3.1.3.jar!/" />
         </CLASSES>
@@ -441,10 +321,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/dse/lib/javassist-3.16.1-GA.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/javassist-3.16.1-GA.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/javassist-3.16.1-GA.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/javassist-3.16.1-GA.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/javassist-3.16.1-GA.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/javassist-3.16.1-GA.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -455,10 +331,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/dse/lib/javax.inject-1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/javax.inject-1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/javax.inject-1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/javax.inject-1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/javax.inject-1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/javax.inject-1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -467,10 +339,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: jbcrypt-0.3m">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/dse/lib/jbcrypt-0.3m.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/jbcrypt-0.3m.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/jbcrypt-0.3m.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/jbcrypt-0.3m.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/jbcrypt-0.3m.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/jbcrypt-0.3m.jar!/" />
         </CLASSES>
@@ -483,10 +351,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/dse/lib/jcl-over-slf4j-1.7.10.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/jcl-over-slf4j-1.7.10.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/jcl-over-slf4j-1.7.10.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/jcl-over-slf4j-1.7.10.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/jcl-over-slf4j-1.7.10.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/jcl-over-slf4j-1.7.10.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -495,10 +359,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: jline-1.0">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/dse/lib/jline-1.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/jline-1.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/jline-1.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/jline-1.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/jline-1.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/jline-1.0.jar!/" />
         </CLASSES>
@@ -511,10 +371,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/dse/lib/journalio-1.4.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/journalio-1.4.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/journalio-1.4.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/journalio-1.4.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/journalio-1.4.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/journalio-1.4.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -523,10 +379,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: kmip-1.7.1a">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/dse/lib/kmip-1.7.1a.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/kmip-1.7.1a.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/kmip-1.7.1a.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/kmip-1.7.1a.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/kmip-1.7.1a.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/kmip-1.7.1a.jar!/" />
         </CLASSES>
@@ -539,10 +391,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/dse/lib/log4j-1.2.13.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/log4j-1.2.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/log4j-1.2.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/log4j-1.2.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/log4j-1.2.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/log4j-1.2.13.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -553,10 +401,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/dse/lib/mina-core-2.0.7.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/mina-core-2.0.7.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/mina-core-2.0.7.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/mina-core-2.0.7.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/mina-core-2.0.7.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/mina-core-2.0.7.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -565,10 +409,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: netty-all-4.0.23.Final">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/dse/lib/netty-all-4.0.23.Final.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/netty-all-4.0.23.Final.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/netty-all-4.0.23.Final.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/netty-all-4.0.23.Final.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/netty-all-4.0.23.Final.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/netty-all-4.0.23.Final.jar!/" />
         </CLASSES>
@@ -581,10 +421,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/dse/lib/reflections-0.9.9-RC1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/reflections-0.9.9-RC1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/reflections-0.9.9-RC1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/reflections-0.9.9-RC1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/reflections-0.9.9-RC1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/reflections-0.9.9-RC1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -593,10 +429,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: slf4j-api-1.7.10">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/dse/lib/slf4j-api-1.7.10.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/slf4j-api-1.7.10.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/slf4j-api-1.7.10.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/slf4j-api-1.7.10.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/slf4j-api-1.7.10.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/slf4j-api-1.7.10.jar!/" />
         </CLASSES>
@@ -609,10 +441,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/dse/lib/stringtemplate-3.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/dse/lib/stringtemplate-3.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/stringtemplate-3.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/stringtemplate-3.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/stringtemplate-3.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/dse/lib/stringtemplate-3.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -621,10 +449,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: cassandra-driver-core-2.1.5">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/driver/lib/cassandra-driver-core-2.1.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/driver/lib/cassandra-driver-core-2.1.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/driver/lib/cassandra-driver-core-2.1.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/driver/lib/cassandra-driver-core-2.1.5.jar!/" />
           <root url="jar://$DSE_HOME$/resources/driver/lib/cassandra-driver-core-2.1.5.jar!/" />
           <root url="jar://$DSE_HOME$/resources/driver/lib/cassandra-driver-core-2.1.5.jar!/" />
         </CLASSES>
@@ -637,10 +461,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/driver/lib/cassandra-driver-dse-2.1.5.jar!/" />
           <root url="jar://$DSE_HOME$/resources/driver/lib/cassandra-driver-dse-2.1.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/driver/lib/cassandra-driver-dse-2.1.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/driver/lib/cassandra-driver-dse-2.1.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/driver/lib/cassandra-driver-dse-2.1.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/driver/lib/cassandra-driver-dse-2.1.5.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -649,10 +469,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: metrics-core-3.0.2">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/driver/lib/metrics-core-3.0.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/driver/lib/metrics-core-3.0.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/driver/lib/metrics-core-3.0.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/driver/lib/metrics-core-3.0.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/driver/lib/metrics-core-3.0.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/driver/lib/metrics-core-3.0.2.jar!/" />
         </CLASSES>
@@ -665,10 +481,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/driver/lib/netty-3.9.0.Final.jar!/" />
           <root url="jar://$DSE_HOME$/resources/driver/lib/netty-3.9.0.Final.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/driver/lib/netty-3.9.0.Final.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/driver/lib/netty-3.9.0.Final.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/driver/lib/netty-3.9.0.Final.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/driver/lib/netty-3.9.0.Final.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -677,10 +489,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: slf4j-api-1.7.5">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/driver/lib/slf4j-api-1.7.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/driver/lib/slf4j-api-1.7.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/driver/lib/slf4j-api-1.7.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/driver/lib/slf4j-api-1.7.5.jar!/" />
           <root url="jar://$DSE_HOME$/resources/driver/lib/slf4j-api-1.7.5.jar!/" />
           <root url="jar://$DSE_HOME$/resources/driver/lib/slf4j-api-1.7.5.jar!/" />
         </CLASSES>
@@ -693,10 +501,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/antlr-3.5.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/antlr-3.5.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/antlr-3.5.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/antlr-3.5.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/antlr-3.5.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/antlr-3.5.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -705,10 +509,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: antlr-runtime-3.5.2">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/antlr-runtime-3.5.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/antlr-runtime-3.5.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/antlr-runtime-3.5.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/antlr-runtime-3.5.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/antlr-runtime-3.5.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/antlr-runtime-3.5.2.jar!/" />
         </CLASSES>
@@ -721,10 +521,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/cassandra-all-2.1.3.304.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/cassandra-all-2.1.3.304.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/cassandra-all-2.1.3.304.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/cassandra-all-2.1.3.304.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/cassandra-all-2.1.3.304.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/cassandra-all-2.1.3.304.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -733,10 +529,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: cassandra-clientutil-2.1.3.304">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/cassandra-clientutil-2.1.3.304.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/cassandra-clientutil-2.1.3.304.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/cassandra-clientutil-2.1.3.304.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/cassandra-clientutil-2.1.3.304.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/cassandra-clientutil-2.1.3.304.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/cassandra-clientutil-2.1.3.304.jar!/" />
         </CLASSES>
@@ -749,10 +541,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/cassandra-thrift-2.1.3.304.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/cassandra-thrift-2.1.3.304.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/cassandra-thrift-2.1.3.304.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/cassandra-thrift-2.1.3.304.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/cassandra-thrift-2.1.3.304.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/cassandra-thrift-2.1.3.304.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -761,10 +549,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: commons-cli-1.1">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-cli-1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-cli-1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-cli-1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-cli-1.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-cli-1.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-cli-1.1.jar!/" />
         </CLASSES>
@@ -777,10 +561,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-codec-1.9.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-codec-1.9.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-codec-1.9.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-codec-1.9.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-codec-1.9.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-codec-1.9.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -789,10 +569,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: commons-lang-2.6">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-lang-2.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-lang-2.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-lang-2.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-lang-2.6.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-lang-2.6.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-lang-2.6.jar!/" />
         </CLASSES>
@@ -805,10 +581,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-lang3-3.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-lang3-3.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-lang3-3.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-lang3-3.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-lang3-3.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-lang3-3.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -817,10 +589,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: commons-logging-1.1.1">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-logging-1.1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-logging-1.1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-logging-1.1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-logging-1.1.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-logging-1.1.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-logging-1.1.1.jar!/" />
         </CLASSES>
@@ -833,10 +601,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-math3-3.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-math3-3.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-math3-3.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-math3-3.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-math3-3.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/commons-math3-3.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -845,10 +609,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: compress-lzf-0.8.4">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/compress-lzf-0.8.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/compress-lzf-0.8.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/compress-lzf-0.8.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/compress-lzf-0.8.4.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/compress-lzf-0.8.4.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/compress-lzf-0.8.4.jar!/" />
         </CLASSES>
@@ -861,10 +621,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/concurrentlinkedhashmap-lru-1.3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/concurrentlinkedhashmap-lru-1.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/concurrentlinkedhashmap-lru-1.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/concurrentlinkedhashmap-lru-1.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/concurrentlinkedhashmap-lru-1.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/concurrentlinkedhashmap-lru-1.3.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -875,10 +631,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/disruptor-3.0.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/disruptor-3.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/disruptor-3.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/disruptor-3.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/disruptor-3.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/disruptor-3.0.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -887,10 +639,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: elephant-bird-hadoop-compat-4.3">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/elephant-bird-hadoop-compat-4.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/elephant-bird-hadoop-compat-4.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/elephant-bird-hadoop-compat-4.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/elephant-bird-hadoop-compat-4.3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/elephant-bird-hadoop-compat-4.3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/elephant-bird-hadoop-compat-4.3.jar!/" />
         </CLASSES>
@@ -903,10 +651,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/fastutil-6.5.7.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/fastutil-6.5.7.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/fastutil-6.5.7.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/fastutil-6.5.7.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/fastutil-6.5.7.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/fastutil-6.5.7.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -915,10 +659,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: guava-16.0.1">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/guava-16.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/guava-16.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/guava-16.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/guava-16.0.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/guava-16.0.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/guava-16.0.1.jar!/" />
         </CLASSES>
@@ -931,10 +671,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/hibernate-validator-4.3.0.Final.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/hibernate-validator-4.3.0.Final.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/hibernate-validator-4.3.0.Final.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/hibernate-validator-4.3.0.Final.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/hibernate-validator-4.3.0.Final.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/hibernate-validator-4.3.0.Final.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -943,10 +679,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: high-scale-lib-1.0.6">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/high-scale-lib-1.0.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/high-scale-lib-1.0.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/high-scale-lib-1.0.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/high-scale-lib-1.0.6.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/high-scale-lib-1.0.6.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/high-scale-lib-1.0.6.jar!/" />
         </CLASSES>
@@ -959,10 +691,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/httpclient-4.2.5.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/httpclient-4.2.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/httpclient-4.2.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/httpclient-4.2.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/httpclient-4.2.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/httpclient-4.2.5.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -971,10 +699,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: httpcore-4.2.4">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/httpcore-4.2.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/httpcore-4.2.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/httpcore-4.2.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/httpcore-4.2.4.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/httpcore-4.2.4.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/httpcore-4.2.4.jar!/" />
         </CLASSES>
@@ -987,10 +711,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/jackson-core-asl-1.9.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/jackson-core-asl-1.9.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/jackson-core-asl-1.9.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/jackson-core-asl-1.9.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/jackson-core-asl-1.9.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/jackson-core-asl-1.9.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -999,10 +719,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: jackson-mapper-asl-1.9.2">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/jackson-mapper-asl-1.9.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/jackson-mapper-asl-1.9.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/jackson-mapper-asl-1.9.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/jackson-mapper-asl-1.9.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/jackson-mapper-asl-1.9.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/jackson-mapper-asl-1.9.2.jar!/" />
         </CLASSES>
@@ -1015,10 +731,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/jamm-0.3.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/jamm-0.3.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/jamm-0.3.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/jamm-0.3.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/jamm-0.3.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/jamm-0.3.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1027,10 +739,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: jbcrypt-0.3m">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/jbcrypt-0.3m.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/jbcrypt-0.3m.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/jbcrypt-0.3m.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/jbcrypt-0.3m.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/jbcrypt-0.3m.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/jbcrypt-0.3m.jar!/" />
         </CLASSES>
@@ -1043,10 +751,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/jna-4.0.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/jna-4.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/jna-4.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/jna-4.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/jna-4.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/jna-4.0.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1055,10 +759,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: joda-time-1.6.2">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/joda-time-1.6.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/joda-time-1.6.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/joda-time-1.6.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/joda-time-1.6.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/joda-time-1.6.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/joda-time-1.6.2.jar!/" />
         </CLASSES>
@@ -1071,10 +771,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/json-simple-1.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/json-simple-1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/json-simple-1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/json-simple-1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/json-simple-1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/json-simple-1.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1083,10 +779,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: libthrift-0.9.2">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/libthrift-0.9.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/libthrift-0.9.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/libthrift-0.9.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/libthrift-0.9.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/libthrift-0.9.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/libthrift-0.9.2.jar!/" />
         </CLASSES>
@@ -1099,10 +791,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/logback-classic-1.1.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/logback-classic-1.1.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/logback-classic-1.1.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/logback-classic-1.1.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/logback-classic-1.1.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/logback-classic-1.1.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1113,10 +801,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/logback-core-1.1.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/logback-core-1.1.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/logback-core-1.1.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/logback-core-1.1.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/logback-core-1.1.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/logback-core-1.1.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1125,10 +809,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: lz4-1.2.0">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/lz4-1.2.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/lz4-1.2.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/lz4-1.2.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/lz4-1.2.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/lz4-1.2.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/lz4-1.2.0.jar!/" />
         </CLASSES>
@@ -1141,10 +821,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/metrics-core-2.2.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/metrics-core-2.2.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/metrics-core-2.2.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/metrics-core-2.2.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/metrics-core-2.2.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/metrics-core-2.2.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1153,10 +829,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: netty-all-4.0.23.Final">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/netty-all-4.0.23.Final.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/netty-all-4.0.23.Final.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/netty-all-4.0.23.Final.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/netty-all-4.0.23.Final.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/netty-all-4.0.23.Final.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/netty-all-4.0.23.Final.jar!/" />
         </CLASSES>
@@ -1169,10 +841,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/reporter-config-2.1.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/reporter-config-2.1.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/reporter-config-2.1.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/reporter-config-2.1.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/reporter-config-2.1.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/reporter-config-2.1.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1181,10 +849,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: slf4j-api-1.7.6">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/slf4j-api-1.7.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/slf4j-api-1.7.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/slf4j-api-1.7.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/slf4j-api-1.7.6.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/slf4j-api-1.7.6.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/slf4j-api-1.7.6.jar!/" />
         </CLASSES>
@@ -1197,10 +861,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/snakeyaml-1.12.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/snakeyaml-1.12.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/snakeyaml-1.12.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/snakeyaml-1.12.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/snakeyaml-1.12.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/snakeyaml-1.12.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1209,10 +869,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: snappy-java-1.0.5.2">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/snappy-java-1.0.5.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/snappy-java-1.0.5.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/snappy-java-1.0.5.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/snappy-java-1.0.5.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/snappy-java-1.0.5.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/snappy-java-1.0.5.2.jar!/" />
         </CLASSES>
@@ -1225,10 +881,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/ST4-4.0.8.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/ST4-4.0.8.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/ST4-4.0.8.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/ST4-4.0.8.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/ST4-4.0.8.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/ST4-4.0.8.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1237,10 +889,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: stream-2.5.2">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/stream-2.5.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/stream-2.5.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/stream-2.5.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/stream-2.5.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/stream-2.5.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/stream-2.5.2.jar!/" />
         </CLASSES>
@@ -1253,10 +901,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/stringtemplate-4.0.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/stringtemplate-4.0.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/stringtemplate-4.0.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/stringtemplate-4.0.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/stringtemplate-4.0.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/stringtemplate-4.0.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1265,10 +909,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: super-csv-2.1.0">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/super-csv-2.1.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/super-csv-2.1.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/super-csv-2.1.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/super-csv-2.1.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/super-csv-2.1.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/super-csv-2.1.0.jar!/" />
         </CLASSES>
@@ -1281,10 +921,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/thrift-server-0.3.7.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/thrift-server-0.3.7.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/thrift-server-0.3.7.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/thrift-server-0.3.7.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/thrift-server-0.3.7.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/thrift-server-0.3.7.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1293,10 +929,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: thrift-server-internal-only-0.3.3">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/thrift-server-internal-only-0.3.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/thrift-server-internal-only-0.3.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/thrift-server-internal-only-0.3.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/thrift-server-internal-only-0.3.3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/thrift-server-internal-only-0.3.3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/thrift-server-internal-only-0.3.3.jar!/" />
         </CLASSES>
@@ -1309,10 +941,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/validation-api-1.0.0.GA.jar!/" />
           <root url="jar://$DSE_HOME$/resources/cassandra/lib/validation-api-1.0.0.GA.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/validation-api-1.0.0.GA.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/validation-api-1.0.0.GA.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/validation-api-1.0.0.GA.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/cassandra/lib/validation-api-1.0.0.GA.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1321,10 +949,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: akka-actor_2.10-2.3.4-spark">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/akka-actor_2.10-2.3.4-spark.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/akka-actor_2.10-2.3.4-spark.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/akka-actor_2.10-2.3.4-spark.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/akka-actor_2.10-2.3.4-spark.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/akka-actor_2.10-2.3.4-spark.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/akka-actor_2.10-2.3.4-spark.jar!/" />
         </CLASSES>
@@ -1337,10 +961,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/akka-remote_2.10-2.3.4-spark.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/akka-remote_2.10-2.3.4-spark.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/akka-remote_2.10-2.3.4-spark.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/akka-remote_2.10-2.3.4-spark.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/akka-remote_2.10-2.3.4-spark.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/akka-remote_2.10-2.3.4-spark.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1349,10 +969,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: akka-slf4j_2.10-2.3.4-spark">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/akka-slf4j_2.10-2.3.4-spark.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/akka-slf4j_2.10-2.3.4-spark.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/akka-slf4j_2.10-2.3.4-spark.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/akka-slf4j_2.10-2.3.4-spark.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/akka-slf4j_2.10-2.3.4-spark.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/akka-slf4j_2.10-2.3.4-spark.jar!/" />
         </CLASSES>
@@ -1365,10 +981,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/arpack_combined_all-0.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/arpack_combined_all-0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/arpack_combined_all-0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/arpack_combined_all-0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/arpack_combined_all-0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/arpack_combined_all-0.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1377,10 +989,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: avro-1.7.6">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/avro-1.7.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/avro-1.7.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/avro-1.7.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/avro-1.7.6.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/avro-1.7.6.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/avro-1.7.6.jar!/" />
         </CLASSES>
@@ -1393,10 +1001,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/avro-ipc-1.5.3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/avro-ipc-1.5.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/avro-ipc-1.5.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/avro-ipc-1.5.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/avro-ipc-1.5.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/avro-ipc-1.5.3.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1405,10 +1009,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: avro-mapred-1.7.6">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/avro-mapred-1.7.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/avro-mapred-1.7.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/avro-mapred-1.7.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/avro-mapred-1.7.6.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/avro-mapred-1.7.6.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/avro-mapred-1.7.6.jar!/" />
         </CLASSES>
@@ -1421,10 +1021,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/breeze-macros_2.10-0.3.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/breeze-macros_2.10-0.3.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/breeze-macros_2.10-0.3.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/breeze-macros_2.10-0.3.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/breeze-macros_2.10-0.3.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/breeze-macros_2.10-0.3.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1433,10 +1029,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: breeze_2.10-0.10">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/breeze_2.10-0.10.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/breeze_2.10-0.10.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/breeze_2.10-0.10.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/breeze_2.10-0.10.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/breeze_2.10-0.10.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/breeze_2.10-0.10.jar!/" />
         </CLASSES>
@@ -1449,10 +1041,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/chill-java-0.5.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/chill-java-0.5.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/chill-java-0.5.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/chill-java-0.5.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/chill-java-0.5.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/chill-java-0.5.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1461,10 +1049,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: chill_2.10-0.5.0">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/chill_2.10-0.5.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/chill_2.10-0.5.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/chill_2.10-0.5.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/chill_2.10-0.5.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/chill_2.10-0.5.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/chill_2.10-0.5.0.jar!/" />
         </CLASSES>
@@ -1477,10 +1061,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/commons-codec-1.5.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/commons-codec-1.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-codec-1.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-codec-1.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-codec-1.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-codec-1.5.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1489,10 +1069,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: commons-collections-3.2.1">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-collections-3.2.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-collections-3.2.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-collections-3.2.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-collections-3.2.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/commons-collections-3.2.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/commons-collections-3.2.1.jar!/" />
         </CLASSES>
@@ -1505,10 +1081,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/commons-compress-1.4.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/commons-compress-1.4.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-compress-1.4.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-compress-1.4.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-compress-1.4.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-compress-1.4.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1519,10 +1091,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/commons-httpclient-3.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/commons-httpclient-3.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-httpclient-3.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-httpclient-3.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-httpclient-3.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-httpclient-3.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1531,10 +1099,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: commons-lang-2.4">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-lang-2.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-lang-2.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-lang-2.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-lang-2.4.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/commons-lang-2.4.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/commons-lang-2.4.jar!/" />
         </CLASSES>
@@ -1547,10 +1111,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/commons-lang3-3.3.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/commons-lang3-3.3.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-lang3-3.3.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-lang3-3.3.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-lang3-3.3.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-lang3-3.3.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1559,10 +1119,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: commons-logging-1.1.1">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-logging-1.1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-logging-1.1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-logging-1.1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-logging-1.1.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/commons-logging-1.1.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/commons-logging-1.1.1.jar!/" />
         </CLASSES>
@@ -1575,10 +1131,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/commons-math3-3.1.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/commons-math3-3.1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-math3-3.1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-math3-3.1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-math3-3.1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-math3-3.1.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1587,10 +1139,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: commons-net-2.2">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-net-2.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-net-2.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-net-2.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/commons-net-2.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/commons-net-2.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/commons-net-2.2.jar!/" />
         </CLASSES>
@@ -1603,10 +1151,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/compress-lzf-1.0.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/compress-lzf-1.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/compress-lzf-1.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/compress-lzf-1.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/compress-lzf-1.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/compress-lzf-1.0.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1615,10 +1159,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: config-1.2.1">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/config-1.2.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/config-1.2.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/config-1.2.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/config-1.2.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/config-1.2.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/config-1.2.1.jar!/" />
         </CLASSES>
@@ -1631,10 +1171,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/core-1.1.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/core-1.1.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/core-1.1.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/core-1.1.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/core-1.1.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/core-1.1.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1643,10 +1179,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: curator-client-2.4.0">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/curator-client-2.4.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/curator-client-2.4.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/curator-client-2.4.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/curator-client-2.4.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/curator-client-2.4.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/curator-client-2.4.0.jar!/" />
         </CLASSES>
@@ -1659,10 +1191,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/curator-framework-2.4.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/curator-framework-2.4.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/curator-framework-2.4.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/curator-framework-2.4.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/curator-framework-2.4.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/curator-framework-2.4.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1671,10 +1199,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: curator-recipes-2.4.0">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/curator-recipes-2.4.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/curator-recipes-2.4.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/curator-recipes-2.4.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/curator-recipes-2.4.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/curator-recipes-2.4.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/curator-recipes-2.4.0.jar!/" />
         </CLASSES>
@@ -1687,10 +1211,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/guava-16.0.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/guava-16.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/guava-16.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/guava-16.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/guava-16.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/guava-16.0.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1699,10 +1219,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: hadoop-client-1.0.4">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/hadoop-client-1.0.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/hadoop-client-1.0.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/hadoop-client-1.0.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/hadoop-client-1.0.4.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/hadoop-client-1.0.4.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/hadoop-client-1.0.4.jar!/" />
         </CLASSES>
@@ -1715,10 +1231,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/hamcrest-core-1.3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/hamcrest-core-1.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/hamcrest-core-1.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/hamcrest-core-1.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/hamcrest-core-1.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/hamcrest-core-1.3.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1727,10 +1239,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: jackson-annotations-2.3.0">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-annotations-2.3.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-annotations-2.3.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-annotations-2.3.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-annotations-2.3.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-annotations-2.3.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-annotations-2.3.0.jar!/" />
         </CLASSES>
@@ -1743,10 +1251,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-core-2.3.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-core-2.3.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-core-2.3.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-core-2.3.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-core-2.3.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-core-2.3.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1755,10 +1259,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: jackson-core-asl-1.9.13">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-core-asl-1.9.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-core-asl-1.9.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-core-asl-1.9.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-core-asl-1.9.13.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-core-asl-1.9.13.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-core-asl-1.9.13.jar!/" />
         </CLASSES>
@@ -1771,10 +1271,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-databind-2.3.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-databind-2.3.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-databind-2.3.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-databind-2.3.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-databind-2.3.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-databind-2.3.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1785,10 +1281,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-mapper-asl-1.9.13.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-mapper-asl-1.9.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-mapper-asl-1.9.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-mapper-asl-1.9.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-mapper-asl-1.9.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jackson-mapper-asl-1.9.13.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1797,10 +1289,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: jansi-1.4">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jansi-1.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jansi-1.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jansi-1.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jansi-1.4.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jansi-1.4.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jansi-1.4.jar!/" />
         </CLASSES>
@@ -1813,10 +1301,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/javax.activation-1.1.0.v201105071233.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/javax.activation-1.1.0.v201105071233.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/javax.activation-1.1.0.v201105071233.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/javax.activation-1.1.0.v201105071233.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/javax.activation-1.1.0.v201105071233.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/javax.activation-1.1.0.v201105071233.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1825,10 +1309,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: javax.mail.glassfish-1.4.1.v201005082020">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/javax.mail.glassfish-1.4.1.v201005082020.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/javax.mail.glassfish-1.4.1.v201005082020.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/javax.mail.glassfish-1.4.1.v201005082020.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/javax.mail.glassfish-1.4.1.v201005082020.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/javax.mail.glassfish-1.4.1.v201005082020.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/javax.mail.glassfish-1.4.1.v201005082020.jar!/" />
         </CLASSES>
@@ -1841,10 +1321,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/javax.servlet-3.0.0.v201112011016.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/javax.servlet-3.0.0.v201112011016.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/javax.servlet-3.0.0.v201112011016.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/javax.servlet-3.0.0.v201112011016.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/javax.servlet-3.0.0.v201112011016.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/javax.servlet-3.0.0.v201112011016.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1853,10 +1329,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: javax.transaction-1.1.1.v201105210645">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/javax.transaction-1.1.1.v201105210645.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/javax.transaction-1.1.1.v201105210645.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/javax.transaction-1.1.1.v201105210645.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/javax.transaction-1.1.1.v201105210645.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/javax.transaction-1.1.1.v201105210645.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/javax.transaction-1.1.1.v201105210645.jar!/" />
         </CLASSES>
@@ -1869,10 +1341,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/jblas-1.2.3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jblas-1.2.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jblas-1.2.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jblas-1.2.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jblas-1.2.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jblas-1.2.3.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1881,10 +1349,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: jets3t-0.7.1">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jets3t-0.7.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jets3t-0.7.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jets3t-0.7.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jets3t-0.7.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jets3t-0.7.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jets3t-0.7.1.jar!/" />
         </CLASSES>
@@ -1897,10 +1361,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-continuation-8.1.14.v20131031.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-continuation-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-continuation-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-continuation-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-continuation-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-continuation-8.1.14.v20131031.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1909,10 +1369,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: jetty-http-8.1.14.v20131031">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-http-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-http-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-http-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-http-8.1.14.v20131031.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-http-8.1.14.v20131031.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-http-8.1.14.v20131031.jar!/" />
         </CLASSES>
@@ -1925,10 +1381,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-io-8.1.14.v20131031.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-io-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-io-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-io-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-io-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-io-8.1.14.v20131031.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1937,10 +1389,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: jetty-jndi-8.1.14.v20131031">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-jndi-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-jndi-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-jndi-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-jndi-8.1.14.v20131031.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-jndi-8.1.14.v20131031.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-jndi-8.1.14.v20131031.jar!/" />
         </CLASSES>
@@ -1953,10 +1401,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-plus-8.1.14.v20131031.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-plus-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-plus-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-plus-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-plus-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-plus-8.1.14.v20131031.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1965,10 +1409,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: jetty-security-8.1.14.v20131031">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-security-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-security-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-security-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-security-8.1.14.v20131031.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-security-8.1.14.v20131031.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-security-8.1.14.v20131031.jar!/" />
         </CLASSES>
@@ -1981,10 +1421,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-server-8.1.14.v20131031.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-server-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-server-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-server-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-server-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-server-8.1.14.v20131031.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -1993,10 +1429,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: jetty-servlet-8.1.14.v20131031">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-servlet-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-servlet-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-servlet-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-servlet-8.1.14.v20131031.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-servlet-8.1.14.v20131031.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-servlet-8.1.14.v20131031.jar!/" />
         </CLASSES>
@@ -2009,10 +1441,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-util-8.1.14.v20131031.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-util-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-util-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-util-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-util-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-util-8.1.14.v20131031.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2021,10 +1449,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: jetty-webapp-8.1.14.v20131031">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-webapp-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-webapp-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-webapp-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-webapp-8.1.14.v20131031.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-webapp-8.1.14.v20131031.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-webapp-8.1.14.v20131031.jar!/" />
         </CLASSES>
@@ -2037,10 +1461,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-xml-8.1.14.v20131031.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-xml-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-xml-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-xml-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-xml-8.1.14.v20131031.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jetty-xml-8.1.14.v20131031.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2049,10 +1469,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: jline-2.10.4">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jline-2.10.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jline-2.10.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jline-2.10.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jline-2.10.4.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jline-2.10.4.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jline-2.10.4.jar!/" />
         </CLASSES>
@@ -2065,10 +1481,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/joda-convert-1.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/joda-convert-1.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/joda-convert-1.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/joda-convert-1.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/joda-convert-1.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/joda-convert-1.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2077,10 +1489,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: joda-time-2.3">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/joda-time-2.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/joda-time-2.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/joda-time-2.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/joda-time-2.3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/joda-time-2.3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/joda-time-2.3.jar!/" />
         </CLASSES>
@@ -2093,10 +1501,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/json4s-ast_2.10-3.2.10.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/json4s-ast_2.10-3.2.10.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/json4s-ast_2.10-3.2.10.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/json4s-ast_2.10-3.2.10.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/json4s-ast_2.10-3.2.10.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/json4s-ast_2.10-3.2.10.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2105,10 +1509,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: json4s-core_2.10-3.2.10">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/json4s-core_2.10-3.2.10.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/json4s-core_2.10-3.2.10.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/json4s-core_2.10-3.2.10.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/json4s-core_2.10-3.2.10.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/json4s-core_2.10-3.2.10.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/json4s-core_2.10-3.2.10.jar!/" />
         </CLASSES>
@@ -2121,10 +1521,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/json4s-jackson_2.10-3.2.10.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/json4s-jackson_2.10-3.2.10.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/json4s-jackson_2.10-3.2.10.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/json4s-jackson_2.10-3.2.10.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/json4s-jackson_2.10-3.2.10.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/json4s-jackson_2.10-3.2.10.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2133,10 +1529,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: jsr305-1.3.9">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jsr305-1.3.9.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jsr305-1.3.9.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jsr305-1.3.9.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jsr305-1.3.9.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jsr305-1.3.9.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jsr305-1.3.9.jar!/" />
         </CLASSES>
@@ -2149,10 +1541,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/jtransforms-2.4.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/jtransforms-2.4.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jtransforms-2.4.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jtransforms-2.4.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jtransforms-2.4.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/jtransforms-2.4.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2161,10 +1549,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: junit-4.11">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/junit-4.11.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/junit-4.11.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/junit-4.11.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/junit-4.11.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/junit-4.11.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/junit-4.11.jar!/" />
         </CLASSES>
@@ -2177,10 +1561,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/kryo-2.24.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/kryo-2.24.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/kryo-2.24.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/kryo-2.24.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/kryo-2.24.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/kryo-2.24.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2189,10 +1569,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: lz4-1.2.0">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/lz4-1.2.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/lz4-1.2.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/lz4-1.2.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/lz4-1.2.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/lz4-1.2.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/lz4-1.2.0.jar!/" />
         </CLASSES>
@@ -2205,10 +1581,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/mesos-0.18.1-shaded-protobuf.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/mesos-0.18.1-shaded-protobuf.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/mesos-0.18.1-shaded-protobuf.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/mesos-0.18.1-shaded-protobuf.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/mesos-0.18.1-shaded-protobuf.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/mesos-0.18.1-shaded-protobuf.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2217,10 +1589,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: metrics-core-3.0.2">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/metrics-core-3.0.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/metrics-core-3.0.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/metrics-core-3.0.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/metrics-core-3.0.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/metrics-core-3.0.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/metrics-core-3.0.2.jar!/" />
         </CLASSES>
@@ -2233,10 +1601,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/metrics-graphite-3.0.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/metrics-graphite-3.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/metrics-graphite-3.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/metrics-graphite-3.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/metrics-graphite-3.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/metrics-graphite-3.0.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2245,10 +1609,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: metrics-json-3.0.0">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/metrics-json-3.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/metrics-json-3.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/metrics-json-3.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/metrics-json-3.0.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/metrics-json-3.0.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/metrics-json-3.0.0.jar!/" />
         </CLASSES>
@@ -2261,10 +1621,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/metrics-jvm-3.0.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/metrics-jvm-3.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/metrics-jvm-3.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/metrics-jvm-3.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/metrics-jvm-3.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/metrics-jvm-3.0.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2273,10 +1629,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: minlog-1.2">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/minlog-1.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/minlog-1.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/minlog-1.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/minlog-1.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/minlog-1.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/minlog-1.2.jar!/" />
         </CLASSES>
@@ -2289,10 +1641,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/netty-3.8.0.Final.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/netty-3.8.0.Final.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/netty-3.8.0.Final.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/netty-3.8.0.Final.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/netty-3.8.0.Final.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/netty-3.8.0.Final.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2301,10 +1649,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: netty-all-4.0.23.Final">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/netty-all-4.0.23.Final.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/netty-all-4.0.23.Final.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/netty-all-4.0.23.Final.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/netty-all-4.0.23.Final.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/netty-all-4.0.23.Final.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/netty-all-4.0.23.Final.jar!/" />
         </CLASSES>
@@ -2317,10 +1661,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/objenesis-2.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/objenesis-2.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/objenesis-2.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/objenesis-2.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/objenesis-2.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/objenesis-2.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2329,10 +1669,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: opencsv-2.3">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/opencsv-2.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/opencsv-2.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/opencsv-2.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/opencsv-2.3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/opencsv-2.3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/opencsv-2.3.jar!/" />
         </CLASSES>
@@ -2345,10 +1681,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/paranamer-2.3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/paranamer-2.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/paranamer-2.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/paranamer-2.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/paranamer-2.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/paranamer-2.3.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2357,10 +1689,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: parquet-column-1.6.0rc3">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-column-1.6.0rc3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-column-1.6.0rc3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-column-1.6.0rc3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-column-1.6.0rc3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-column-1.6.0rc3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-column-1.6.0rc3.jar!/" />
         </CLASSES>
@@ -2373,10 +1701,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-common-1.6.0rc3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-common-1.6.0rc3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-common-1.6.0rc3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-common-1.6.0rc3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-common-1.6.0rc3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-common-1.6.0rc3.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2385,10 +1709,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: parquet-encoding-1.6.0rc3">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-encoding-1.6.0rc3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-encoding-1.6.0rc3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-encoding-1.6.0rc3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-encoding-1.6.0rc3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-encoding-1.6.0rc3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-encoding-1.6.0rc3.jar!/" />
         </CLASSES>
@@ -2401,10 +1721,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-format-2.2.0-rc1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-format-2.2.0-rc1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-format-2.2.0-rc1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-format-2.2.0-rc1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-format-2.2.0-rc1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-format-2.2.0-rc1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2413,10 +1729,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: parquet-generator-1.6.0rc3">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-generator-1.6.0rc3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-generator-1.6.0rc3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-generator-1.6.0rc3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-generator-1.6.0rc3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-generator-1.6.0rc3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-generator-1.6.0rc3.jar!/" />
         </CLASSES>
@@ -2429,10 +1741,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-hadoop-1.6.0rc3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-hadoop-1.6.0rc3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-hadoop-1.6.0rc3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-hadoop-1.6.0rc3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-hadoop-1.6.0rc3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-hadoop-1.6.0rc3.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2441,10 +1749,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: parquet-hive-bundle-1.5.0">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-hive-bundle-1.5.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-hive-bundle-1.5.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-hive-bundle-1.5.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-hive-bundle-1.5.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-hive-bundle-1.5.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-hive-bundle-1.5.0.jar!/" />
         </CLASSES>
@@ -2457,10 +1761,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-jackson-1.6.0rc3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-jackson-1.6.0rc3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-jackson-1.6.0rc3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-jackson-1.6.0rc3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-jackson-1.6.0rc3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/parquet-jackson-1.6.0rc3.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2469,10 +1769,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: protobuf-java-2.5.0-spark">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/protobuf-java-2.5.0-spark.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/protobuf-java-2.5.0-spark.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/protobuf-java-2.5.0-spark.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/protobuf-java-2.5.0-spark.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/protobuf-java-2.5.0-spark.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/protobuf-java-2.5.0-spark.jar!/" />
         </CLASSES>
@@ -2485,10 +1781,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/py4j-0.8.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/py4j-0.8.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/py4j-0.8.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/py4j-0.8.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/py4j-0.8.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/py4j-0.8.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2497,10 +1789,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: pyrolite-2.0.1">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/pyrolite-2.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/pyrolite-2.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/pyrolite-2.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/pyrolite-2.0.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/pyrolite-2.0.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/pyrolite-2.0.1.jar!/" />
         </CLASSES>
@@ -2513,10 +1801,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/quasiquotes_2.10-2.0.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/quasiquotes_2.10-2.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/quasiquotes_2.10-2.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/quasiquotes_2.10-2.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/quasiquotes_2.10-2.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/quasiquotes_2.10-2.0.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2525,10 +1809,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: RoaringBitmap-0.4.5">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/RoaringBitmap-0.4.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/RoaringBitmap-0.4.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/RoaringBitmap-0.4.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/RoaringBitmap-0.4.5.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/RoaringBitmap-0.4.5.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/RoaringBitmap-0.4.5.jar!/" />
         </CLASSES>
@@ -2541,10 +1821,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/scala-compiler-2.10.4.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/scala-compiler-2.10.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/scala-compiler-2.10.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/scala-compiler-2.10.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/scala-compiler-2.10.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/scala-compiler-2.10.4.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2553,10 +1829,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: scala-library-2.10.4">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/scala-library-2.10.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/scala-library-2.10.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/scala-library-2.10.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/scala-library-2.10.4.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/scala-library-2.10.4.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/scala-library-2.10.4.jar!/" />
         </CLASSES>
@@ -2569,10 +1841,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/scala-reflect-2.10.4.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/scala-reflect-2.10.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/scala-reflect-2.10.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/scala-reflect-2.10.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/scala-reflect-2.10.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/scala-reflect-2.10.4.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2581,10 +1849,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: scalap-2.10.0">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/scalap-2.10.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/scalap-2.10.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/scalap-2.10.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/scalap-2.10.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/scalap-2.10.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/scalap-2.10.0.jar!/" />
         </CLASSES>
@@ -2597,10 +1861,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/snappy-java-1.0.5.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/snappy-java-1.0.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/snappy-java-1.0.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/snappy-java-1.0.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/snappy-java-1.0.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/snappy-java-1.0.5.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2609,10 +1869,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: spark-bagel_2.10-1.2.1_dse-SNAPSHOT">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-bagel_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-bagel_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-bagel_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-bagel_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-bagel_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-bagel_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
         </CLASSES>
@@ -2625,10 +1881,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-cassandra-connector-java_2.10-1.2.0-alpha3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-cassandra-connector-java_2.10-1.2.0-alpha3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-cassandra-connector-java_2.10-1.2.0-alpha3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-cassandra-connector-java_2.10-1.2.0-alpha3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-cassandra-connector-java_2.10-1.2.0-alpha3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-cassandra-connector-java_2.10-1.2.0-alpha3.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2637,10 +1889,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: spark-cassandra-connector_2.10-1.2.0-alpha3">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-cassandra-connector_2.10-1.2.0-alpha3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-cassandra-connector_2.10-1.2.0-alpha3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-cassandra-connector_2.10-1.2.0-alpha3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-cassandra-connector_2.10-1.2.0-alpha3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-cassandra-connector_2.10-1.2.0-alpha3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-cassandra-connector_2.10-1.2.0-alpha3.jar!/" />
         </CLASSES>
@@ -2653,10 +1901,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-catalyst_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-catalyst_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-catalyst_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-catalyst_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-catalyst_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-catalyst_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2665,10 +1909,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: spark-core_2.10-1.2.1_dse-SNAPSHOT">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-core_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-core_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-core_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-core_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-core_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-core_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
         </CLASSES>
@@ -2681,10 +1921,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-graphx_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-graphx_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-graphx_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-graphx_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-graphx_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-graphx_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2693,10 +1929,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: spark-hive-thriftserver_2.10-1.2.1_dse-SNAPSHOT">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-hive-thriftserver_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-hive-thriftserver_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-hive-thriftserver_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-hive-thriftserver_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-hive-thriftserver_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-hive-thriftserver_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
         </CLASSES>
@@ -2709,10 +1941,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-hive_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-hive_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-hive_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-hive_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-hive_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-hive_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2721,10 +1949,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: spark-mllib_2.10-1.2.1_dse-SNAPSHOT">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-mllib_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-mllib_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-mllib_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-mllib_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-mllib_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-mllib_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
         </CLASSES>
@@ -2737,10 +1961,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-network-common_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-network-common_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-network-common_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-network-common_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-network-common_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-network-common_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2749,10 +1969,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: spark-network-shuffle_2.10-1.2.1_dse-SNAPSHOT">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-network-shuffle_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-network-shuffle_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-network-shuffle_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-network-shuffle_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-network-shuffle_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-network-shuffle_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
         </CLASSES>
@@ -2765,10 +1981,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-repl_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-repl_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-repl_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-repl_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-repl_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-repl_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2777,10 +1989,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: spark-sql_2.10-1.2.1_dse-SNAPSHOT">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-sql_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-sql_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-sql_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-sql_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-sql_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-sql_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
         </CLASSES>
@@ -2793,10 +2001,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-streaming_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/spark-streaming_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-streaming_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-streaming_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-streaming_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spark-streaming_2.10-1.2.1_dse-SNAPSHOT.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2805,10 +2009,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: spire-macros_2.10-0.7.4">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spire-macros_2.10-0.7.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spire-macros_2.10-0.7.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spire-macros_2.10-0.7.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spire-macros_2.10-0.7.4.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/spire-macros_2.10-0.7.4.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/spire-macros_2.10-0.7.4.jar!/" />
         </CLASSES>
@@ -2821,10 +2021,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/spire_2.10-0.7.4.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/spire_2.10-0.7.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spire_2.10-0.7.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spire_2.10-0.7.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spire_2.10-0.7.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/spire_2.10-0.7.4.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2833,10 +2029,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: stream-2.7.0">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/stream-2.7.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/stream-2.7.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/stream-2.7.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/stream-2.7.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/stream-2.7.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/stream-2.7.0.jar!/" />
         </CLASSES>
@@ -2849,10 +2041,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/tachyon-0.5.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/tachyon-0.5.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/tachyon-0.5.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/tachyon-0.5.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/tachyon-0.5.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/tachyon-0.5.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2861,10 +2049,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: tachyon-client-0.5.0">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/tachyon-client-0.5.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/tachyon-client-0.5.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/tachyon-client-0.5.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/tachyon-client-0.5.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/tachyon-client-0.5.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/tachyon-client-0.5.0.jar!/" />
         </CLASSES>
@@ -2877,10 +2061,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/uncommons-maths-1.2.2a.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/uncommons-maths-1.2.2a.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/uncommons-maths-1.2.2a.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/uncommons-maths-1.2.2a.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/uncommons-maths-1.2.2a.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/uncommons-maths-1.2.2a.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2889,10 +2069,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: unused-1.0.0">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/unused-1.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/unused-1.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/unused-1.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/unused-1.0.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/unused-1.0.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/unused-1.0.0.jar!/" />
         </CLASSES>
@@ -2905,10 +2081,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/velocity-1.7.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/velocity-1.7.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/velocity-1.7.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/velocity-1.7.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/velocity-1.7.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/velocity-1.7.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2917,10 +2089,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: xz-1.0">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/spark/lib/xz-1.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/xz-1.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/xz-1.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/xz-1.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/xz-1.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/xz-1.0.jar!/" />
         </CLASSES>
@@ -2933,10 +2101,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/spark/lib/zookeeper-3.4.5.jar!/" />
           <root url="jar://$DSE_HOME$/resources/spark/lib/zookeeper-3.4.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/zookeeper-3.4.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/zookeeper-3.4.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/zookeeper-3.4.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/spark/lib/zookeeper-3.4.5.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2945,10 +2109,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: asm-4.0">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/shark/lib/asm-4.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/asm-4.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/asm-4.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/asm-4.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/shark/lib/asm-4.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/shark/lib/asm-4.0.jar!/" />
         </CLASSES>
@@ -2961,10 +2121,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/shark/lib/commons-codec-1.6.jar!/" />
           <root url="jar://$DSE_HOME$/resources/shark/lib/commons-codec-1.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/commons-codec-1.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/commons-codec-1.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/commons-codec-1.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/commons-codec-1.6.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -2973,10 +2129,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: commons-httpclient-3.1">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/shark/lib/commons-httpclient-3.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/commons-httpclient-3.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/commons-httpclient-3.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/commons-httpclient-3.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/shark/lib/commons-httpclient-3.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/shark/lib/commons-httpclient-3.1.jar!/" />
         </CLASSES>
@@ -2989,10 +2141,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/shark/lib/commons-io-2.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/shark/lib/commons-io-2.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/commons-io-2.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/commons-io-2.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/commons-io-2.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/commons-io-2.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3001,10 +2149,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: commons-logging-1.1.3">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/shark/lib/commons-logging-1.1.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/commons-logging-1.1.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/commons-logging-1.1.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/commons-logging-1.1.3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/shark/lib/commons-logging-1.1.3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/shark/lib/commons-logging-1.1.3.jar!/" />
         </CLASSES>
@@ -3017,10 +2161,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/shark/lib/guava-16.0.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/shark/lib/guava-16.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/guava-16.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/guava-16.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/guava-16.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/guava-16.0.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3029,10 +2169,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: hadoop-client-1.0.4">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/shark/lib/hadoop-client-1.0.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/hadoop-client-1.0.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/hadoop-client-1.0.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/hadoop-client-1.0.4.jar!/" />
           <root url="jar://$DSE_HOME$/resources/shark/lib/hadoop-client-1.0.4.jar!/" />
           <root url="jar://$DSE_HOME$/resources/shark/lib/hadoop-client-1.0.4.jar!/" />
         </CLASSES>
@@ -3045,10 +2181,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/shark/lib/httpclient-4.3.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/shark/lib/httpclient-4.3.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/httpclient-4.3.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/httpclient-4.3.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/httpclient-4.3.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/httpclient-4.3.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3057,10 +2189,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: httpcore-4.3.1">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/shark/lib/httpcore-4.3.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/httpcore-4.3.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/httpcore-4.3.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/httpcore-4.3.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/shark/lib/httpcore-4.3.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/shark/lib/httpcore-4.3.1.jar!/" />
         </CLASSES>
@@ -3073,10 +2201,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/shark/lib/jansi-1.4.jar!/" />
           <root url="jar://$DSE_HOME$/resources/shark/lib/jansi-1.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/jansi-1.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/jansi-1.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/jansi-1.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/jansi-1.4.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3085,10 +2209,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: jets3t-0.7.1">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/shark/lib/jets3t-0.7.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/jets3t-0.7.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/jets3t-0.7.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/jets3t-0.7.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/shark/lib/jets3t-0.7.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/shark/lib/jets3t-0.7.1.jar!/" />
         </CLASSES>
@@ -3101,10 +2221,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/shark/lib/jline-2.10.3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/shark/lib/jline-2.10.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/jline-2.10.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/jline-2.10.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/jline-2.10.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/jline-2.10.3.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3113,10 +2229,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: shark_2.10-1.1.1">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/shark/lib/shark_2.10-1.1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/shark_2.10-1.1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/shark_2.10-1.1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/shark/lib/shark_2.10-1.1.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/shark/lib/shark_2.10-1.1.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/shark/lib/shark_2.10-1.1.1.jar!/" />
         </CLASSES>
@@ -3129,10 +2241,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/airline-0.6.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/airline-0.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/airline-0.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/airline-0.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/airline-0.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/airline-0.6.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3141,10 +2249,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: ant-1.6.5">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/ant-1.6.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/ant-1.6.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/ant-1.6.5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/ant-1.6.5.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/ant-1.6.5.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/ant-1.6.5.jar!/" />
         </CLASSES>
@@ -3157,10 +2261,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/automaton-1.11-8.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/automaton-1.11-8.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/automaton-1.11-8.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/automaton-1.11-8.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/automaton-1.11-8.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/automaton-1.11-8.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3169,10 +2269,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: commons-beanutils-1.7.0">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-beanutils-1.7.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-beanutils-1.7.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-beanutils-1.7.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-beanutils-1.7.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-beanutils-1.7.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-beanutils-1.7.0.jar!/" />
         </CLASSES>
@@ -3185,10 +2281,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-beanutils-core-1.8.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-beanutils-core-1.8.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-beanutils-core-1.8.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-beanutils-core-1.8.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-beanutils-core-1.8.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-beanutils-core-1.8.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3197,10 +2289,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: commons-cli-1.2">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-cli-1.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-cli-1.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-cli-1.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-cli-1.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-cli-1.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-cli-1.2.jar!/" />
         </CLASSES>
@@ -3213,10 +2301,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-codec-1.4.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-codec-1.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-codec-1.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-codec-1.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-codec-1.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-codec-1.4.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3225,10 +2309,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: commons-collections-3.2.1">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-collections-3.2.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-collections-3.2.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-collections-3.2.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-collections-3.2.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-collections-3.2.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-collections-3.2.1.jar!/" />
         </CLASSES>
@@ -3241,10 +2321,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-configuration-1.6.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-configuration-1.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-configuration-1.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-configuration-1.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-configuration-1.6.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-configuration-1.6.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3253,10 +2329,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: commons-digester-1.8">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-digester-1.8.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-digester-1.8.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-digester-1.8.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-digester-1.8.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-digester-1.8.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-digester-1.8.jar!/" />
         </CLASSES>
@@ -3269,10 +2341,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-el-1.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-el-1.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-el-1.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-el-1.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-el-1.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-el-1.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3281,10 +2349,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: commons-httpclient-3.0.1">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-httpclient-3.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-httpclient-3.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-httpclient-3.0.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-httpclient-3.0.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-httpclient-3.0.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-httpclient-3.0.1.jar!/" />
         </CLASSES>
@@ -3297,10 +2361,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-lang-2.4.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-lang-2.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-lang-2.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-lang-2.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-lang-2.4.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-lang-2.4.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3309,10 +2369,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: commons-logging-1.1.1">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-logging-1.1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-logging-1.1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-logging-1.1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-logging-1.1.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-logging-1.1.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-logging-1.1.1.jar!/" />
         </CLASSES>
@@ -3325,10 +2381,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-math-2.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-math-2.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-math-2.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-math-2.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-math-2.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-math-2.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3337,10 +2389,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: commons-net-1.4.1">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-net-1.4.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-net-1.4.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-net-1.4.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-net-1.4.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-net-1.4.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/commons-net-1.4.1.jar!/" />
         </CLASSES>
@@ -3353,10 +2401,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/core-3.1.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/core-3.1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/core-3.1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/core-3.1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/core-3.1.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/core-3.1.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3365,10 +2409,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: elephant-bird-hadoop-compat-4.3">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/elephant-bird-hadoop-compat-4.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/elephant-bird-hadoop-compat-4.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/elephant-bird-hadoop-compat-4.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/elephant-bird-hadoop-compat-4.3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/elephant-bird-hadoop-compat-4.3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/elephant-bird-hadoop-compat-4.3.jar!/" />
         </CLASSES>
@@ -3381,10 +2421,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/ftplet-api-1.0.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/ftplet-api-1.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/ftplet-api-1.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/ftplet-api-1.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/ftplet-api-1.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/ftplet-api-1.0.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3393,10 +2429,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: ftpserver-core-1.0.0">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/ftpserver-core-1.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/ftpserver-core-1.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/ftpserver-core-1.0.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/ftpserver-core-1.0.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/ftpserver-core-1.0.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/ftpserver-core-1.0.0.jar!/" />
         </CLASSES>
@@ -3409,10 +2441,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/ftpserver-deprecated-1.0.0-M2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/ftpserver-deprecated-1.0.0-M2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/ftpserver-deprecated-1.0.0-M2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/ftpserver-deprecated-1.0.0-M2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/ftpserver-deprecated-1.0.0-M2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/ftpserver-deprecated-1.0.0-M2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3421,10 +2449,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: guava-12.0">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/guava-12.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/guava-12.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/guava-12.0.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/guava-12.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/guava-12.0.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/guava-12.0.jar!/" />
         </CLASSES>
@@ -3437,10 +2461,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-core-1.0.4.13.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-core-1.0.4.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-core-1.0.4.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-core-1.0.4.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-core-1.0.4.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-core-1.0.4.13.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3449,10 +2469,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: hadoop-examples-1.0.4.13">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-examples-1.0.4.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-examples-1.0.4.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-examples-1.0.4.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-examples-1.0.4.13.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-examples-1.0.4.13.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-examples-1.0.4.13.jar!/" />
         </CLASSES>
@@ -3465,10 +2481,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-fairscheduler-1.0.4.13.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-fairscheduler-1.0.4.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-fairscheduler-1.0.4.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-fairscheduler-1.0.4.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-fairscheduler-1.0.4.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-fairscheduler-1.0.4.13.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3477,10 +2489,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: hadoop-streaming-1.0.4.13">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-streaming-1.0.4.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-streaming-1.0.4.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-streaming-1.0.4.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-streaming-1.0.4.13.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-streaming-1.0.4.13.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-streaming-1.0.4.13.jar!/" />
         </CLASSES>
@@ -3493,10 +2501,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-test-1.0.4.13.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-test-1.0.4.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-test-1.0.4.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-test-1.0.4.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-test-1.0.4.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-test-1.0.4.13.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3505,10 +2509,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: hadoop-tools-1.0.4.13">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-tools-1.0.4.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-tools-1.0.4.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-tools-1.0.4.13.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-tools-1.0.4.13.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-tools-1.0.4.13.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/hadoop-tools-1.0.4.13.jar!/" />
         </CLASSES>
@@ -3521,10 +2521,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/hsqldb-1.8.0.10.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/hsqldb-1.8.0.10.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hsqldb-1.8.0.10.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hsqldb-1.8.0.10.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hsqldb-1.8.0.10.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/hsqldb-1.8.0.10.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3533,10 +2529,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: jackson-core-asl-1.8.8">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jackson-core-asl-1.8.8.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jackson-core-asl-1.8.8.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jackson-core-asl-1.8.8.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jackson-core-asl-1.8.8.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/jackson-core-asl-1.8.8.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/jackson-core-asl-1.8.8.jar!/" />
         </CLASSES>
@@ -3549,10 +2541,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/jackson-mapper-asl-1.8.8.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/jackson-mapper-asl-1.8.8.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jackson-mapper-asl-1.8.8.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jackson-mapper-asl-1.8.8.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jackson-mapper-asl-1.8.8.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jackson-mapper-asl-1.8.8.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3561,10 +2549,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: jasper-compiler-5.5.12">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jasper-compiler-5.5.12.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jasper-compiler-5.5.12.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jasper-compiler-5.5.12.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jasper-compiler-5.5.12.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/jasper-compiler-5.5.12.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/jasper-compiler-5.5.12.jar!/" />
         </CLASSES>
@@ -3577,10 +2561,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/jasper-runtime-5.5.12.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/jasper-runtime-5.5.12.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jasper-runtime-5.5.12.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jasper-runtime-5.5.12.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jasper-runtime-5.5.12.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jasper-runtime-5.5.12.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3589,10 +2569,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: javax.inject-1">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/javax.inject-1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/javax.inject-1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/javax.inject-1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/javax.inject-1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/javax.inject-1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/javax.inject-1.jar!/" />
         </CLASSES>
@@ -3605,10 +2581,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/jets3t-0.7.1.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/jets3t-0.7.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jets3t-0.7.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jets3t-0.7.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jets3t-0.7.1.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jets3t-0.7.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3617,10 +2589,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: jetty-6.1.26">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jetty-6.1.26.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jetty-6.1.26.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jetty-6.1.26.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jetty-6.1.26.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/jetty-6.1.26.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/jetty-6.1.26.jar!/" />
         </CLASSES>
@@ -3633,10 +2601,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/jetty-util-6.1.26.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/jetty-util-6.1.26.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jetty-util-6.1.26.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jetty-util-6.1.26.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jetty-util-6.1.26.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jetty-util-6.1.26.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3645,10 +2609,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: jsp-2.1-6.1.14">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jsp-2.1-6.1.14.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jsp-2.1-6.1.14.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jsp-2.1-6.1.14.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jsp-2.1-6.1.14.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/jsp-2.1-6.1.14.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/jsp-2.1-6.1.14.jar!/" />
         </CLASSES>
@@ -3661,10 +2621,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/jsp-api-2.1-6.1.14.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/jsp-api-2.1-6.1.14.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jsp-api-2.1-6.1.14.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jsp-api-2.1-6.1.14.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jsp-api-2.1-6.1.14.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jsp-api-2.1-6.1.14.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3673,10 +2629,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: jsr305-1.3.9">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jsr305-1.3.9.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jsr305-1.3.9.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jsr305-1.3.9.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/jsr305-1.3.9.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/jsr305-1.3.9.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/jsr305-1.3.9.jar!/" />
         </CLASSES>
@@ -3689,10 +2641,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/kfs-0.3.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/kfs-0.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/kfs-0.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/kfs-0.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/kfs-0.3.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/kfs-0.3.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3701,10 +2649,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: mina-core-2.0.0-M5">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/mina-core-2.0.0-M5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/mina-core-2.0.0-M5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/mina-core-2.0.0-M5.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/mina-core-2.0.0-M5.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/mina-core-2.0.0-M5.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/mina-core-2.0.0-M5.jar!/" />
         </CLASSES>
@@ -3717,10 +2661,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/oro-2.0.8.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/oro-2.0.8.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/oro-2.0.8.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/oro-2.0.8.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/oro-2.0.8.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/oro-2.0.8.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3729,10 +2669,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: servlet-api-2.5-20081211">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/servlet-api-2.5-20081211.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/servlet-api-2.5-20081211.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/servlet-api-2.5-20081211.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/servlet-api-2.5-20081211.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/servlet-api-2.5-20081211.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/servlet-api-2.5-20081211.jar!/" />
         </CLASSES>
@@ -3745,10 +2681,6 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/servlet-api-2.5-6.1.14.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/servlet-api-2.5-6.1.14.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/servlet-api-2.5-6.1.14.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/servlet-api-2.5-6.1.14.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/servlet-api-2.5-6.1.14.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/servlet-api-2.5-6.1.14.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -3757,10 +2689,6 @@
     <orderEntry type="module-library" exported="">
       <library name="Gradle: snappy-java-1.0.5.2">
         <CLASSES>
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/snappy-java-1.0.5.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/snappy-java-1.0.5.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/snappy-java-1.0.5.2.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/snappy-java-1.0.5.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/snappy-java-1.0.5.2.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/snappy-java-1.0.5.2.jar!/" />
         </CLASSES>
@@ -3773,15 +2701,13 @@
         <CLASSES>
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/xmlenc-0.52.jar!/" />
           <root url="jar://$DSE_HOME$/resources/hadoop/lib/xmlenc-0.52.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/xmlenc-0.52.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/xmlenc-0.52.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/xmlenc-0.52.jar!/" />
-          <root url="jar://$DSE_HOME$/resources/hadoop/lib/xmlenc-0.52.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="scala-sdk-2.10.3" level="application" />
+    <orderEntry type="library" exported="" name="Gradle: com.github.scopt:scopt_2.10:3.2.0" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: org.scala-lang:scala-library:2.10.3" level="project" />
+    <orderEntry type="library" name="scala-sdk-2.10.3 (2)" level="application" />
   </component>
 </module>

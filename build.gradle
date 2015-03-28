@@ -6,7 +6,7 @@ version = '1.0'
 String Home = System.getenv("HOME")
 String DseHome = System.getenv("DSE_HOME") ?: "$Home/dse"
 String DseResources = System.getenv("DSE_RESOURCES") ?: "$Home/dse/resources/"
-String mainClassName = "SparkCassandraStress"
+String mainClassName = "com.datastax.sparkstress.SparkCassandraStress"
 
 jar {
     manifest.attributes("Main-Class": mainClassName)
@@ -48,7 +48,6 @@ repositories {
 dependencies {
     compile "com.github.scopt:scopt_2.10:3.2.0"
 
-
     [
             'dse/lib',
             'driver/lib',
@@ -57,8 +56,14 @@ dependencies {
             'shark/lib',
             'hadoop',
             'hadoop/lib',
-    ].each {dir ->
+    ].each { dir ->
         provided fileTree(dir: "$DseResources/$dir", include: '*.jar')
     }
-    provided fileTree(dir: "$DseHome/lib", include: '*.jar')
+
+    [
+            '/lib',
+            '/build/lib'
+    ].each { dir ->
+        provided fileTree(dir: "$DseHome/$dir", include: '*.jar')
+    }
 }

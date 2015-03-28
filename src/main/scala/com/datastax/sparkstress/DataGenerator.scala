@@ -1,24 +1,23 @@
 package com.datastax.sparkstress
 
-import java.lang.reflect.Constructor
 import org.apache.spark.SparkContext
 import scala.util.{Random, Failure, Success, Try}
 import org.apache.spark.rdd.RDD
-import java.util.Date
+import com.datastax.sparkstress.RowTypes._
 
 
 object RowGenerator {
 
-  case class shortrowClass(key: Long, col1: String, col2: String, col3: String)
 
-  def getShortRowRDD(sc: SparkContext, numPartitions: Int, numTotalRows: Long): RDD[shortrowClass] = {
+  def getShortRowRDD(sc: SparkContext, numPartitions: Int, numTotalRows: Long):
+  RDD[ShortRowClass] = {
     val opsPerPartition = numTotalRows / numPartitions
 
     def generatePartition(index: Int) = {
       val r = new scala.util.Random(index * System.currentTimeMillis())
       val start = opsPerPartition*index
       (0L until opsPerPartition).map { i =>
-        new shortrowClass(i + start, r.nextString(20), r.nextString(20), r.nextString(20))
+        new ShortRowClass(i + start, r.nextString(20), r.nextString(20), r.nextString(20))
       }.iterator
     }
 
@@ -30,14 +29,16 @@ object RowGenerator {
 
   }
 
-  def getWideRowRdd(sc: SparkContext, numPartitions: Int, numTotalOps: Long, numTotalKeys:Long): RDD[shortrowClass] = {
+  def getWideRowRdd(sc: SparkContext, numPartitions: Int, numTotalOps: Long, numTotalKeys: Long):
+  RDD[ShortRowClass] = {
     val opsPerPartition = numTotalOps /numPartitions
 
     def generatePartition(index: Int) = {
       val r = new scala.util.Random(index * System.currentTimeMillis())
       val start = opsPerPartition*index:Long
       (0L until opsPerPartition).map { i =>
-        new shortrowClass((i + start)%numTotalKeys,(i+start).toString, r.nextString(20), r.nextString(20))
+        new ShortRowClass((i + start) % numTotalKeys, (i + start).toString, r.nextString(20), r
+          .nextString(20))
       }.iterator
     }
      sc.parallelize(Seq[Int](), numPartitions).mapPartitionsWithIndex {
@@ -47,13 +48,14 @@ object RowGenerator {
     }
   }
 
-  def getRandomWideRow(sc: SparkContext, numPartitions: Int, numTotalOps: Long, numTotalKeys: Long): RDD[shortrowClass] = {
+  def getRandomWideRow(sc: SparkContext, numPartitions: Int, numTotalOps: Long, numTotalKeys:
+  Long): RDD[ShortRowClass] = {
     val opsPerPartition = numTotalOps / numPartitions
 
     def generatePartition(index: Int) = {
       val r = new scala.util.Random(index * System.currentTimeMillis())
       (0L until opsPerPartition).map { i =>
-        new shortrowClass(math.abs(r.nextLong()) % numTotalKeys, r.nextInt.toString, r.nextString(20), r.nextString(20))
+        new ShortRowClass(math.abs(r.nextLong()) % numTotalKeys, r.nextInt.toString, r.nextString(20), r.nextString(20))
       }.iterator
     }
     sc.parallelize(Seq[Int](), numPartitions).mapPartitionsWithIndex {
@@ -64,9 +66,6 @@ object RowGenerator {
   }
 
 
-  case class perfrowClass(key: String, color: String, size: String, qty: Int, time: Date,
-                          col1: String, col2: String, col3: String, col4: String, col5: String,
-                          col6: String, col7: String, col8: String, col9: String, col10: String)
 
 
   val colors = List("red", "green", "blue", "yellow", "purple", "pink", "grey", "black", "white", "brown").view
@@ -74,7 +73,7 @@ object RowGenerator {
   val qtys = (1 to 500).view
 
 
-  def getPerfRowRdd(sc: SparkContext, numPartitions: Int, numTotalRows: Long): RDD[perfrowClass] ={
+  def getPerfRowRdd(sc: SparkContext, numPartitions: Int, numTotalRows: Long): RDD[PerfRowClass] = {
     val opsPerPartition = numTotalRows / numPartitions
 
     def generatePartition(index: Int) = {
@@ -85,7 +84,7 @@ object RowGenerator {
         if (!csqIt.hasNext){ csqIt = (for (color <- colors; size <- sizes; qty <- qtys) yield (color,size,qty)).iterator }
         val (color,size,qty) = csqIt.next()
         val extraString = "Operation_"+(i+start)
-        new perfrowClass("Key_"+(i + start), color,size,qty,new java.util.Date,
+        new PerfRowClass("Key_" + (i + start), color, size, qty, new java.util.Date,
           extraString,extraString,extraString,extraString,extraString,
           extraString,extraString,extraString,extraString,extraString)
       }.iterator

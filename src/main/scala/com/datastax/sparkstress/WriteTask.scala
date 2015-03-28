@@ -1,10 +1,9 @@
 package com.datastax.sparkstress
 
-import com.datastax.driver.core.Cluster
 import com.datastax.spark.connector.cql.CassandraConnector
 import org.apache.spark.rdd.RDD
-import org.apache.spark.{SparkConf, SparkContext}
-
+import org.apache.spark.SparkContext
+import com.datastax.sparkstress.RowTypes._
 import com.datastax.spark.connector._
 
 object WriteTask {
@@ -28,6 +27,7 @@ abstract class WriteTask( var config: Config, val sc: SparkContext) extends Stre
       val tbcql = getTableCql(config.table)
       println(s"Running the following create statements\n$kscql\n$tbcql")
       session.execute(kscql)
+      session.execute(s"USE ${config.keyspace}")
       session.execute(tbcql)
     }
     printf("Done Setting up CQL Keyspace/Table\n")
@@ -37,10 +37,7 @@ abstract class WriteTask( var config: Config, val sc: SparkContext) extends Stre
 
   def getTableCql(tbName: String): String
 
-  def run(sc: SparkContext) : Unit = {
-    setupCQL()
-    getRDD().saveToCassandra(config.keyspace, config.table)
-  }
+  def run() : Unit
 
   def setConfig(c: Config): Unit  = {
     config = c
@@ -48,10 +45,9 @@ abstract class WriteTask( var config: Config, val sc: SparkContext) extends Stre
 
   def runTrials(sc: SparkContext): Seq[Long] = {
     println("About to Start Trials")
-    for (trial <- 1 to config.trials) yield {setupCQL(); time(run(sc))}
+    for (trial <- 1 to config.trials) yield {setupCQL(); time(run())}
   }
 
-  def getRDD(): RDD[_]
 
 }
 
@@ -62,7 +58,13 @@ class WriteShortRow(config: Config, sc: SparkContext) extends WriteTask(config, 
     s"""CREATE TABLE IF NOT EXISTS $tbName
        |(key bigint, col1 text, col2 text, col3 text, PRIMARY KEY(key))""".stripMargin
 
-  def getRDD(): RDD[_] = RowGenerator.getShortRowRDD(sc, config.numPartitions, config.totalOps)
+  def getRDD: RDD[ShortRowClass] =
+    RowGenerator.getShortRowRDD(sc, config.numPartitions, config.totalOps)
+
+  def run(): Unit = {
+    setupCQL()
+    getRDD.saveToCassandra(config.keyspace, config.table)
+  }
 }
 
 class WritePerfRow(config: Config, sc: SparkContext) extends WriteTask(config, sc) {
@@ -75,9 +77,13 @@ class WritePerfRow(config: Config, sc: SparkContext) extends WriteTask(config, s
        |PRIMARY KEY (key))}
      """.stripMargin
 
-  def getRDD(): RDD[_] =
-    RowGenerator
-      .getPerfRowRdd(sc, config.numPartitions, config.totalOps)
+  def getRDD: RDD[PerfRowClass] =
+    RowGenerator.getPerfRowRdd(sc, config.numPartitions, config.totalOps)
+
+  def run(): Unit = {
+    setupCQL()
+    getRDD.saveToCassandra(config.keyspace, config.table)
+  }
 
 }
 
@@ -89,9 +95,14 @@ class WriteWideRow(config: Config, sc: SparkContext) extends WriteTask( config, 
       |PRIMARY KEY (key, col1))
     """.stripMargin
 
-  def getRDD(): RDD[_] =
+  def getRDD: RDD[ShortRowClass] =
     RowGenerator
       .getWideRowRdd(sc, config.numPartitions, config.totalOps, config.numTotalKeys)
+
+  def run(): Unit = {
+    setupCQL()
+    getRDD.saveToCassandra(config.keyspace, config.table)
+  }
 }
 
 class WriteRandomWideRow(config: Config, sc: SparkContext) extends WriteTask(config, sc){
@@ -102,7 +113,12 @@ class WriteRandomWideRow(config: Config, sc: SparkContext) extends WriteTask(con
        |PRIMARY KEY (key, col1))
      """.stripMargin
 
-  def getRDD(): RDD[_] =
+  def getRDD[T]: RDD[ShortRowClass] =
     RowGenerator.getRandomWideRow(sc, config.numPartitions, config.totalOps, config.numTotalKeys)
+
+  def run(): Unit = {
+    setupCQL()
+    getRDD.saveToCassandra(config.keyspace, config.table)
+  }
 
 }

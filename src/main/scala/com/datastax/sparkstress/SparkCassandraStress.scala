@@ -14,7 +14,7 @@ case class Config(
   trials: Int = 1,
   deleteKeyspace: Boolean = false,
   //Spark Options
-  sparkOps: Map[String,String]
+  sparkOps: Map[String,String] = Map.empty
 )
 
 
