@@ -21,5 +21,7 @@ project/plugins/project/
 # Gradle
 .gradle
 build/
-
+*.iml
+*.ipr
+*.iws
 checkpoint
