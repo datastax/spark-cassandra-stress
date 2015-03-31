@@ -3,10 +3,50 @@ apply plugin: 'scala'
 
 version = '1.0'
 
+enum LibrariesFrom {
+    dse,
+    maven,
+    source
+}
+
+LibrariesFrom buildAgainst = LibrariesFrom.dse
+
 String Home = System.getenv("HOME")
 String DseHome = System.getenv("DSE_HOME") ?: "$Home/dse"
 String DseResources = System.getenv("DSE_RESOURCES") ?: "$Home/dse/resources/"
 String mainClassName = "com.datastax.sparkstress.SparkCassandraStress"
+
+// Parameters for buliding against Maven Libs
+String ConnectorVersion = System.getenv("CONNECTOR_VERSION") ?: '1.2.0-rc2'
+String SparkVersion = System.getenv("SPARK_VERSION") ?: '1.2.1'
+
+// Parameter for building against Connector Repository
+String SparkCCHome = System.getenv("SPARKCC_HOME") ?:
+        "$Home/repos/spark-cassandra-connector/"
+
+task maven_jar {
+    buildAgainst = LibrariesFrom.maven
+}
+
+task dse_jar {
+    buildAgainst = LibrariesFrom.dse
+}
+
+task source_jar {
+    buildAgainst = LibrariesFrom.source
+}
+
+
+task build_connector(type: Exec) {
+    workingDir SparkCCHome
+    commandLine 'sbt/sbt', 'clean'
+    commandLine 'sbt/sbt', 'assembly'
+}
+
+source_jar.dependsOn(build_connector)
+source_jar.finalizedBy(jar)
+dse_jar.finalizedBy(jar)
+maven_jar.finalizedBy(jar)
 
 jar {
     manifest.attributes("Main-Class": mainClassName)
@@ -15,22 +55,21 @@ jar {
         (configurations.runtime - configurations.provided).collect {
             it.isDirectory() ? it : zipTree(it)
         }
+    } {
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
     }
 }
 
 tasks.withType(Exec) {
-    environment  "DSE_HOME": DseHome
+    environment "DSE_HOME": DseHome
 }
 
-task run_dse(type:Exec) {
+task run_dse(type: Exec) {
     commandLine "$DseHome/bin/dse", "spark-submit", "--class", mainClassName, jar.archivePath
 }
 run_dse.dependsOn jar
-
-task run_apache(type:Exec) {
-
-}
-
 
 configurations {
     provided
@@ -48,22 +87,41 @@ repositories {
 dependencies {
     compile "com.github.scopt:scopt_2.10:3.2.0"
 
-    [
-            'dse/lib',
-            'driver/lib',
-            'cassandra/lib',
-            'spark/lib',
-            'shark/lib',
-            'hadoop',
-            'hadoop/lib',
-    ].each { dir ->
-        provided fileTree(dir: "$DseResources/$dir", include: '*.jar')
-    }
+    if (buildAgainst == LibrariesFrom.dse) {
+        println "Building against DSE Libraries"
 
-    [
-            '/lib',
-            '/build/lib'
-    ].each { dir ->
-        provided fileTree(dir: "$DseHome/$dir", include: '*.jar')
+        //DSE Libraries
+        [
+                'dse/lib',
+                'driver/lib',
+                'cassandra/lib',
+                'spark/lib',
+                'shark/lib',
+                'hadoop',
+                'hadoop/lib',
+        ].each { dir ->
+            provided fileTree(dir: "$DseResources/$dir", include: '*.jar')
+        }
+
+        [
+                '/lib',
+                '/build/lib'
+        ].each { dir ->
+            provided fileTree(dir: "$DseHome/$dir", include: '*.jar')
+        }
+    } else if (buildAgainst == LibrariesFrom.maven) {
+        println "Building against Apache Maven Libraries"
+
+        dependencies {
+            compile "com.github.scopt:scopt_2.10:3.2.0"
+            compile "com.datastax.spark:spark-cassandra-connector_2.10:$ConnectorVersion"
+            provided "org.apache.spark:spark-core_2.10:$SparkVersion"
+        }
+    } else if (buildAgainst == LibrariesFrom.source) {
+        println "Building Against Assembly Jar from Source Repo"
+
+        compile "com.github.scopt:scopt_2.10:3.2.0"
+        compile fileTree(dir: "$SparkCCHome/spark-cassandra-connector/target/scala-2.10/", include: "*.jar")
+        provided "org.apache.spark:spark-core_2.10:$SparkVersion"
     }
 }

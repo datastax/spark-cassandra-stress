@@ -27,7 +27,7 @@ object SparkCassandraStress {
   def main(args: Array[String]) {
 
     val parser = new scopt.OptionParser[Config]("SparkCassandraStress") {
-      head("SparkCassandraStress", "0.1")
+      head("SparkCassandraStress", "1.0")
 
       arg[String]("testName") optional() action { (arg,config) =>
         config.copy(testName = arg.toLowerCase())
