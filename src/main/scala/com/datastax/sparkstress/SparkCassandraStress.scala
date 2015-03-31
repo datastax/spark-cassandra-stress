@@ -42,19 +42,19 @@ object SparkCassandraStress {
         config.copy(sparkOps = config.sparkOps + ("spark.cassandra.connection.host" -> arg))
       } text {"Ip Address to Connect To Cassandra On"}
 
-      opt[Long]('n',"totalOps") optional() action { (arg,config) =>
+      opt[Long]('o',"totalOps") optional() action { (arg,config) =>
         config.copy(totalOps = arg)
       } text {"Total number of operations to execute"}
 
-      opt[Int]('x',"numPartitons") optional() action { (arg,config) =>
+      opt[Int]('p',"numPartitons") optional() action { (arg,config) =>
         config.copy(numPartitions = arg)
       } text {"Number of Spark Partitions To Create"}
 
-      opt[Long]('k',"numTotalKeys") optional() action { (arg,config) =>
+      opt[Long]('y',"numTotalKeys") optional() action { (arg,config) =>
         config.copy(numTotalKeys = arg)
       } text {"Total Number of CQL Partition Key Values"}
 
-      opt[Int]('t',"trials")optional() action { (arg,config) =>
+      opt[Int]('n',"trials")optional() action { (arg,config) =>
         config.copy(trials = arg)
       } text {"Trials to run"}
 
@@ -74,7 +74,7 @@ object SparkCassandraStress {
         config.copy(table = arg)
       } text {"Name of the table to use/create"}
 
-      opt[Int]('p',"maxParaWrites") optional() action { (arg,config) =>
+      opt[Int]('c',"maxConcurrentWrites") optional() action { (arg,config) =>
         config.copy(sparkOps = config.sparkOps + ("spark.cassandra.output.concurrent.writes" -> arg.toString))
       } text {"Connector Write Paralellism"}
 
@@ -82,7 +82,7 @@ object SparkCassandraStress {
         config.copy(sparkOps = config.sparkOps + ("spark.cassandra.output.batch.size.bytes" -> arg.toString))
       } text {"Write Batch Size in bytes"}
 
-      opt[Int]('r',"rowSize") optional() action { (arg,config) =>
+      opt[Int]('w',"rowSize") optional() action { (arg,config) =>
         config.copy(sparkOps = config.sparkOps + ("spark.cassandra.output.batch.size.rows" -> arg.toString))
       } text {"This setting will override batch size in bytes and instead just do a static number of rows per batch"}
 
