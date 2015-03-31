@@ -8,6 +8,7 @@ case class Config(
   testName: String ="writeshortrow",
   keyspace: String = "ks",
   table: String = "tab",
+  replicationFactor: Int = 1,
   numPartitions: Int = 400,
   totalOps: Long = 20 * 1000000,
   numTotalKeys: Long =  1 * 1000000,
@@ -61,6 +62,18 @@ object SparkCassandraStress {
         config.copy(deleteKeyspace = true)
       } text {"Delete Keyspace before running"}
 
+      opt[String]('k',"keyspace") optional() action { (arg,config) =>
+        config.copy(keyspace = arg)
+      } text {"Name of the keyspace to use/create"}
+
+      opt[Int]('r',"replication") optional() action { (arg,config) =>
+        config.copy(replicationFactor = arg)
+      } text {"Replication Factor to set on new keyspace, will not change existing keyspaces"}
+
+      opt[String]('t', "table") optional() action { (arg,config) =>
+        config.copy(table = arg)
+      } text {"Name of the table to use/create"}
+
       opt[Int]('p',"maxParaWrites") optional() action { (arg,config) =>
         config.copy(sparkOps = config.sparkOps + ("spark.cassandra.output.concurrent.writes" -> arg.toString))
       } text {"Connector Write Paralellism"}
@@ -100,7 +113,7 @@ object SparkCassandraStress {
         .setAppName("SparkStress: "+config.testName)
         .setAll(config.sparkOps)
 
-    val sc = new SparkContext(sparkConf)
+    val sc = ConnectHelper.getContext(sparkConf)
 
     val test: StressTask =
       config.testName.toLowerCase match {
