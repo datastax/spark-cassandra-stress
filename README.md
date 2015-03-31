@@ -14,7 +14,7 @@ This project is built using gradle and can be built in three(3) exciting ways.
 
 The jar can be built using 
 
-    ./gradlew [type]_jar
+    ./gradlew jar -Pagainst=[type]
     
 Where type is one of `dse`,`maven` or `source`
 

@@ -32,24 +32,29 @@ tasks.whenTaskAdded { theTask ->
     }
 }
 
-
-task maven_jar {
-}
-
-task dse_jar {
-}
-
-task source_jar {
-}
-
 task build_connector(type: Exec) {
     workingDir SparkCCHome
     commandLine 'sbt/sbt', 'clean'
     commandLine 'sbt/sbt', 'assembly'
 }
 
-source_jar.dependsOn(build_connector)
-
+if (hasProperty('against')) {
+    switch (against) {
+        case 'dse':
+            buildAgainst = LibrariesFrom.dse
+            break
+        case 'source':
+            buildAgainst = LibrariesFrom.source
+            jar.dependsOn(build_connector)
+            break
+        case 'maven':
+            buildAgainst = LibrariesFrom.maven
+            break
+        default:
+            println 'Invalid "against" target : $against'
+            exit(1)
+    }
+}
 
 
 jar {
@@ -84,7 +89,7 @@ dependencies {
     println "Checking dependency flag: $buildAgainst"
 
     if (buildAgainst == LibrariesFrom.dse) {
-        println "Building against DSE Libraries"
+        println "Using DSE Libraries"
 
         //DSE Libraries
         [
@@ -106,7 +111,7 @@ dependencies {
             provided fileTree(dir: "$DseHome/$dir", include: '*.jar')
         }
     } else if (buildAgainst == LibrariesFrom.maven) {
-        println "Building against Apache Maven Libraries"
+        println "Using Maven Libraries"
 
         dependencies {
             compile "com.github.scopt:scopt_2.10:3.2.0"
@@ -114,7 +119,7 @@ dependencies {
             provided "org.apache.spark:spark-core_2.10:$SparkVersion"
         }
     } else if (buildAgainst == LibrariesFrom.source) {
-        println "Building Against Assembly Jar from Source Repo"
+        println "Using Assembly Jar from Source Repo"
 
         compile "com.github.scopt:scopt_2.10:3.2.0"
         compile fileTree(dir: "$SparkCCHome/spark-cassandra-connector/target/scala-2.10/", include: "*.jar")
@@ -122,15 +127,3 @@ dependencies {
     }
 }
 
-gradle.taskGraph.whenReady {taskGraph ->
-    if (taskGraph.hasTask("dse_jar")) {
-        buildAgainst = LibrariesFrom.dse
-    }
-    if (taskGraph.hasTask("maven_jar")) {
-        buildAgainst = LibrariesFrom.maven
-    }
-    if (taskGraph.hasTask("source_jar")) {
-        buildAgainst = LibrariesFrom.source
-    }
-
-}
