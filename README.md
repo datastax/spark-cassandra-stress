@@ -1,10 +1,10 @@
-h1. Spark Cassandra Stress
+# Spark Cassandra Stress
 
 A tool for testing the Datastax Spark Connector against both Apache
-Cassandra and DSE packaged Cassandra with either Apache Spark or DSE 
-packaged Spark
+Cassandra and DSE packaged Cassandra with either bundled libraries from
+DSE, Maven, or the connector Built from source!
 
-h2. Building
+## Building
 
 This project is built using gradle and can be built in three(3) exciting ways.
 
@@ -18,7 +18,7 @@ The jar can be built using
     
 Where type is one of `dse`,`maven` or `source`
 
-h3. DSE Options
+### DSE Options
 
 DSE libraries are located by looking for the installation of DSE on your machine.
 Change environment variables `DSE_HOME` and `DSE_RESOURCES` if your installation
@@ -30,7 +30,7 @@ Defaults
     DSE_HOME=$HOME/dse
     DSE_RESOURCES=$HOME/dse/resources
     
-h3. Maven Options
+### Maven Options
 
 When getting libraries from maven we need to specify the Connector version and
 Spark Version libraries to compile against. Change environment variables 
@@ -42,18 +42,18 @@ Defaults
     CONNECTOR_VERSION=1.2.0-rc2
     SPARK_VERSION=1.2.1
     
-h3. Source Options
+### Source Options
 
 Gradle will attempt to clean and build the assembly jar for the Spark Connector
 looking for the repository in environment variable `SPARKCC_HOME`. This will 
-build in whatever 
+build whatever commit the connector is currently at.
 
 Default
 
     SPARKCC_HOME=$HOME/repos/spark-cassandra-connector/
 
 
-h2. Running
+## Running
 
 There are many options which can be used to configure your run of
 Spark Cassandra Stress but the two main invocations are either using
