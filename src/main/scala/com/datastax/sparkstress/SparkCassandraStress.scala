@@ -19,11 +19,12 @@ case class Config(
 )
 
 
-
 object SparkCassandraStress {
   val VALID_TESTS =
     WriteTask.ValidTasks ++
     Set("readall")
+
+  val KeyGroupings = Seq("none", "replica_set", "partition")
 
   def main(args: Array[String]) {
 
@@ -75,24 +76,44 @@ object SparkCassandraStress {
       } text {"Name of the table to use/create"}
 
       opt[Int]('c',"maxConcurrentWrites") optional() action { (arg,config) =>
-        config.copy(sparkOps = config.sparkOps + ("spark.cassandra.output.concurrent.writes" -> arg.toString))
+        config.copy(sparkOps = config.sparkOps +
+          ("spark.cassandra.output.concurrent.writes" -> arg.toString))
       } text {"Connector Write Paralellism"}
 
       opt[Int]('b',"batchSize") optional() action { (arg,config) =>
-        config.copy(sparkOps = config.sparkOps + ("spark.cassandra.output.batch.size.bytes" -> arg.toString))
+        config.copy(sparkOps = config.sparkOps +
+          ("spark.cassandra.output.batch.size.bytes" -> arg.toString))
       } text {"Write Batch Size in bytes"}
 
       opt[Int]('w',"rowSize") optional() action { (arg,config) =>
-        config.copy(sparkOps = config.sparkOps + ("spark.cassandra.output.batch.size.rows" -> arg.toString))
+        config.copy(sparkOps = config.sparkOps +
+          ("spark.cassandra.output.batch.size.rows" -> arg.toString))
       } text {"This setting will override batch size in bytes and instead just do a static number of rows per batch"}
 
       opt[Int]('f',"fetchSize") optional() action { (arg,config) =>
-        config.copy(sparkOps = config.sparkOps + ("spark.cassandra.input.page.row.size" -> arg.toString))
+        config.copy(sparkOps = config.sparkOps +
+          ("spark.cassandra.input.page.row.size" -> arg.toString))
       } text {"Read fetch size"}
 
       opt[Int]('s',"splitSize") optional() action { (arg,config) =>
-        config.copy(sparkOps = config.sparkOps + ("spark.cassandra.input.split.size" -> arg.toString))
+        config.copy(sparkOps = config.sparkOps +
+          ("spark.cassandra.input.split.size" -> arg.toString))
       } text {"Read input size"}
+
+      opt[String]('g', "groupingKey") optional() action { (arg, config) =>
+        config.copy(sparkOps = config.sparkOps +
+          ("spark.cassandra.output.batch.grouping.key" -> arg.toString))
+      } validate { (arg) =>
+        if (KeyGroupings.contains(arg))
+          success
+        else
+          failure(s"groupingKey ($arg) must be be part of ${KeyGroupings.mkString(" ")}")
+      }
+      opt[Int]('q', "batchBufferSize") optional() action { (arg, config) =>
+        config.copy(sparkOps = config.sparkOps +
+          ("spark.cassandra.output.batch.buffer.size" -> arg.toString))
+      }
+
       help("help") text {"CLI Help"}
 
      checkConfig{ c => if (VALID_TESTS.contains(c.testName)) success else failure(c.testName+" is not a valid test : "+VALID_TESTS.mkString(" , ")) }

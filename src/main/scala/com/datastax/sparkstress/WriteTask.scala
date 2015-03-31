@@ -58,8 +58,13 @@ class WriteShortRow(config: Config, sc: SparkContext) extends WriteTask(config, 
     s"""CREATE TABLE IF NOT EXISTS $tbName
        |(key bigint, col1 text, col2 text, col3 text, PRIMARY KEY(key))""".stripMargin
 
-  def getRDD: RDD[ShortRowClass] =
+  def getRDD: RDD[ShortRowClass] = {
+    println(
+      s"""Generating RDD for short rows:
+         |${config.totalOps} Total Writes""".stripMargin
+    )
     RowGenerator.getShortRowRDD(sc, config.numPartitions, config.totalOps)
+  }
 
   def run(): Unit = {
     setupCQL()
@@ -88,16 +93,21 @@ class WritePerfRow(config: Config, sc: SparkContext) extends WriteTask(config, s
 }
 
 class WriteWideRow(config: Config, sc: SparkContext) extends WriteTask( config, sc){
-
   def getTableCql(tbName: String): String =
     s"""CREATE TABLE IF NOT EXISTS $tbName
       |(key int, col1 text, col2 text, col3 text,
       |PRIMARY KEY (key, col1))
     """.stripMargin
 
-  def getRDD: RDD[ShortRowClass] =
+  def getRDD: RDD[ShortRowClass] = {
+    println(
+      s"""Generating RDD for wide rows:
+         |${config.totalOps} Total Writes,
+         |${config.numTotalKeys} Cassandra Partitions""".stripMargin
+    )
     RowGenerator
       .getWideRowRdd(sc, config.numPartitions, config.totalOps, config.numTotalKeys)
+  }
 
   def run(): Unit = {
     setupCQL()
@@ -113,8 +123,14 @@ class WriteRandomWideRow(config: Config, sc: SparkContext) extends WriteTask(con
        |PRIMARY KEY (key, col1))
      """.stripMargin
 
-  def getRDD[T]: RDD[ShortRowClass] =
+  def getRDD[T]: RDD[ShortRowClass] = {
+    println(
+      s"""Generating RDD for random wide rows:
+         |${config.totalOps} Total Writes,
+         |${config.numTotalKeys} Cassandra Partitions""".stripMargin
+    )
     RowGenerator.getRandomWideRow(sc, config.numPartitions, config.totalOps, config.numTotalKeys)
+  }
 
   def run(): Unit = {
     setupCQL()
