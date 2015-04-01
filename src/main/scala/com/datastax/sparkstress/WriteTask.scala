@@ -21,7 +21,7 @@ abstract class WriteTask( var config: Config, val sc: SparkContext) extends Stre
   def setupCQL() = {
     CassandraConnector(sc.getConf).withSessionDo{ session =>
       if (config.deleteKeyspace){
-      println("Destroying Keyspace")
+      println(s"Destroying Keyspace")
       session.execute(s"DROP KEYSPACE IF EXISTS ${config.keyspace}")
       }
       val kscql = getKeyspaceCql(config.keyspace)
@@ -106,11 +106,11 @@ class WritePerfRow(config: Config, sc: SparkContext) extends WriteTask(config, s
 class WriteWideRow(config: Config, sc: SparkContext) extends WriteTask( config, sc){
   def getTableCql(tbName: String): String =
     s"""CREATE TABLE IF NOT EXISTS $tbName
-      |(key int, col1 text, col2 text, col3 text,
-      |PRIMARY KEY (key, col1))
+      |(key int, col1 text, col2 text, col3 text, col4 text, col5 text, col6 text, col7 text, col8 text, col9 text,
+      |PRIMARY KEY ((key, col1), col2, col3, col4, col5, col6, col7, col8, col9))
     """.stripMargin
 
-  def getRDD: RDD[ShortRowClass] = {
+  def getRDD: RDD[WideRowClass] = {
     println(
       s"""Generating RDD for wide rows with round robin partitions:
          |${config.totalOps} Total Writes,
@@ -134,11 +134,11 @@ class WriteRandomWideRow(config: Config, sc: SparkContext) extends WriteTask(con
 
   def getTableCql(tbName: String): String =
     s"""CREATE TABLE IF NOT EXISTS $tbName
-       |(key int, col1 text, col2 text, col3 text,
-       |PRIMARY KEY (key, col1))
+      |(key int, col1 text, col2 text, col3 text, col4 text, col5 text, col6 text, col7 text, col8 text, col9 text,
+      |PRIMARY KEY ((key, col1), col2, col3, col4, col5, col6, col7, col8, col9))
      """.stripMargin
 
-  def getRDD[T]: RDD[ShortRowClass] = {
+  def getRDD[T]: RDD[WideRowClass] = {
     println(
       s"""Generating RDD for random wide rows:
          |${config.totalOps} Total Writes,

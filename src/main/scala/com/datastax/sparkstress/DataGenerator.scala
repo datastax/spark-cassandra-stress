@@ -48,15 +48,14 @@ object RowGenerator {
   }
 
   def getWideRowRdd(sc: SparkContext, numPartitions: Int, numTotalOps: Long, numTotalKeys: Long):
-  RDD[ShortRowClass] = {
+  RDD[WideRowClass] = {
     val opsPerPartition = numTotalOps /numPartitions
 
     def generatePartition(index: Int) = {
       val r = new scala.util.Random(index * System.currentTimeMillis())
       val start = opsPerPartition*index:Long
       (0L until opsPerPartition).map { i =>
-        new ShortRowClass((i + start) % numTotalKeys, (i + start).toString, r.nextString(20), r
-          .nextString(20))
+        new WideRowClass((i + start) % numTotalKeys, (i + start).toString, r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20))
       }.iterator
     }
      sc.parallelize(Seq[Int](), numPartitions).mapPartitionsWithIndex {
@@ -67,13 +66,13 @@ object RowGenerator {
   }
 
   def getRandomWideRow(sc: SparkContext, numPartitions: Int, numTotalOps: Long, numTotalKeys:
-  Long): RDD[ShortRowClass] = {
+  Long): RDD[WideRowClass] = {
     val opsPerPartition = numTotalOps / numPartitions
 
     def generatePartition(index: Int) = {
       val r = new scala.util.Random(index * System.currentTimeMillis())
       (0L until opsPerPartition).map { i =>
-        new ShortRowClass(math.abs(r.nextLong()) % numTotalKeys, r.nextInt.toString, r.nextString(20), r.nextString(20))
+        new WideRowClass(math.abs(r.nextLong()) % numTotalKeys, r.nextInt.toString, r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20))
       }.iterator
     }
     sc.parallelize(Seq[Int](), numPartitions).mapPartitionsWithIndex {
