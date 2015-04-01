@@ -108,14 +108,13 @@ object SparkCassandraStress {
           success
         else
           failure(s"groupingKey ($arg) must be be part of ${KeyGroupings.mkString(" ")}")
-      }
+      } text {"The method by which the Spark Connector groups rows into partitions"}
       opt[Int]('q', "batchBufferSize") optional() action { (arg, config) =>
         config.copy(sparkOps = config.sparkOps +
           ("spark.cassandra.output.batch.buffer.size" -> arg.toString))
-      }
+      } text {"The amount of batches the connector keeps alive before forcing the largest to be executed"}
 
       help("help") text {"CLI Help"}
-
      checkConfig{ c => if (VALID_TESTS.contains(c.testName)) success else failure(c.testName+" is not a valid test : "+VALID_TESTS.mkString(" , ")) }
     }
 
