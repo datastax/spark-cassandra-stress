@@ -11,7 +11,8 @@ object WriteTask {
     "writeshortrow",
     "writeperfrow",
     "writewiderow",
-    "writerandomwiderow"
+    "writerandomwiderow",
+    "writewiderowbypartition"
   )
 }
 
@@ -51,7 +52,10 @@ abstract class WriteTask( var config: Config, val sc: SparkContext) extends Stre
 
 }
 
-
+/**
+ * Writes data to a schema which contains no clustering keys, no partitions will be
+ * overwritten.
+ */
 class WriteShortRow(config: Config, sc: SparkContext) extends WriteTask(config, sc) {
 
   def getTableCql(tbName: String): String =
@@ -72,6 +76,9 @@ class WriteShortRow(config: Config, sc: SparkContext) extends WriteTask(config, 
   }
 }
 
+/**
+ * Writes data in a format similar to the DataStax legacy 'tshirt' schema
+ */
 class WritePerfRow(config: Config, sc: SparkContext) extends WriteTask(config, sc) {
 
   def getTableCql(tbName: String): String =
@@ -92,6 +99,10 @@ class WritePerfRow(config: Config, sc: SparkContext) extends WriteTask(config, s
 
 }
 
+/**
+ * Runs inserts to partitions in a round robin fashion. This means partition key 1 will not
+ * be written to twice until partition key n is written to once.
+ */
 class WriteWideRow(config: Config, sc: SparkContext) extends WriteTask( config, sc){
   def getTableCql(tbName: String): String =
     s"""CREATE TABLE IF NOT EXISTS $tbName
@@ -101,7 +112,7 @@ class WriteWideRow(config: Config, sc: SparkContext) extends WriteTask( config, 
 
   def getRDD: RDD[ShortRowClass] = {
     println(
-      s"""Generating RDD for wide rows:
+      s"""Generating RDD for wide rows with round robin partitions:
          |${config.totalOps} Total Writes,
          |${config.numTotalKeys} Cassandra Partitions""".stripMargin
     )
@@ -115,6 +126,10 @@ class WriteWideRow(config: Config, sc: SparkContext) extends WriteTask( config, 
   }
 }
 
+/**
+ * Runs inserts to partitions in a random fashion. The chance that any particular partition
+ * key will be written to at a time is 1/N. (flat distribution)
+ */
 class WriteRandomWideRow(config: Config, sc: SparkContext) extends WriteTask(config, sc){
 
   def getTableCql(tbName: String): String =
@@ -136,5 +151,31 @@ class WriteRandomWideRow(config: Config, sc: SparkContext) extends WriteTask(con
     setupCQL()
     getRDD.saveToCassandra(config.keyspace, config.table)
   }
+}
 
+/**
+ *  Runs inserts to partitions in an ordered fashion. All writes to partition 1 occur before any
+ *  writes to partition 2.
+ */
+class WriteWideRowByPartition(config: Config, sc: SparkContext) extends WriteTask(config, sc){
+
+  def getTableCql(tbName: String): String =
+    s"""CREATE TABLE IF NOT EXISTS $tbName
+       |(key int, col1 text, col2 text, col3 text,
+       |PRIMARY KEY (key, col1))
+     """.stripMargin
+
+  def getRDD[T]: RDD[ShortRowClass] = {
+    println(
+      s"""Generating RDD for wide rows in ordered by partition:
+         |${config.totalOps} Total Writes,
+         |${config.numTotalKeys} Cassandra Partitions""".stripMargin
+    )
+    RowGenerator.getWideRowByPartition(sc, config.numPartitions, config.totalOps, config.numTotalKeys)
+  }
+
+  def run(): Unit = {
+    setupCQL()
+    getRDD.saveToCassandra(config.keyspace, config.table)
+  }
 }

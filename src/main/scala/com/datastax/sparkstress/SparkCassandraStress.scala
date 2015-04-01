@@ -108,7 +108,7 @@ object SparkCassandraStress {
           success
         else
           failure(s"groupingKey ($arg) must be be part of ${KeyGroupings.mkString(" ")}")
-      } text {"The method by which the Spark Connector groups rows into partitions"}
+      } text {s"The method by which the Spark Connector groups rows into partitions. Options: [ ${KeyGroupings.mkString(" ")} ]"}
       opt[Int]('q', "batchBufferSize") optional() action { (arg, config) =>
         config.copy(sparkOps = config.sparkOps +
           ("spark.cassandra.output.batch.buffer.size" -> arg.toString))
@@ -141,6 +141,7 @@ object SparkCassandraStress {
         case "writewiderow" => new WriteWideRow(config, sc)
         case "writeperfrow" => new WritePerfRow(config, sc)
         case "writerandomwiderow" => new WriteRandomWideRow(config, sc)
+        case "writewiderowbypartition" => new WriteWideRowByPartition(config, sc)
         case "readall" => new ReadAll()
       }
 

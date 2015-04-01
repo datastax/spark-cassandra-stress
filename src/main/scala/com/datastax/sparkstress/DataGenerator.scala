@@ -29,6 +29,24 @@ object RowGenerator {
 
   }
 
+  def getWideRowByPartition(sc: SparkContext, numPartitions: Int, numTotalOps: Long, numTotalKeys: Long):
+  RDD[ShortRowClass] = {
+    val opsPerPartition = numTotalOps /numPartitions
+
+    def generatePartition(index: Int) = {
+      val r = new scala.util.Random(index * System.currentTimeMillis())
+      val keysPerPartition = numTotalKeys / numPartitions
+      val start = keysPerPartition * numPartitions
+      val ckeysPerPkey = numTotalOps / numTotalKeys
+
+      for ( pk <- (0L until keysPerPartition); ck <- (0L until ckeysPerPkey)) yield
+        new ShortRowClass((start + pk), (ck).toString, r.nextString(20), r.nextString(20))
+    }.iterator
+
+    sc.parallelize(Seq[Int](), numPartitions)
+      .mapPartitionsWithIndex { case (index, n) => generatePartition(index) }
+  }
+
   def getWideRowRdd(sc: SparkContext, numPartitions: Int, numTotalOps: Long, numTotalKeys: Long):
   RDD[ShortRowClass] = {
     val opsPerPartition = numTotalOps /numPartitions
