@@ -30,7 +30,7 @@ object RowGenerator {
   }
 
   def getWideRowByPartition(sc: SparkContext, numPartitions: Int, numTotalOps: Long, numTotalKeys: Long):
-  RDD[ShortRowClass] = {
+  RDD[WideRowClass] = {
     val opsPerPartition = numTotalOps /numPartitions
 
     def generatePartition(index: Int) = {

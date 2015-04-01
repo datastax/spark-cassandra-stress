@@ -85,7 +85,7 @@ class WritePerfRow(config: Config, sc: SparkContext) extends WriteTask(config, s
     s"""CREATE TABLE IF NOT EXISTS $tbName
        |(key text, size text, qty int, time timestamp, color text,
        |col1 text, col2 text, col3 text, col4 text, col5 text,
-       |col6 text, col7 text, col8 text, col9 text, col10text,
+       |col6 text, col7 text, col8 text, col9 text, col10 text,
        |PRIMARY KEY (key))}
      """.stripMargin
 
@@ -165,7 +165,7 @@ class WriteWideRowByPartition(config: Config, sc: SparkContext) extends WriteTas
        |PRIMARY KEY (key, col1))
      """.stripMargin
 
-  def getRDD[T]: RDD[ShortRowClass] = {
+  def getRDD[T]: RDD[WideRowClass] = {
     println(
       s"""Generating RDD for wide rows in ordered by partition:
          |${config.totalOps} Total Writes,
