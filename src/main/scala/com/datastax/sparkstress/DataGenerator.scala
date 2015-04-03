@@ -40,7 +40,7 @@ object RowGenerator {
       val ckeysPerPkey = numTotalOps / numTotalKeys
 
       for ( pk <- (0L until keysPerPartition); ck <- (0L until ckeysPerPkey)) yield
-        new ShortRowClass((start + pk), (ck).toString, r.nextString(20), r.nextString(20))
+        new WideRowClass((start + pk), (ck).toString, r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20))
     }.iterator
 
     sc.parallelize(Seq[Int](), numPartitions)
