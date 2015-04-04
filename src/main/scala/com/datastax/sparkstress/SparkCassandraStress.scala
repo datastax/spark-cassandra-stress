@@ -47,7 +47,7 @@ object SparkCassandraStress {
         config.copy(totalOps = arg)
       } text {"Total number of operations to execute"}
 
-      opt[Int]('p',"numPartitons") optional() action { (arg,config) =>
+      opt[Int]('p',"numPartitions") optional() action { (arg,config) =>
         config.copy(numPartitions = arg)
       } text {"Number of Spark Partitions To Create"}
 
@@ -111,7 +111,7 @@ object SparkCassandraStress {
       } text {s"The method by which the Spark Connector groups rows into partitions. Options: [ ${KeyGroupings.mkString(" ")} ]"}
       opt[Int]('q', "batchBufferSize") optional() action { (arg, config) =>
         config.copy(sparkOps = config.sparkOps +
-          ("spark.cassandra.output.batch.buffer.size" -> arg.toString))
+          ("spark.cassandra.output.batch.grouping.buffer.size" -> arg.toString))
       } text {"The amount of batches the connector keeps alive before forcing the largest to be executed"}
 
       help("help") text {"CLI Help"}
