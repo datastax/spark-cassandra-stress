@@ -34,7 +34,7 @@ abstract class WriteTask( var config: Config, val sc: SparkContext) extends Stre
     printf("Done Setting up CQL Keyspace/Table\n")
   }
 
-  def getKeyspaceCql(ksName: String): String = s"CREATE KEYSPACE IF NOT EXISTS $ksName WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1 }"
+  def getKeyspaceCql(ksName: String): String = s"CREATE KEYSPACE IF NOT EXISTS $ksName WITH replication = {'class': 'NetworkTopologyStrategy', 'Analytics': ${config.replicationFactor} }"
 
   def getTableCql(tbName: String): String
 
@@ -65,13 +65,13 @@ class WriteShortRow(config: Config, sc: SparkContext) extends WriteTask(config, 
   def getRDD: RDD[ShortRowClass] = {
     println(
       s"""Generating RDD for short rows:
-         |${config.totalOps} Total Writes""".stripMargin
+         |${config.totalOps} Total Writes
+         |${config.numPartitions} Num Partitions""".stripMargin
     )
     RowGenerator.getShortRowRDD(sc, config.numPartitions, config.totalOps)
   }
 
   def run(): Unit = {
-    setupCQL()
     getRDD.saveToCassandra(config.keyspace, config.table)
   }
 }
@@ -93,7 +93,6 @@ class WritePerfRow(config: Config, sc: SparkContext) extends WriteTask(config, s
     RowGenerator.getPerfRowRdd(sc, config.numPartitions, config.totalOps)
 
   def run(): Unit = {
-    setupCQL()
     getRDD.saveToCassandra(config.keyspace, config.table)
   }
 
@@ -121,7 +120,6 @@ class WriteWideRow(config: Config, sc: SparkContext) extends WriteTask( config, 
   }
 
   def run(): Unit = {
-    setupCQL()
     getRDD.saveToCassandra(config.keyspace, config.table)
   }
 }
@@ -148,7 +146,6 @@ class WriteRandomWideRow(config: Config, sc: SparkContext) extends WriteTask(con
   }
 
   def run(): Unit = {
-    setupCQL()
     getRDD.saveToCassandra(config.keyspace, config.table)
   }
 }
@@ -175,7 +172,6 @@ class WriteWideRowByPartition(config: Config, sc: SparkContext) extends WriteTas
   }
 
   def run(): Unit = {
-    setupCQL()
     getRDD.saveToCassandra(config.keyspace, config.table)
   }
 }

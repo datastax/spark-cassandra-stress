@@ -151,8 +151,9 @@ object SparkCassandraStress {
     sc.stop()
     val timeSeconds = time.map{ _ / 1000000000.0}
     val opsPerSecond = timeSeconds.map{ config.totalOps/_}
-    printf(s"\n\nTimeInSeconds : %s\n",timeSeconds.mkString(","))
-    printf(s"OpsPerSecond : %s\n",opsPerSecond.mkString(","))
+    printf(s"\n\nTimeInSeconds : %.2f\n",timeSeconds.mkString(",").toDouble)
+    printf(s"TimeInMinutes : %.2f\n",((timeSeconds.mkString(",").toDouble)/60.0))
+    printf(s"OpsPerSecond : %.2f\n",opsPerSecond.mkString(",").toDouble)
  }
 
 
