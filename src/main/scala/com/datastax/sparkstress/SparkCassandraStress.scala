@@ -147,12 +147,19 @@ object SparkCassandraStress {
 
     test.setConfig(config)
 
+    val wallClockStartTime = System.nanoTime() 
     val time = test.runTrials(sc)
+
+    val wallClockStopTime = System.nanoTime() 
+    val wallClockTimeDiff = wallClockStopTime - wallClockStartTime
+    val wallClockTimeSeconds = (wallClockTimeDiff / 1000000000.0) 
     sc.stop()
     val timeSeconds = time.map{ _ / 1000000000.0}
     val opsPerSecond = timeSeconds.map{ config.totalOps/_}
     printf(s"\n\nTimeInSeconds : %.2f\n",timeSeconds.mkString(",").toDouble)
     printf(s"TimeInMinutes : %.2f\n",((timeSeconds.mkString(",").toDouble)/60.0))
+    printf(s"WallClockTimeSeconds : %.2f\n",wallClockTimeSeconds.toDouble)
+    printf(s"WallClockTimeMinutes : %.2f\n",(wallClockTimeSeconds.toDouble)/60.0)
     printf(s"OpsPerSecond : %.2f\n",opsPerSecond.mkString(",").toDouble)
  }
 

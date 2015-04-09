@@ -46,7 +46,7 @@ abstract class WriteTask( var config: Config, val sc: SparkContext) extends Stre
 
   def runTrials(sc: SparkContext): Seq[Long] = {
     println("About to Start Trials")
-    for (trial <- 1 to config.trials) yield {setupCQL(); time(run())}
+    for (trial <- 1 to config.trials) yield {setupCQL(); Thread.sleep(10000); time(run())}
   }
 
 
