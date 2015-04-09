@@ -40,7 +40,7 @@ object RowGenerator {
       val ckeysPerPkey = numTotalOps / numTotalKeys
 
       for ( pk <- (0L until keysPerPartition); ck <- (0L until ckeysPerPkey)) yield
-        new WideRowClass((start + pk), (ck).toString, r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20))
+        new WideRowClass((start + pk), (ck).toString, r.nextString(20), r.nextString(20)) 
     }.iterator
 
     sc.parallelize(Seq[Int](), numPartitions)
@@ -55,7 +55,7 @@ object RowGenerator {
       val r = new scala.util.Random(index * System.currentTimeMillis())
       val start = opsPerPartition*index:Long
       (0L until opsPerPartition).map { i =>
-        new WideRowClass((i + start) % numTotalKeys, (i + start).toString, r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20))
+        new WideRowClass((i + start) % numTotalKeys, (i + start).toString, r.nextString(20), r.nextString(20)) 
       }.iterator
     }
      sc.parallelize(Seq[Int](), numPartitions).mapPartitionsWithIndex {
@@ -72,7 +72,7 @@ object RowGenerator {
     def generatePartition(index: Int) = {
       val r = new scala.util.Random(index * System.currentTimeMillis())
       (0L until opsPerPartition).map { i =>
-        new WideRowClass(math.abs(r.nextLong()) % numTotalKeys, r.nextInt.toString, r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20), r.nextString(20))
+        new WideRowClass(math.abs(r.nextLong()) % numTotalKeys, r.nextInt.toString, r.nextString(20), r.nextString(20)) 
       }.iterator
     }
     sc.parallelize(Seq[Int](), numPartitions).mapPartitionsWithIndex {

@@ -104,10 +104,14 @@ class WritePerfRow(config: Config, sc: SparkContext) extends WriteTask(config, s
  */
 class WriteWideRow(config: Config, sc: SparkContext) extends WriteTask( config, sc){
   def getTableCql(tbName: String): String =
+    //s"""CREATE TABLE IF NOT EXISTS $tbName
+    //  |(key int, col1 text, col2 text, col3 text, col4 text, col5 text, col6 text, col7 text, col8 text, col9 text,
+    //  |PRIMARY KEY ((key, col1), col2, col3, col4, col5, col6, col7, col8, col9))
+    //""".stripMargin
     s"""CREATE TABLE IF NOT EXISTS $tbName
-      |(key int, col1 text, col2 text, col3 text, col4 text, col5 text, col6 text, col7 text, col8 text, col9 text,
-      |PRIMARY KEY ((key, col1), col2, col3, col4, col5, col6, col7, col8, col9))
-    """.stripMargin
+       |(key bigint, col1 text, col2 text, col3 text, 
+       |PRIMARY KEY (key, col1))
+     """.stripMargin
 
   def getRDD: RDD[WideRowClass] = {
     println(
@@ -131,9 +135,13 @@ class WriteWideRow(config: Config, sc: SparkContext) extends WriteTask( config, 
 class WriteRandomWideRow(config: Config, sc: SparkContext) extends WriteTask(config, sc){
 
   def getTableCql(tbName: String): String =
+    //s"""CREATE TABLE IF NOT EXISTS $tbName
+    //  |(key int, col1 text, col2 text, col3 text, col4 text, col5 text, col6 text, col7 text, col8 text, col9 text,
+    //  |PRIMARY KEY ((key, col1), col2, col3, col4, col5, col6, col7, col8, col9))
+    // """.stripMargin
     s"""CREATE TABLE IF NOT EXISTS $tbName
-      |(key int, col1 text, col2 text, col3 text, col4 text, col5 text, col6 text, col7 text, col8 text, col9 text,
-      |PRIMARY KEY ((key, col1), col2, col3, col4, col5, col6, col7, col8, col9))
+       |(key bigint, col1 text, col2 text, col3 text, 
+       |PRIMARY KEY (key, col1))
      """.stripMargin
 
   def getRDD[T]: RDD[WideRowClass] = {
