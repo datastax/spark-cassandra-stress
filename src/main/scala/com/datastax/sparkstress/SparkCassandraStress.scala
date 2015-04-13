@@ -1,5 +1,6 @@
 package com.datastax.sparkstress
 
+import org.apache.spark.SparkConf
 import java.io.{FileWriter, Writer}
 
 import org.apache.spark.SparkConf
@@ -18,6 +19,7 @@ case class Config(
   deleteKeyspace: Boolean = false,
   // csv file to append results
   file: Option[Writer] = Option.empty,
+  saveMethod: String = "driver",
   //Spark Options
   sparkOps: Map[String,String] = Map.empty
 )
@@ -121,6 +123,9 @@ object SparkCassandraStress {
         config.copy(sparkOps = config.sparkOps +
           ("spark.cassandra.output.batch.grouping.buffer.size" -> arg.toString))
       } text {"The amount of batches the connector keeps alive before forcing the largest to be executed"}
+      opt[String]('m',"saveMethod") optional() action { (arg,config) =>
+        config.copy(saveMethod = arg)
+      } text {"rdd save method. bulk: bulkSaveToCassandra, driver: saveToCassandra"}
 
       help("help") text {"CLI Help"}
      checkConfig{ c => if (VALID_TESTS.contains(c.testName)) success else failure(c.testName+" is not a valid test : "+VALID_TESTS.mkString(" , ")) }
