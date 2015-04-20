@@ -1,6 +1,5 @@
 package com.datastax.sparkstress
 
-import org.apache.spark.SparkConf
 import java.io.{FileWriter, Writer}
 
 import org.apache.spark.SparkConf
@@ -140,7 +139,7 @@ object SparkCassandraStress {
 
   def csvResults(config: Config, time: Seq[Long]) : String = {
     time.zipWithIndex.map {case (time,count) => {
-      Seq(config.testName, count, time/ 1000000000.0, config.totalOps/time, config).mkString("; ")
+      Seq(config.testName, config.saveMethod, count, time/ 1000000000.0, config.totalOps/time, config).mkString("; ")
     }}.mkString("\n") + "\n"
   }
 
