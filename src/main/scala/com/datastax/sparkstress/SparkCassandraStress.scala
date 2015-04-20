@@ -133,6 +133,9 @@ object SparkCassandraStress {
         .setAppName("SparkStress: "+config.testName)
         .setAll(config.sparkOps)
 
+    // testing and debugging
+    sparkConf.getAll.foreach(println)
+
     val sc = ConnectHelper.getContext(sparkConf)
 
     val test: StressTask =
