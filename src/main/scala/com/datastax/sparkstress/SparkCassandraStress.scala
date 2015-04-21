@@ -139,7 +139,9 @@ object SparkCassandraStress {
 
   def csvResults(config: Config, time: Seq[Long]) : String = {
     time.zipWithIndex.map {case (time,count) => {
-      Seq(config.testName, config.saveMethod, count, time/ 1000000000.0, config.totalOps/time, config).mkString("; ")
+      val timeSeconds :Double = time / 1000000000.0
+      val opsPerSecond = config.totalOps/ timeSeconds
+      Seq(config.testName, config.saveMethod, config.totalOps, config.totalOps/config.numTotalKeys, count, timeSeconds, opsPerSecond, config).mkString("\t")
     }}.mkString("\n") + "\n"
   }
 
