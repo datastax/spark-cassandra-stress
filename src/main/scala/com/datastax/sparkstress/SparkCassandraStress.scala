@@ -141,6 +141,7 @@ object SparkCassandraStress {
     val test: StressTask =
       config.testName.toLowerCase match {
         case "writeshortrow" => new WriteShortRow(config, sc)
+        case "writetimelinerow" => new WriteTimelineRow(config, sc)
         case "writewiderow" => new WriteWideRow(config, sc)
         case "writeperfrow" => new WritePerfRow(config, sc)
         case "writerandomwiderow" => new WriteRandomWideRow(config, sc)
