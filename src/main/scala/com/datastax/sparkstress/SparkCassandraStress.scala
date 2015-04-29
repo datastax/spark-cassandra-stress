@@ -100,6 +100,11 @@ object SparkCassandraStress {
           ("spark.cassandra.input.split.size" -> arg.toString))
       } text {"Read input size"}
 
+      opt[Int]('u',"throughput") optional() action { (arg,config) =>
+        config.copy(sparkOps = config.sparkOps +
+          ("spark.cassandra.output.throughput_mb_per_sec" -> arg.toString))
+      } text {"maximum write throughput allowed per single core in MB/s"}
+
       opt[String]('g', "groupingKey") optional() action { (arg, config) =>
         config.copy(sparkOps = config.sparkOps +
           ("spark.cassandra.output.batch.grouping.key" -> arg.toString))
