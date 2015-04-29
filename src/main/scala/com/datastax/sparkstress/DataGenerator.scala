@@ -13,8 +13,8 @@ import java.util.UUID
 object RowGenerator {
 
   val METHODS = Seq("POST", "GET", "DELETE", "PUT")
-  val TOPLEVELDOMAINS = Seq("DSP-5185")
-  val WORDS = Seq("prepopulate", "pregenerate", "originalData", "dataLoad")
+  val TOPLEVELDOMAINS = Seq("home", "about", "island", "mirror", "store", "images", "gallery", "products", "streams") 
+  val WORDS = Seq("apple", "banana", "orange", "kiwi", "lemon") 
   val HEADERS = Seq("gzip", "deflate", "tar", "untar", "crunch", "smash", "smooth", "blend")
   class HttpUrlGenerator(queue: LinkedBlockingQueue[String], ips: Seq[String], port: Int) extends Runnable {
     def run() {
