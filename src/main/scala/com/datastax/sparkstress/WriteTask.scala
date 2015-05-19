@@ -1,6 +1,7 @@
 package com.datastax.sparkstress
 
 import com.datastax.spark.connector.cql.CassandraConnector
+import com.datastax.spark.connector.writer.RowWriterFactory
 import org.apache.spark.rdd.RDD
 import org.apache.spark.SparkContext
 import com.datastax.sparkstress.RowTypes._
@@ -16,7 +17,10 @@ object WriteTask {
   )
 }
 
-abstract class WriteTask( var config: Config, val sc: SparkContext) extends StressTask {
+abstract class WriteTask[rowType](
+  var config: Config,
+  val sc: SparkContext)
+  (implicit rwf: RowWriterFactory[rowType]) extends StressTask {
 
   def setupCQL() = {
     CassandraConnector(sc.getConf).withSessionDo{ session =>
@@ -38,7 +42,11 @@ abstract class WriteTask( var config: Config, val sc: SparkContext) extends Stre
 
   def getTableCql(tbName: String): String
 
-  def run() : Unit
+  def getRDD: RDD[rowType]
+
+  def run() = {
+    getRDD.saveToCassandra(config.keyspace, config.table)
+  }
 
   def setConfig(c: Config): Unit  = {
     config = c
@@ -56,7 +64,8 @@ abstract class WriteTask( var config: Config, val sc: SparkContext) extends Stre
  * Writes data to a schema which contains no clustering keys, no partitions will be
  * overwritten.
  */
-class WriteShortRow(config: Config, sc: SparkContext) extends WriteTask(config, sc) {
+class WriteShortRow(config: Config, sc: SparkContext) extends
+  WriteTask[ShortRowClass](config, sc)(implicitly[RowWriterFactory[ShortRowClass]]) {
 
   def getTableCql(tbName: String): String =
     s"""CREATE TABLE IF NOT EXISTS $tbName
@@ -71,15 +80,13 @@ class WriteShortRow(config: Config, sc: SparkContext) extends WriteTask(config, 
     RowGenerator.getShortRowRDD(sc, config.numPartitions, config.totalOps)
   }
 
-  def run(): Unit = {
-    getRDD.saveToCassandra(config.keyspace, config.table)
-  }
 }
 
 /**
  * Writes data in a format similar to the DataStax legacy 'tshirt' schema
  */
-class WritePerfRow(config: Config, sc: SparkContext) extends WriteTask(config, sc) {
+class WritePerfRow(config: Config, sc: SparkContext) extends
+  WriteTask[PerfRowClass](config, sc)(implicitly[RowWriterFactory[PerfRowClass]]) {
 
   def getTableCql(tbName: String): String =
     s"""CREATE TABLE IF NOT EXISTS $tbName
@@ -92,24 +99,22 @@ class WritePerfRow(config: Config, sc: SparkContext) extends WriteTask(config, s
   def getRDD: RDD[PerfRowClass] =
     RowGenerator.getPerfRowRdd(sc, config.numPartitions, config.totalOps)
 
-  def run(): Unit = {
-    getRDD.saveToCassandra(config.keyspace, config.table)
-  }
-
 }
 
 /**
  * Runs inserts to partitions in a round robin fashion. This means partition key 1 will not
  * be written to twice until partition key n is written to once.
  */
-class WriteWideRow(config: Config, sc: SparkContext) extends WriteTask( config, sc){
+class WriteWideRow(config: Config, sc: SparkContext) extends
+  WriteTask[WideRowClass](config, sc)(implicitly[RowWriterFactory[WideRowClass]]) {
+
   def getTableCql(tbName: String): String =
     //s"""CREATE TABLE IF NOT EXISTS $tbName
     //  |(key int, col1 text, col2 text, col3 text, col4 text, col5 text, col6 text, col7 text, col8 text, col9 text,
     //  |PRIMARY KEY ((key, col1), col2, col3, col4, col5, col6, col7, col8, col9))
     //""".stripMargin
     s"""CREATE TABLE IF NOT EXISTS $tbName
-       |(key bigint, col1 text, col2 text, col3 text, 
+       |(key bigint, col1 text, col2 text, col3 text,
        |PRIMARY KEY (key, col1))
      """.stripMargin
 
@@ -123,16 +128,14 @@ class WriteWideRow(config: Config, sc: SparkContext) extends WriteTask( config, 
       .getWideRowRdd(sc, config.numPartitions, config.totalOps, config.numTotalKeys)
   }
 
-  def run(): Unit = {
-    getRDD.saveToCassandra(config.keyspace, config.table)
-  }
 }
 
 /**
  * Runs inserts to partitions in a random fashion. The chance that any particular partition
  * key will be written to at a time is 1/N. (flat distribution)
  */
-class WriteRandomWideRow(config: Config, sc: SparkContext) extends WriteTask(config, sc){
+class WriteRandomWideRow(config: Config, sc: SparkContext) extends
+  WriteTask[WideRowClass](config, sc)(implicitly[RowWriterFactory[WideRowClass]]) {
 
   def getTableCql(tbName: String): String =
     //s"""CREATE TABLE IF NOT EXISTS $tbName
@@ -140,11 +143,11 @@ class WriteRandomWideRow(config: Config, sc: SparkContext) extends WriteTask(con
     //  |PRIMARY KEY ((key, col1), col2, col3, col4, col5, col6, col7, col8, col9))
     // """.stripMargin
     s"""CREATE TABLE IF NOT EXISTS $tbName
-       |(key bigint, col1 text, col2 text, col3 text, 
+       |(key bigint, col1 text, col2 text, col3 text,
        |PRIMARY KEY (key, col1))
      """.stripMargin
 
-  def getRDD[T]: RDD[WideRowClass] = {
+  def getRDD: RDD[WideRowClass] = {
     println(
       s"""Generating RDD for random wide rows:
          |${config.totalOps} Total Writes,
@@ -153,16 +156,14 @@ class WriteRandomWideRow(config: Config, sc: SparkContext) extends WriteTask(con
     RowGenerator.getRandomWideRow(sc, config.numPartitions, config.totalOps, config.numTotalKeys)
   }
 
-  def run(): Unit = {
-    getRDD.saveToCassandra(config.keyspace, config.table)
-  }
 }
 
 /**
  *  Runs inserts to partitions in an ordered fashion. All writes to partition 1 occur before any
  *  writes to partition 2.
  */
-class WriteWideRowByPartition(config: Config, sc: SparkContext) extends WriteTask(config, sc){
+class WriteWideRowByPartition(config: Config, sc: SparkContext) extends
+  WriteTask[WideRowClass](config, sc)(implicitly[RowWriterFactory[WideRowClass]]) {
 
   def getTableCql(tbName: String): String =
     s"""CREATE TABLE IF NOT EXISTS $tbName
@@ -170,7 +171,7 @@ class WriteWideRowByPartition(config: Config, sc: SparkContext) extends WriteTas
        |PRIMARY KEY (key, col1))
      """.stripMargin
 
-  def getRDD[T]: RDD[WideRowClass] = {
+  def getRDD: RDD[WideRowClass] = {
     println(
       s"""Generating RDD for wide rows in ordered by partition:
          |${config.totalOps} Total Writes,
@@ -179,7 +180,4 @@ class WriteWideRowByPartition(config: Config, sc: SparkContext) extends WriteTas
     RowGenerator.getWideRowByPartition(sc, config.numPartitions, config.totalOps, config.numTotalKeys)
   }
 
-  def run(): Unit = {
-    getRDD.saveToCassandra(config.keyspace, config.table)
-  }
 }
