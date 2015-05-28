@@ -1,13 +1,68 @@
 package com.datastax.sparkstress
 
+import java.util.concurrent.{Executors, ExecutorService}
+import java.util.concurrent.{BlockingQueue, LinkedBlockingQueue}
+import com.datastax.driver.core.utils.UUIDs
 import org.apache.spark.SparkContext
 import scala.util.{Random, Failure, Success, Try}
 import org.apache.spark.rdd.RDD
 import com.datastax.sparkstress.RowTypes._
-
+import java.net.URI
+import java.util.UUID
 
 object RowGenerator {
 
+  val METHODS = Seq("POST", "GET", "DELETE", "PUT")
+  val TOPLEVELDOMAINS = Seq("home", "about", "island", "mirror", "store", "images", "gallery", "products", "streams") 
+  val WORDS = Seq("apple", "banana", "orange", "kiwi", "lemon") 
+  val HEADERS = Seq("gzip", "deflate", "tar", "untar", "crunch", "smash", "smooth", "blend")
+  class HttpUrlGenerator(queue: LinkedBlockingQueue[String], ips: Seq[String], port: Int) extends Runnable {
+    def run() {
+      println("Generator Starting")
+      val r = new Random()
+      val toplevelDomains = Seq("home", "about", "island", "mirror", "store", "images", "gallery", "products", "streams")
+      val words = Seq("apple", "banana", "orange", "kiwi", "lemon")
+      while (true) {
+        val ip = ips(r.nextInt(ips.length))
+        val tld = toplevelDomains(r.nextInt(toplevelDomains.length))
+        val sub1 = words(r.nextInt(words.length))
+        val sub2 = words(r.nextInt(words.length))
+        val uri = s"/$tld/$sub1/$sub2"
+        queue.put(s"http://$ip:$port$uri")
+      }
+    }
+  }
+
+  def getTimelineRowRDD(sc: SparkContext, numPartitions: Int, numTotalRows: Long):
+  RDD[TimelineRowClass] = {
+    val opsPerPartition = numTotalRows / numPartitions
+
+    def generatePartition(index: Int) = {
+      val r = new scala.util.Random(index * System.currentTimeMillis())
+      val start = opsPerPartition*index
+      (0L until opsPerPartition).map { i =>
+        val url = "/"+TOPLEVELDOMAINS(r.nextInt(TOPLEVELDOMAINS.length))+
+                  "/"+WORDS(r.nextInt(WORDS.length))+"/"+WORDS(r.nextInt(WORDS.length))
+        val h1 = HEADERS(r.nextInt(HEADERS.length))
+        val h2 = HEADERS(r.nextInt(HEADERS.length))
+        new TimelineRowClass(
+          UUIDs.unixTimestamp(UUIDs.timeBased()) / 10000L,
+          url,
+          UUIDs.timeBased(),
+          METHODS(r.nextInt(METHODS.length)),
+          Map("Accept-encoding" -> List(h1, h2)).map { case (k, v) => (k, v.mkString("#"))},
+          "NO BODY"
+        )
+      }.iterator
+    }
+
+    sc.parallelize(Seq[Int](), numPartitions).mapPartitionsWithIndex {
+      case (index, n) => {
+        generatePartition(index)
+      }
+    }
+
+  }
 
   def getShortRowRDD(sc: SparkContext, numPartitions: Int, numTotalRows: Long):
   RDD[ShortRowClass] = {

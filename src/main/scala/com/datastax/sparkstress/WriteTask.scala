@@ -9,6 +9,7 @@ import com.datastax.spark.connector._
 
 object WriteTask {
   val ValidTasks = Set(
+    "writetimelinerow",
     "writeshortrow",
     "writeperfrow",
     "writewiderow",
@@ -25,8 +26,8 @@ abstract class WriteTask[rowType](
   def setupCQL() = {
     CassandraConnector(sc.getConf).withSessionDo{ session =>
       if (config.deleteKeyspace){
-      println(s"Destroying Keyspace")
-      session.execute(s"DROP KEYSPACE IF EXISTS ${config.keyspace}")
+         println(s"Destroying Keyspace")
+         session.execute(s"DROP KEYSPACE IF EXISTS ${config.keyspace}")
       }
       val kscql = getKeyspaceCql(config.keyspace)
       val tbcql = getTableCql(config.table)
@@ -58,6 +59,37 @@ abstract class WriteTask[rowType](
   }
 
 
+}
+
+/**
+ * Writes data to timeline table. 
+ */
+class WriteTimelineRow(config: Config, sc: SparkContext) extends WriteTask(config, sc) {
+
+  def getTableCql(tbName: String): String =
+    s"""CREATE TABLE IF NOT EXISTS $tbName (
+       |timesegment bigint,
+       |url text,
+       |t_uuid timeuuid,
+       |method text,
+       |headers map <text, text>,
+       |body text ,
+       |PRIMARY KEY ((url, timesegment), t_uuid ))
+       |WITH CLUSTERING ORDER BY (t_uuid DESC)
+       |AND compaction = {'class': 'DateTieredCompactionStrategy','base_time_seconds':'3600','max_sstable_age_days':'365'};""".stripMargin
+    
+  def getRDD: RDD[TimelineRowClass] = {
+    println(
+      s"""Generating RDD for timeline rows:
+         |${config.totalOps} Total Writes
+         |${config.numPartitions} Num Partitions""".stripMargin
+    )
+    RowGenerator.getTimelineRowRDD(sc, config.numPartitions, config.totalOps)
+  }
+
+  def run(): Unit = {
+    getRDD.saveToCassandra(config.keyspace, config.table)
+  }
 }
 
 /**
