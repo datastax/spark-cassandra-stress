@@ -1,6 +1,8 @@
 package com.datastax.sparkstress
 
-import org.apache.spark.{SparkConf, SparkContext}
+import java.io.{FileWriter, Writer}
+
+import org.apache.spark.SparkConf
 
 
 case class Config(
@@ -14,6 +16,9 @@ case class Config(
   numTotalKeys: Long =  1 * 1000000,
   trials: Int = 1,
   deleteKeyspace: Boolean = false,
+  // csv file to append results
+  file: Option[Writer] = Option.empty,
+  saveMethod: String = "driver",
   //Spark Options
   sparkOps: Map[String,String] = Map.empty
 )
@@ -34,6 +39,10 @@ object SparkCassandraStress {
       arg[String]("testName") optional() action { (arg,config) =>
         config.copy(testName = arg.toLowerCase())
       } text {"Name of the test to be run: "+VALID_TESTS.mkString(" , ")}
+
+      opt[String]('S', "save") optional() action { (arg,config) =>
+        config.copy(file = Option(new FileWriter(arg, true)))
+      } text {"Name of the file to append results"}
 
       arg[String]("master") optional() action { (arg,config) =>
         config.copy(sparkOps = config.sparkOps + ("spark.master" -> arg))
@@ -113,6 +122,9 @@ object SparkCassandraStress {
         config.copy(sparkOps = config.sparkOps +
           ("spark.cassandra.output.batch.grouping.buffer.size" -> arg.toString))
       } text {"The amount of batches the connector keeps alive before forcing the largest to be executed"}
+      opt[String]('m',"saveMethod") optional() action { (arg,config) =>
+        config.copy(saveMethod = arg)
+      } text {"rdd save method. bulk: bulkSaveToCassandra, driver: saveToCassandra"}
 
       help("help") text {"CLI Help"}
      checkConfig{ c => if (VALID_TESTS.contains(c.testName)) success else failure(c.testName+" is not a valid test : "+VALID_TESTS.mkString(" , ")) }
@@ -123,6 +135,14 @@ object SparkCassandraStress {
     } getOrElse {
       System.exit(1)
     }
+  }
+
+  def csvResults(config: Config, time: Seq[Long]) : String = {
+    time.zipWithIndex.map {case (time,count) => {
+      val timeSeconds :Double = time / 1000000000.0
+      val opsPerSecond = config.totalOps/ timeSeconds
+      Seq(config.testName, config.saveMethod, config.totalOps, config.totalOps/config.numTotalKeys, count, timeSeconds, opsPerSecond, config).mkString("\t")
+    }}.mkString("\n") + "\n"
   }
 
   def runTask(config:Config)
@@ -161,6 +181,7 @@ object SparkCassandraStress {
     //printf(s"WallClockTimeSeconds : %s\n",wallClockTimeSeconds)
     //printf(s"WallClockTimeMinutes : %s\n",(wallClockTimeSeconds)/60.0)
     printf(s"OpsPerSecond : %s\n",(opsPerSecond.map{math.round(_)}).mkString(","))
+    config.file.map(f => {f.write(csvResults(config, time));f.flush })
  }
 
 

@@ -22,9 +22,13 @@ class ReadAll extends ReadTask{
 
   val keyspace = config.keyspace
   val table = config.table
-
+  var count: Long = 0
   def run(sc: SparkContext){
-    sc.cassandraTable(keyspace,table).count
+    //  do not use count optimization               VVVVVVVVV
+    count = sc.cassandraTable(keyspace,table).filter(x=> true).count
+    if (config.totalOps != count) {
+      println(s"Read verification failed! Expected ${config.totalOps}, returned $count");
+    }
   }
 }
 

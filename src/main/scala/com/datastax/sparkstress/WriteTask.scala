@@ -6,6 +6,7 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.SparkContext
 import com.datastax.sparkstress.RowTypes._
 import com.datastax.spark.connector._
+import com.datastax.bdp.spark.writer.BulkTableWriter._
 
 object WriteTask {
   val ValidTasks = Set(
@@ -45,7 +46,10 @@ abstract class WriteTask[rowType](
   def getRDD: RDD[rowType]
 
   def run() = {
-    getRDD.saveToCassandra(config.keyspace, config.table)
+    config.saveMethod match {
+      case "bulk" => getRDD.bulkSaveToCassandra(config.keyspace, config.table)
+      case _ => getRDD.saveToCassandra(config.keyspace, config.table)
+  	}
   }
 
   def setConfig(c: Config): Unit  = {
