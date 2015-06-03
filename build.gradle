@@ -4,7 +4,7 @@ apply plugin: 'scala'
 version = '1.0'
 
 if (!hasProperty('against')) {
-    ext.against = 'dse'    // default
+    ext.against = 'maven'    // default
 }
 
 def Home = System.env.HOME
@@ -13,7 +13,7 @@ def DseResources = System.env.DSE_RESOURCES ?: "$Home/dse/resources/"
 def mainClassName = "com.datastax.sparkstress.SparkCassandraStress"
 
 // Parameters for buliding against Maven Libs
-def ConnectorVersion = System.env.CONNECTOR_VERSION ?: '1.2.0-rc2'
+def ConnectorVersion = System.env.CONNECTOR_VERSION ?: '1.2.1'
 def SparkVersion = System.env.SPARK_VERSION ?: '1.2.1'
 
 // Parameter for building against Connector Repository
@@ -96,7 +96,16 @@ repositories {
     mavenCentral()
 }
 
+test {
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+    }
+}
+
 dependencies {
+    testCompile "org.scala-lang:scala-library:2.10.5"
+    testCompile "com.datastax.spark:spark-cassandra-connector-embedded_2.10:1.2.1"
+    testCompile "org.scalatest:scalatest_2.10:2.2.4"
     compile "com.github.scopt:scopt_2.10:3.2.0"
     println "Checking dependency flag: $against"
 
