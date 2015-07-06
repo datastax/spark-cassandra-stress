@@ -63,7 +63,12 @@ class WriteTaskTests extends FlatSpec
   }
 
   "WriteWideRow" should "save correctly" in {
-    val config = new Config(testName = "writewiderow", keyspace = "test4", numPartitions = 1, totalOps = 8, numTotalKeys = 1)
+    val config = new Config(
+      testName = "writewiderow", 
+      keyspace = "test4", 
+      numPartitions = 1, 
+      totalOps = 8, 
+      numTotalKeys = 1)
     val writer = new WriteWideRow(config, sc)
     writer.setupCQL
     writer.run
@@ -71,7 +76,12 @@ class WriteTaskTests extends FlatSpec
   }
 
   "WriteRandomWideRow" should "save correctly" in {
-    val config = new Config(testName = "writerandomwiderow", keyspace = "test5", numPartitions = 10, totalOps = 20, numTotalKeys = 1)
+    val config = new Config(
+      testName = "writerandomwiderow", 
+      keyspace = "test5", 
+      numPartitions = 10, 
+      totalOps = 20, 
+      numTotalKeys = 1)
     val writer = new WriteRandomWideRow(config, sc)
     writer.setupCQL
     writer.run
@@ -79,7 +89,12 @@ class WriteTaskTests extends FlatSpec
   }
 
   "WriteWideRowByPartition" should "save correctly" in {
-    val config = new Config(testName = "writewiderowbypartition", keyspace = "test6", numPartitions = 1, totalOps = 40, numTotalKeys = 5)
+    val config = new Config(
+      testName = "writewiderowbypartition", 
+      keyspace = "test6", 
+      numPartitions = 1, 
+      totalOps = 40, 
+      numTotalKeys = 5)
     val writer = new WriteWideRowByPartition(config, sc)
     writer.setupCQL
     writer.run
