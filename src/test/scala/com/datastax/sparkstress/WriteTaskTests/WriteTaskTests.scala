@@ -37,29 +37,22 @@ class WriteTaskTests extends FlatSpec
     rdd.count should be (config.totalOps)
   }
 
- "WriteShortRow" should "save correctly" in {
-    val config = new Config(keyspace = "test2", numPartitions = 1, totalOps = 6, numTotalKeys = 1)
-    val writer = new WriteShortRow(config, sc)
-    writer.setupCQL
-    writer.run
-    sc.cassandraTable(config.keyspace,config.table).count should be (6)
-  }
-
-  it should "throw an exception when using bulkSave" in {
-    val config = new Config(saveMethod = "bulk")
-    val writer = new WriteShortRow(config, sc)
-    an [UnsupportedOperationException] should be thrownBy writer.run
-  }
-
-  it should "set new config options" in {
-    val config = new Config(keyspace = "test3", numPartitions = 1, totalOps = 15, numTotalKeys = 1)
+  "WriteTask" should "set new config options" in {
+    val config = new Config(keyspace = "test2", numPartitions = 1, totalOps = 15, numTotalKeys = 1)
     val writer = new WriteShortRow(config, sc)
     writer.setupCQL
     writer.run
     sc.cassandraTable(config.keyspace,config.table).count should be (15)
     writer.setConfig(new Config(saveMethod = "bulk"))
     writer.config.saveMethod should be ("bulk")
-    an [UnsupportedOperationException] should be thrownBy writer.run
+  }
+
+ "WriteShortRow" should "save correctly" in {
+    val config = new Config(keyspace = "test3", numPartitions = 1, totalOps = 6, numTotalKeys = 1)
+    val writer = new WriteShortRow(config, sc)
+    writer.setupCQL
+    writer.run
+    sc.cassandraTable(config.keyspace,config.table).count should be (6)
   }
 
   "WriteWideRow" should "save correctly" in {

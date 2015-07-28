@@ -97,6 +97,9 @@ repositories {
 }
 
 test {
+    if(against == 'dse') {
+        exclude '**/NonDseWriteTaskTests/**'
+    }
     testLogging {
         events "passed", "skipped", "failed", "standardOut", "standardError"
     }
