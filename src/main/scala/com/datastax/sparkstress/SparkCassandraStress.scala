@@ -16,6 +16,7 @@ case class Config(
   numTotalKeys: Long =  1 * 1000000,
   trials: Int = 1,
   deleteKeyspace: Boolean = false,
+  verboseOutput: Boolean = false,
   // csv file to append results
   file: Option[Writer] = Option.empty,
   saveMethod: String = "driver",
@@ -72,6 +73,10 @@ object SparkCassandraStress {
         config.copy(deleteKeyspace = true)
       } text {"Delete Keyspace before running"}
 
+      opt[Unit]('v',"verbose") optional() action { (_,config) =>
+        config.copy(verboseOutput = true)
+      } text {"Display verbose output for debugging."}
+
       opt[String]('k',"keyspace") optional() action { (arg,config) =>
         config.copy(keyspace = arg)
       } text {"Name of the keyspace to use/create"}
@@ -108,6 +113,11 @@ object SparkCassandraStress {
         config.copy(sparkOps = config.sparkOps +
           ("spark.cassandra.input.split.size" -> arg.toString))
       } text {"Read input size"}
+
+      opt[Int]('u',"throughput") optional() action { (arg,config) =>
+        config.copy(sparkOps = config.sparkOps +
+          ("spark.cassandra.output.throughput_mb_per_sec" -> arg.toString))
+      } text {"maximum write throughput allowed per single core in MB/s"}
 
       opt[String]('g', "groupingKey") optional() action { (arg, config) =>
         config.copy(sparkOps = config.sparkOps +
@@ -152,6 +162,10 @@ object SparkCassandraStress {
       new SparkConf()
         .setAppName("SparkStress: "+config.testName)
         .setAll(config.sparkOps)
+
+    if (config.verboseOutput) { 
+      sparkConf.getAll.foreach(println)
+    }
 
     val sc = ConnectHelper.getContext(sparkConf)
 
