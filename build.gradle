@@ -13,8 +13,8 @@ def DseResources = System.env.DSE_RESOURCES ?: "$Home/dse/resources/"
 def mainClassName = "com.datastax.sparkstress.SparkCassandraStress"
 
 // Parameters for buliding against Maven Libs
-def ConnectorVersion = System.env.CONNECTOR_VERSION ?: '1.2.1'
-def SparkVersion = System.env.SPARK_VERSION ?: '1.2.1'
+def ConnectorVersion = System.env.CONNECTOR_VERSION ?: '1.3.0'
+def SparkVersion = System.env.SPARK_VERSION ?: '1.3.1'
 
 // Parameter for building against Connector Repository
 def SparkCCHome = System.env.SPARKCC_HOME ?:
@@ -89,7 +89,7 @@ configurations {
 }
 
 ext {
-    scalaVersion = '2.10.4'
+    scalaVersion = '2.10.5'
 }
 
 repositories {
@@ -110,6 +110,8 @@ dependencies {
     testCompile "com.datastax.spark:spark-cassandra-connector-embedded_2.10:1.2.1"
     testCompile "org.scalatest:scalatest_2.10:2.2.4"
     compile "com.github.scopt:scopt_2.10:3.2.0"
+    compile "joda-time:joda-time:2.8.1"
+
     println "Checking dependency flag: $against"
 
 }

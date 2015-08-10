@@ -93,7 +93,7 @@ object RowGenerator {
   val colors = List("red", "green", "blue", "yellow", "purple", "pink", "grey", "black", "white", "brown").view
   val sizes = List("P", "S", "M", "L", "XL", "XXL", "XXXL").view
   val qtys = (5 to 10000 by 5).view
-  val perftime = new DateTime(2000,1,1,0,0)
+  val perftime = new DateTime(2000,1,1,0,0,0,0)
   val perfRandom = 42
 
   def getPerfRowRdd(sc: SparkContext, numPartitions: Int, numTotalRows: Long, numTotalKeys: Long): RDD[PerfRowClass] = {

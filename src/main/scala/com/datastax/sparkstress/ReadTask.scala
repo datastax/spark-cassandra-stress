@@ -8,16 +8,16 @@ import com.datastax.spark.connector._
 
 object ReadTask {
   val ValidTasks = Set(
-    "CountAll",
-    "AggregateColor",
-    "AggregateColorSize",
-    "FilterColorStringMatchCount",
-    "FilterEqualityQtyColorSizeCount",
-    "FilterEqualityQtyColorSizeCountFiveCols",
-    "FilterLessThanQtyEqualityColorSizeCount",
-    "FilterLessThanQtyEqualityColorSizeFiveCols",
-    "FilterQtyMatchCount",
-    "RetrieveSinglePartition"
+    "countall",
+    "aggregatecolor",
+    "aggregatecolorsize",
+    "filtercolorstringmatchcount",
+    "filterequalityqtycolorsizecount",
+    "filterequalityqtycolorsizecountfivecols",
+    "filterlessthanqtyequalitycolorsizecount",
+    "filterlessthanqtyequalitycolorsizefivecols",
+    "filterqtymatchcount",
+    "retrievesinglepartition"
   )
 }
 

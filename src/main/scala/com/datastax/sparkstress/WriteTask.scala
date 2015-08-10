@@ -100,8 +100,8 @@ class WritePerfRow(config: Config, sc: SparkContext) extends
        |qty int,
        |PRIMARY KEY (store, order_time, order_number))
      """.stripMargin,
-    s"""CREATE INDEX color ON ${config.keyspace}.$tbName (color) """,
-    s"""CREATE INDEX size ON ${config.keyspace}.$tbName (size)"""
+    s"""CREATE INDEX IF NOT EXISTS color ON ${config.keyspace}.$tbName (color) """,
+    s"""CREATE INDEX IF NOT EXISTS size ON ${config.keyspace}.$tbName (size)"""
     )
 
   def getRDD: RDD[PerfRowClass] =

@@ -18,7 +18,7 @@ class NonDseWriteTaskTests extends FlatSpec
   def clearCache(): Unit = CassandraConnector.evictCache()
   useCassandraConfig(Seq("cassandra-default.yaml.template"))
   useSparkConf(defaultSparkConf)
-
+/**
   val conn = CassandraConnector(Set(EmbeddedCassandra.getHost(0)))
   conn.withSessionDo { session =>
     session.execute(s"""CREATE KEYSPACE test WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
@@ -30,4 +30,5 @@ class NonDseWriteTaskTests extends FlatSpec
     val writer = new WriteShortRow(config, sc)
     an [UnsupportedOperationException] should be thrownBy writer.run
   }
+  **/
 }

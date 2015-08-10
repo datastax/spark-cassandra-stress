@@ -21,13 +21,13 @@ class WriteTaskTests extends FlatSpec
 
   val conn = CassandraConnector(Set(EmbeddedCassandra.getHost(0)))
   conn.withSessionDo { session =>
-    session.execute(s"""CREATE KEYSPACE test1 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
-    session.execute(s"""CREATE KEYSPACE test2 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
-    session.execute(s"""CREATE KEYSPACE test3 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
-    session.execute(s"""CREATE KEYSPACE test4 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
-    session.execute(s"""CREATE KEYSPACE test5 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
-    session.execute(s"""CREATE KEYSPACE test6 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
-    session.execute(s"""CREATE KEYSPACE test7 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
+    session.execute(s"""CREATE KEYSPACE IF NOT EXISTS test1 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
+    session.execute(s"""CREATE KEYSPACE IF NOT EXISTS test2 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
+    session.execute(s"""CREATE KEYSPACE IF NOT EXISTS test3 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
+    session.execute(s"""CREATE KEYSPACE IF NOT EXISTS test4 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
+    session.execute(s"""CREATE KEYSPACE IF NOT EXISTS test5 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
+    session.execute(s"""CREATE KEYSPACE IF NOT EXISTS test6 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
+    session.execute(s"""CREATE KEYSPACE IF NOT EXISTS test7 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
   }
 
   "The RDD" should "have the correct configurations" in {
