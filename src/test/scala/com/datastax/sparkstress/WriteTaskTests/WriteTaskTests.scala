@@ -27,6 +27,7 @@ class WriteTaskTests extends FlatSpec
     session.execute(s"""CREATE KEYSPACE test4 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
     session.execute(s"""CREATE KEYSPACE test5 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
     session.execute(s"""CREATE KEYSPACE test6 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
+    session.execute(s"""CREATE KEYSPACE test7 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
   }
 
   "The RDD" should "have the correct configurations" in {
@@ -35,16 +36,6 @@ class WriteTaskTests extends FlatSpec
     val rdd = writer.getRDD
     rdd.partitions.length should be (config.numPartitions)
     rdd.count should be (config.totalOps)
-  }
-
-  "WriteTask" should "set new config options" in {
-    val config = new Config(keyspace = "test2", numPartitions = 1, totalOps = 15, numTotalKeys = 1)
-    val writer = new WriteShortRow(config, sc)
-    writer.setupCQL
-    writer.run
-    sc.cassandraTable(config.keyspace,config.table).count should be (15)
-    writer.setConfig(new Config(saveMethod = "bulk"))
-    writer.config.saveMethod should be ("bulk")
   }
 
  "WriteShortRow" should "save correctly" in {
@@ -92,6 +83,44 @@ class WriteTaskTests extends FlatSpec
     writer.setupCQL
     writer.run
     sc.cassandraTable(config.keyspace,config.table).count should be (40)
+  }
+
+  "WritePerfRow" should " generate the correct number of pks" in {
+    val config = new Config(
+      testName = "writeperfrow",
+      keyspace = "test7",
+      numPartitions = 5,
+      totalOps = 1000,
+      numTotalKeys = 200)
+    val writer = new WritePerfRow(config, sc)
+    val results = writer.getRDD.map(_.store).countByValue()
+    results should have size (200)
+  }
+
+  it should "generate the correct number of cks per pk" in {
+    val config = new Config(
+      testName = "writeperfrow",
+      keyspace = "test7",
+      numPartitions = 2,
+      totalOps = 40,
+      numTotalKeys = 4)
+    val writer = new WritePerfRow(config, sc)
+    val rowLengths = writer.getRDD.spanBy( u=> u.store).map(row => row._2).collect()
+    for (row <- rowLengths)
+      row should have size 10
+  }
+
+  it should " write to C*" in {
+     val config = new Config(
+      testName = "writeperfrow",
+      keyspace = "test7",
+      numPartitions = 10,
+      totalOps = 1000,
+      numTotalKeys = 200)
+    val writer = new WritePerfRow(config, sc)
+    writer.setupCQL
+    writer.run
+    sc.cassandraTable(config.keyspace, config.table).count should be (1000)
   }
 
 }

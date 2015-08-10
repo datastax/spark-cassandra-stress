@@ -19,29 +19,30 @@ object WriteTask {
 }
 
 abstract class WriteTask[rowType](
-  var config: Config,
+  val config: Config,
   val sc: SparkContext)
   (implicit rwf: RowWriterFactory[rowType]) extends StressTask {
 
   def setupCQL() = {
     CassandraConnector(sc.getConf).withSessionDo{ session =>
       if (config.deleteKeyspace){
-      println(s"Destroying Keyspace")
-      session.execute(s"DROP KEYSPACE IF EXISTS ${config.keyspace}")
+        println(s"Destroying Keyspace")
+        session.execute(s"DROP KEYSPACE IF EXISTS ${config.keyspace}")
       }
       val kscql = getKeyspaceCql(config.keyspace)
       val tbcql = getTableCql(config.table)
-      println(s"Running the following create statements\n$kscql\n$tbcql")
+      println(s"""Running the following create statements\n$kscql\n${tbcql.mkString("\n")})""")
       session.execute(kscql)
       session.execute(s"USE ${config.keyspace}")
-      session.execute(tbcql)
+      for (cql <- tbcql)
+       session.execute(cql)
     }
     printf("Done Setting up CQL Keyspace/Table\n")
   }
 
   def getKeyspaceCql(ksName: String): String = s"CREATE KEYSPACE IF NOT EXISTS $ksName WITH replication = {'class': 'NetworkTopologyStrategy', 'Analytics': ${config.replicationFactor} }"
 
-  def getTableCql(tbName: String): String
+  def getTableCql(tbName: String): Seq[String]
 
   def getRDD: RDD[rowType]
 
@@ -50,10 +51,6 @@ abstract class WriteTask[rowType](
       case "bulk" => getRDD.bulkSaveToCassandra(config.keyspace, config.table)
       case _ => getRDD.saveToCassandra(config.keyspace, config.table)
   	}
-  }
-
-  def setConfig(c: Config): Unit  = {
-    config = c
   }
 
   def runTrials(sc: SparkContext): Seq[Long] = {
@@ -71,9 +68,9 @@ abstract class WriteTask[rowType](
 class WriteShortRow(config: Config, sc: SparkContext) extends
   WriteTask[ShortRowClass](config, sc)(implicitly[RowWriterFactory[ShortRowClass]]) {
 
-  def getTableCql(tbName: String): String =
-    s"""CREATE TABLE IF NOT EXISTS $tbName
-       |(key bigint, col1 text, col2 text, col3 text, PRIMARY KEY(key))""".stripMargin
+  def getTableCql(tbName: String): Seq[String] =
+    Seq(s"""CREATE TABLE IF NOT EXISTS $tbName
+       |(key bigint, col1 text, col2 text, col3 text, PRIMARY KEY(key))""".stripMargin)
 
   def getRDD: RDD[ShortRowClass] = {
     println(
@@ -92,16 +89,23 @@ class WriteShortRow(config: Config, sc: SparkContext) extends
 class WritePerfRow(config: Config, sc: SparkContext) extends
   WriteTask[PerfRowClass](config, sc)(implicitly[RowWriterFactory[PerfRowClass]]) {
 
-  def getTableCql(tbName: String): String =
-    s"""CREATE TABLE IF NOT EXISTS $tbName
-       |(key text, size text, qty int, time timestamp, color text,
-       |col1 text, col2 text, col3 text, col4 text, col5 text,
-       |col6 text, col7 text, col8 text, col9 text, col10 text,
-       |PRIMARY KEY (key))}
-     """.stripMargin
+  def getTableCql(tbName: String): Seq[String] =
+    Seq(
+      s"""CREATE TABLE IF NOT EXISTS $tbName
+       |(store text,
+       |order_time timestamp,
+       |order_number uuid,
+       |color text,
+       |size text,
+       |qty int,
+       |PRIMARY KEY (store, order_time, order_number))
+     """.stripMargin,
+    s"""CREATE INDEX color ON ${config.keyspace}.$tbName (color) """,
+    s"""CREATE INDEX size ON ${config.keyspace}.$tbName (size)"""
+    )
 
   def getRDD: RDD[PerfRowClass] =
-    RowGenerator.getPerfRowRdd(sc, config.numPartitions, config.totalOps)
+    RowGenerator.getPerfRowRdd(sc, config.numPartitions, config.totalOps, config.numTotalKeys)
 
 }
 
@@ -112,15 +116,11 @@ class WritePerfRow(config: Config, sc: SparkContext) extends
 class WriteWideRow(config: Config, sc: SparkContext) extends
   WriteTask[WideRowClass](config, sc)(implicitly[RowWriterFactory[WideRowClass]]) {
 
-  def getTableCql(tbName: String): String =
-    //s"""CREATE TABLE IF NOT EXISTS $tbName
-    //  |(key int, col1 text, col2 text, col3 text, col4 text, col5 text, col6 text, col7 text, col8 text, col9 text,
-    //  |PRIMARY KEY ((key, col1), col2, col3, col4, col5, col6, col7, col8, col9))
-    //""".stripMargin
-    s"""CREATE TABLE IF NOT EXISTS $tbName
+  def getTableCql(tbName: String): Seq[String] =
+    Seq(s"""CREATE TABLE IF NOT EXISTS $tbName
        |(key bigint, col1 text, col2 text, col3 text,
        |PRIMARY KEY (key, col1))
-     """.stripMargin
+     """.stripMargin)
 
   def getRDD: RDD[WideRowClass] = {
     println(
@@ -141,15 +141,11 @@ class WriteWideRow(config: Config, sc: SparkContext) extends
 class WriteRandomWideRow(config: Config, sc: SparkContext) extends
   WriteTask[WideRowClass](config, sc)(implicitly[RowWriterFactory[WideRowClass]]) {
 
-  def getTableCql(tbName: String): String =
-    //s"""CREATE TABLE IF NOT EXISTS $tbName
-    //  |(key int, col1 text, col2 text, col3 text, col4 text, col5 text, col6 text, col7 text, col8 text, col9 text,
-    //  |PRIMARY KEY ((key, col1), col2, col3, col4, col5, col6, col7, col8, col9))
-    // """.stripMargin
-    s"""CREATE TABLE IF NOT EXISTS $tbName
+  def getTableCql(tbName: String): Seq[String] =
+    Seq(s"""CREATE TABLE IF NOT EXISTS $tbName
        |(key bigint, col1 text, col2 text, col3 text,
        |PRIMARY KEY (key, col1))
-     """.stripMargin
+     """.stripMargin)
 
   def getRDD: RDD[WideRowClass] = {
     println(
@@ -169,11 +165,11 @@ class WriteRandomWideRow(config: Config, sc: SparkContext) extends
 class WriteWideRowByPartition(config: Config, sc: SparkContext) extends
   WriteTask[WideRowClass](config, sc)(implicitly[RowWriterFactory[WideRowClass]]) {
 
-  def getTableCql(tbName: String): String =
-    s"""CREATE TABLE IF NOT EXISTS $tbName
+  def getTableCql(tbName: String): Seq[String] =
+    Seq(s"""CREATE TABLE IF NOT EXISTS $tbName
        |(key int, col1 text, col2 text, col3 text,
        |PRIMARY KEY (key, col1))
-     """.stripMargin
+     """.stripMargin)
 
   def getRDD: RDD[WideRowClass] = {
     println(
@@ -183,5 +179,7 @@ class WriteWideRowByPartition(config: Config, sc: SparkContext) extends
     )
     RowGenerator.getWideRowByPartition(sc, config.numPartitions, config.totalOps, config.numTotalKeys)
   }
+
+
 
 }
