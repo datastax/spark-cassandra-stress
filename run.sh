@@ -26,4 +26,3 @@ elif [[ $1 == "apache" ]]; then
 else
   echo "dse or apache required as the first argument"
 fi
-echo
