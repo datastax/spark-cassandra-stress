@@ -27,8 +27,7 @@ case class Config(
 
 object SparkCassandraStress {
   val VALID_TESTS =
-    WriteTask.ValidTasks ++
-    Set("readall")
+    WriteTask.ValidTasks ++ ReadTask.ValidTasks
 
   val KeyGroupings = Seq("none", "replica_set", "partition")
 
@@ -133,12 +132,19 @@ object SparkCassandraStress {
         case "writeperfrow" => new WritePerfRow(config, sc)
         case "writerandomwiderow" => new WriteRandomWideRow(config, sc)
         case "writewiderowbypartition" => new WriteWideRowByPartition(config, sc)
-        case "readall" => new ReadAll()
+        case "countall" => new CountAll(config, sc)
+        case "aggregatecolor" => new AggregateColor(config, sc)
+        case "aggregatecolorsize" => new AggregateColorSize(config, sc)
+        case "filtercolorstringmatchcount" => new FilterColorStringMatchCount(config, sc)
+        case "filterequalityqtycolorsizecount" => new FilterEqualityQtyColorSizeCount(config, sc)
+        case "filterequalityqtycolorsizecountfivecols" => new FilterEqualityQtyColorSizeCountFiveCols(config, sc)
+        case "filterlessthanqtyequalitycolorsizecount" => new FilterLessThanQtyEqualityColorSizeCount(config, sc)
+        case "filterlessthanqtyequalitycolorsizefivecols" => new FilterLessThanQtyEqualityColorSizeCountFiveCols(config, sc)
+        case "filterqtymatchcount" => new FilterQtyMatchCount(config, sc)
+        case "retrievesinglepartition" => new RetrieveSinglePartition(config, sc)
       }
 
-    test.setConfig(config)
-
-    val wallClockStartTime = System.nanoTime() 
+    val wallClockStartTime = System.nanoTime()
     val time = test.runTrials(sc)
 
     val wallClockStopTime = System.nanoTime() 
