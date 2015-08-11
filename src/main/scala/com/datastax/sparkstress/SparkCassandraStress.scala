@@ -139,7 +139,7 @@ object SparkCassandraStress {
         case "filterequalityqtycolorsizecount" => new FilterEqualityQtyColorSizeCount(config, sc)
         case "filterequalityqtycolorsizecountfivecols" => new FilterEqualityQtyColorSizeCountFiveCols(config, sc)
         case "filterlessthanqtyequalitycolorsizecount" => new FilterLessThanQtyEqualityColorSizeCount(config, sc)
-        case "filterlessthanqtyequalitycolorsizecountfivecols" => new FilterLessThanQtyEqualityColorSizeCountFiveCols(config, sc)
+        case "filterlessthanqtyequalitycolorsizefivecols" => new FilterLessThanQtyEqualityColorSizeCountFiveCols(config, sc)
         case "filterqtymatchcount" => new FilterQtyMatchCount(config, sc)
         case "retrievesinglepartition" => new RetrieveSinglePartition(config, sc)
       }

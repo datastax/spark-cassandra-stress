@@ -44,6 +44,7 @@ class CountAll(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
     if (config.totalOps != count) {
       println(s"Read verification failed! Expected ${config.totalOps}, returned $count");
     }
+    println(count)
   }
 }
 
