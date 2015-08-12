@@ -38,7 +38,9 @@ object SparkCassandraStress {
 
       arg[String]("testName") optional() action { (arg,config) =>
         config.copy(testName = arg.toLowerCase())
-      } text {"Name of the test to be run: "+VALID_TESTS.mkString(" , ")}
+      } text {  s"""Tests :
+              |Write Tests:  ${WriteTask.ValidTasks.mkString(" , ")}
+              |Read Tests: ${ReadTask.ValidTasks.mkString(" , ")}""".stripMargin}
 
       opt[String]('S', "save") optional() action { (arg,config) =>
         config.copy(file = Option(new FileWriter(arg, true)))
@@ -92,7 +94,10 @@ object SparkCassandraStress {
       
       
       help("help") text {"CLI Help"}
-      checkConfig{ c => if (VALID_TESTS.contains(c.testName)) success else failure(c.testName+" is not a valid test : "+VALID_TESTS.mkString(" , ")) }
+      checkConfig{ c => if (VALID_TESTS.contains(c.testName)) success else failure(
+        s"""${c.testName} is not a valid test :
+           |Write Tests:  ${WriteTask.ValidTasks.mkString(" , ")}
+           |Read Tests: ${ReadTask.ValidTasks.mkString(" , ")}""".stripMargin)}
     }
 
     parser.parse(args, Config()) map { config =>
@@ -132,15 +137,15 @@ object SparkCassandraStress {
         case "writeperfrow" => new WritePerfRow(config, sc)
         case "writerandomwiderow" => new WriteRandomWideRow(config, sc)
         case "writewiderowbypartition" => new WriteWideRowByPartition(config, sc)
-        case "countall" => new CountAll(config, sc)
-        case "aggregatecolor" => new AggregateColor(config, sc)
-        case "aggregatecolorsize" => new AggregateColorSize(config, sc)
-        case "filtercolorstringmatchcount" => new FilterColorStringMatchCount(config, sc)
-        case "filterequalityqtycolorsizecount" => new FilterEqualityQtyColorSizeCount(config, sc)
-        case "filterequalityqtycolorsizecountfivecols" => new FilterEqualityQtyColorSizeCountFiveCols(config, sc)
-        case "filterlessthanqtyequalitycolorsizecount" => new FilterLessThanQtyEqualityColorSizeCount(config, sc)
-        case "filterlessthanqtyequalitycolorsizefivecols" => new FilterLessThanQtyEqualityColorSizeCountFiveCols(config, sc)
-        case "filterqtymatchcount" => new FilterQtyMatchCount(config, sc)
+        case "pdcount" => new PDCount(config, sc)
+        case "ftsallcolumns" => new FTSAllColumns(config, sc)
+        case "ftsfivecolumns" => new FTSFiveColumns(config, sc)
+        case "ftsonecolumn" => new FTSOneColumn(config, sc)
+        case "ftspdclusteringallcolumns" => new FTSPDClusteringAllColumns(config, sc)
+        case "ftspdclusteringfivecolumns" => new FTSPDClusteringFiveColumns(config, sc)
+        case "jwcallcolumns" => new JWCAllColumns(config, sc)
+        case "jwcpdclusteringallcolumns" => new JWCPDClusteringAllColumns(config, sc)
+        case "jwcrpallcolumns" => new JWCRPAllColumns(config, sc)
         case "retrievesinglepartition" => new RetrieveSinglePartition(config, sc)
       }
 

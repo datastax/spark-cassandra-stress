@@ -5,24 +5,27 @@ import java.util.UUID
 import com.datastax.sparkstress.RowTypes.PerfRowClass
 import org.apache.spark.SparkContext
 import com.datastax.spark.connector._
+import org.joda.time.DateTime
 
 object ReadTask {
   val ValidTasks = Set(
-    "countall",
-    "aggregatecolor",
-    "aggregatecolorsize",
-    "filtercolorstringmatchcount",
-    "filterequalityqtycolorsizecount",
-    "filterequalityqtycolorsizecountfivecols",
-    "filterlessthanqtyequalitycolorsizecount",
-    "filterlessthanqtyequalitycolorsizefivecols",
-    "filterqtymatchcount",
+    "ftsallcolumns",
+    "ftsfivecolumns",
+    "ftsonecolumn",
+    "ftspdclusteringallcolumns",
+    "ftspdclusteringfivecolumns",
+    "jwcallcolumns",
+    "jwcpdclusteringallcolumns",
+    "jwcrpallcolumns",
+    "pdcount",
     "retrievesinglepartition"
   )
 }
 
 abstract class ReadTask(config: Config, sc: SparkContext) extends StressTask {
 
+  val uuidPivot = UUID.fromString("9b657ca1-bfb1-49c0-85f5-04b127adc6f3")
+  val timePivot =  new DateTime(2000,1,1,0,0,0,0).plusSeconds(500)
   val keyspace = config.keyspace
   val table = config.table
 
@@ -36,11 +39,15 @@ abstract class ReadTask(config: Config, sc: SparkContext) extends StressTask {
   }
 }
 
-
-class CountAll(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
+/**
+ * Push Down Count
+ * Uses our internally cassandra count pushdown, this means all of the aggregation
+ * is done on the C* side
+ */
+class PDCount(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
 
   def run(): Unit = {
-    val count = sc.cassandraTable(keyspace, table).count
+    val count = sc.cassandraTable(keyspace, table).cassandraCount()
     if (config.totalOps != count) {
       println(s"Read verification failed! Expected ${config.totalOps}, returned $count");
     }
@@ -48,91 +55,120 @@ class CountAll(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   }
 }
 
-class AggregateColor(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
+/**
+ * Full Table Scan One Column
+ * Performs a full table scan but only retreives a single column from the underlying
+ * table.
+ */
+class FTSOneColumn(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
 
   def run(): Unit = {
-    val colorCounts = sc.cassandraTable[String](keyspace, table).select("color").countByValue
-    colorCounts.foreach(println)
+    val colorCounts = sc.cassandraTable[String](keyspace, table).select("color").count
+    println(colorCounts)
   }
 }
 
-class AggregateColorSize(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
-
+/**
+ * Full Table Scan One Column
+ * Performs a full table scan but only retreives a single column from the underlying
+ * table.
+ */
+class FTSAllColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
-    val colorCounts = sc.cassandraTable[(String, String)](keyspace, table).select("color",
-      "size").countByValue
-    colorCounts.foreach(println)
+    val count = sc.cassandraTable[PerfRowClass](keyspace, table).count
+    println(s"Loaded $count rows")
   }
 }
 
-class FilterColorStringMatchCount(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
-
+/**
+ * Full Table Scan Five Columns
+ * Performs a full table scan and only retreives 5 of the coulmns for each row
+ */
+class FTSFiveColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
-    val greenCount = sc.cassandraTable[PerfRowClass](keyspace, table).where("color = ?", "green")
+    val count = sc.cassandraTable[(UUID, Int, String, String, org.joda.time.DateTime)](keyspace,
+      table)
+      .select("order_number", "qty", "color", "size", "order_time")
       .count
-    println(greenCount)
+    println(s"Loaded $count rows")
   }
 }
 
-class FilterEqualityQtyColorSizeCount(config: Config, sc: SparkContext) extends ReadTask(config,
+/**
+ * Full Table Scan with a Clustering Column Predicate Pushed down to C*
+ */
+class FTSPDClusteringAllColumns(config: Config, sc: SparkContext) extends ReadTask(config,
   sc) {
   def run(): Unit = {
-    val filterCount = sc.cassandraTable[PerfRowClass](keyspace, table)
-      .where("color = ? AND size = ?", "red", "P")
-      .filter(_.qty == 500)
+    val count = sc.cassandraTable[PerfRowClass](keyspace, table)
+      .where("order_time < ?", timePivot)
       .count
-    println(filterCount)
+    println(s"Loaded $count rows")
   }
 }
 
-class FilterEqualityQtyColorSizeCountFiveCols(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
+/**
+ * Full Table Scan with a Clustering Column Predicate Pushed down to C*
+ * Only 5 columns retreived per row
+ */
+class FTSPDClusteringFiveColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
-    val filterResults = sc
-      .cassandraTable[(UUID, Int, String, String, org.joda.time.DateTime)] (keyspace, table)
-      .where("color = ? AND size = ?", "red", "P")
+    val count = sc.cassandraTable[(UUID, Int, String, String, org.joda.time.DateTime)](keyspace,
+      table)
+      .where("order_time < ?", timePivot)
       .select("order_number", "qty", "color", "size", "order_time")
-      .filter(_._2 == 500)
-      .collect
-    println(filterResults.size)
-    filterResults.slice(0, 5).foreach(println)
-  }
-}
-
-class FilterLessThanQtyEqualityColorSizeCount(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
-  def run(): Unit = {
-    val filterResults = sc.cassandraTable[PerfRowClass](keyspace, table)
-      .where("color = ? AND size = ?", "red", "P")
-      .filter(_.qty <= 498)
       .count
-    println(filterResults)
+    println(s"Loaded $count rows")
   }
 }
 
-class FilterLessThanQtyEqualityColorSizeCountFiveCols(config: Config, sc: SparkContext) extends
+/**
+ * Join With C* with 1M Partition Key requests
+ */
+class JWCAllColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
+  def run(): Unit = {
+    val count = sc.parallelize(1 to 1000000)
+      .map(num => Tuple1(s"Store $num"))
+      .joinWithCassandraTable[PerfRowClass](keyspace, table)
+      .count
+    println(s"Loaded $count rows")
+  }
+}
+
+/**
+ * Join With C* with 1M Partition Key requests
+ * A repartitionByCassandraReplica occurs before retreiving the data
+ */
+class JWCRPAllColumns(config: Config, sc: SparkContext) extends
 ReadTask(config, sc) {
   def run(): Unit = {
-    val filterResults = sc
-      .cassandraTable[(UUID, Int, String, String, org.joda.time.DateTime)] (keyspace, table)
-      .where("color = ? AND size = ?", "red", "P")
-      .select("order_number", "qty", "color", "size", "order_time")
-      .filter(_._2 <= 498)
-      .collect
-    println(filterResults.size)
-    filterResults.slice(0, 5).foreach(println)
-  }
-}
-
-class FilterQtyMatchCount(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
-  def run(): Unit = {
-    val filterResults = sc.cassandraTable[Int](keyspace, table)
-      .select("qty")
-      .filter(_ == 5)
+    val count = sc.parallelize(1 to 1000000)
+      .map(num => Tuple1(s"Store $num"))
+      .repartitionByCassandraReplica(keyspace, table, 2)
+      .joinWithCassandraTable[PerfRowClass](keyspace, table)
       .count
-    println(filterResults)
+    println(s"Loaded $count rows")
   }
 }
 
+/**
+ * Join With C* with 1M Partition Key requests
+ * A clustering column predicate is pushed down to limit data retrevial
+ */
+class JWCPDClusteringAllColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
+  def run(): Unit = {
+    val count = sc.parallelize(1 to 1000000)
+      .map(num => Tuple1(s"Store $num"))
+      .joinWithCassandraTable[PerfRowClass](keyspace, table)
+      .where("order_time < ?", timePivot)
+      .count
+    println(s"Loaded $count rows")
+  }
+}
 
+/**
+ * A single C* partition is retreivied in an RDD
+ */
 class RetrieveSinglePartition(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
     val filterResults = sc.cassandraTable[Int](keyspace, table)

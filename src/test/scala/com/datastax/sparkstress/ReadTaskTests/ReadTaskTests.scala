@@ -32,7 +32,7 @@ class ReadTaskTests extends FlatSpec
     conn.withSessionDo { session =>
       session.execute(
         s"""
-           |CREATE KEYSPACE readperfks WITH
+           |CREATE KEYSPACE IF NOT EXISTS readperfks WITH
            |REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """
           .stripMargin)}
 
@@ -41,40 +41,40 @@ class ReadTaskTests extends FlatSpec
     writer.run
   }
 
-  "AggregateColor" should " be able to run" in {
-    new AggregateColor(config, sc).run
+  "FTSOneColumn" should " be able to run" in {
+    new FTSOneColumn(config, sc).run
   }
 
-  "AggregateColorSize" should " be able to run" in {
-    new AggregateColorSize(config, sc).run
+  "FTSAllColumns" should " be able to run" in {
+    new FTSAllColumns(config, sc).run
   }
 
-  "CountAll" should " be able to run" in {
-    new CountAll(config, sc).run
+  "PDCount" should " be able to run" in {
+    new PDCount(config, sc).run
   }
 
-  "FilterColorStringMatchCount" should " be able to run " in {
-    new FilterColorStringMatchCount(config, sc).run
+  "FTSFiveColumns" should " be able to run " in {
+    new FTSFiveColumns(config, sc).run
   }
 
-  "FilterEqualityQtyColorSizeCount" should " be able to run" in {
-    new FilterEqualityQtyColorSizeCount(config, sc).run
+  "FTSPDClusteringAllColumns" should " be able to run" in {
+    new FTSPDClusteringAllColumns(config, sc).run
   }
 
-  "FilterEqualityQtyColorSizeCountFiveCols" should " be able to run" in {
-    new FilterEqualityQtyColorSizeCountFiveCols(config, sc).run
+  "FTSPDClusteringFiveColumns" should " be able to run" in {
+    new FTSPDClusteringFiveColumns(config, sc).run
   }
 
-  "FilterLessThanQtyEqualityColorSizeCount" should " be able to run" in {
-    new FilterLessThanQtyEqualityColorSizeCount(config, sc).run
+  "JWCAllColumns" should " be able to run" in {
+    new JWCAllColumns(config, sc).run
   }
 
-  "FilterLessThanQtyequalityColorSizeCountFiveCols" should " be able to run " in {
-    new FilterLessThanQtyEqualityColorSizeCountFiveCols(config, sc).run
+  "JWCRPAllColumns" should " be able to run " in {
+    new JWCRPAllColumns(config, sc).run
   }
 
-  "FilterQtyMatchCount" should " be able to run " in {
-    new FilterQtyMatchCount(config, sc).run
+  "JWCPDClusteringAllColumns" should " be able to run " in {
+    new JWCPDClusteringAllColumns(config, sc).run
   }
 
   "RetrieveSinglePartiton" should " be able to run " in {
