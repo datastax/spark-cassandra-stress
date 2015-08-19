@@ -5,6 +5,7 @@ import java.util.UUID
 import com.datastax.sparkstress.RowTypes.PerfRowClass
 import org.apache.spark.SparkContext
 import com.datastax.spark.connector._
+import com.datastax.sparkstress.SparkStressImplicits._
 import org.joda.time.DateTime
 
 object ReadTask {
