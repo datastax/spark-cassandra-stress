@@ -105,7 +105,7 @@ class WriteTaskTests extends FlatSpec
       totalOps = 40,
       numTotalKeys = 4)
     val writer = new WritePerfRow(config, sc)
-    val rowLengths = writer.getRDD.spanBy( u=> u.store).map(row => row._2).collect()
+    val rowLengths = writer.getRDD.groupBy( u=> u.store).map(row => row._2).collect
     for (row <- rowLengths)
       row should have size 10
   }
