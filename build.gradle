@@ -13,8 +13,8 @@ def DseResources = System.env.DSE_RESOURCES ?: "$Home/dse/resources/"
 def mainClassName = "com.datastax.sparkstress.SparkCassandraStress"
 
 // Parameters for buliding against Maven Libs
-def ConnectorVersion = System.env.CONNECTOR_VERSION ?: '1.3.0'
-def SparkVersion = System.env.SPARK_VERSION ?: '1.3.1'
+def ConnectorVersion = System.env.CONNECTOR_VERSION ?: '1.4.0-M3'
+def SparkVersion = System.env.SPARK_VERSION ?: '1.4.1'
 
 // Parameter for building against Connector Repository
 def SparkCCHome = System.env.SPARKCC_HOME ?:
@@ -32,6 +32,7 @@ def deps = [
                     'hadoop',
                     'hadoop/lib',
             ].each { dir ->
+
                 provided fileTree(dir: "$DseResources/$dir", include: '*.jar')
             }
 
@@ -42,6 +43,13 @@ def deps = [
             ].each { dir ->
                 provided fileTree(dir: "$DseHome/$dir", include: '*.jar')
             }
+
+            def connector = fileTree(dir: "$DseResources/spark/lib", include: '*connector_*.jar')
+            def connectorJarName = (connector as List)[0].name
+            def match = connectorJarName =~ /connector_.*-(.*?)-?.*\.jar/
+            assert match.find(), "Unable to find Spark Cassandra Connector"
+            println("Connector Version = " + match.group(1))
+            ConnectorVersion = match.group(1)
         },
         maven : {
             println "Using Maven Libraries"
@@ -127,6 +135,17 @@ sourceSets {
             } else {
                 srcDirs += 'src/apache'
             }
+
+            //Api Change Catcher -- This is done to catch the CassandraCount Change in connector 1.2.4
+            def (major, minor, patch) = ConnectorVersion.split(/\./,3).collect { (it.find(/^\d+/).toInteger()) }
+            if (major == 1 && minor == 2 && patch < 4){
+                println("using special 1.2.0 -1.2.3 stubs")
+                srcDirs += 'src/connector/1.2.0to1.2.3'
+            } else if (major <= 1 && minor <= 1 ) {
+                println("using pre-Connector 1.2.0 stubs")
+                srcDirs += 'src/connector/lessThan1.2.0'
+            } else { srcDirs += 'src/connector/default' }
+
         }
     }
 }

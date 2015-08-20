@@ -6,6 +6,7 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.SparkContext
 import com.datastax.sparkstress.RowTypes._
 import com.datastax.spark.connector._
+import com.datastax.spark.connector.RDDFunctions
 import com.datastax.bdp.spark.writer.BulkTableWriter._
 
 object WriteTask {
@@ -49,7 +50,8 @@ abstract class WriteTask[rowType](
   def run() = {
     config.saveMethod match {
       case "bulk" => getRDD.bulkSaveToCassandra(config.keyspace, config.table)
-      case _ => getRDD.saveToCassandra(config.keyspace, config.table)
+      case _ => new RDDFunctions(getRDD).saveToCassandra(config.keyspace, config.table)
+      //For Some reason the implicit doesn't work here in Connector 1.[1,0].X
   	}
   }
 
