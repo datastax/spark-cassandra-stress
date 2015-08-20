@@ -7,30 +7,35 @@ if (!hasProperty('against')) {
     ext.against = 'maven'    // default
 }
 
-def Home = System.env.HOME
-def DseHome = System.env.DSE_HOME ?: "$Home/dse"
-def DseResources = System.env.DSE_RESOURCES ?: "$Home/dse/resources/"
-def mainClassName = "com.datastax.sparkstress.SparkCassandraStress"
+ext.Home = System.env.HOME
+ext.DseHome = System.env.DSE_HOME ?: "$Home/dse"
+ext.DseResources = System.env.DSE_RESOURCES ?: "$Home/dse/resources/"
+ext.mainClassName = "com.datastax.sparkstress.SparkCassandraStress"
+
+def determineConnectorVersion() {
+    if (against == 'dse') {
+        def connector = fileTree(dir: "$DseResources/spark/lib", include: '*connector_*.jar')
+        def connectorJarName = (connector as List)[0].name
+        def match = connectorJarName =~ /connector_.*-(\d+\.\d+.\d+).*\.jar/
+        assert match.find(), "Unable to find Spark Cassandra Connector"
+        assert match.group(1).length() != 0, "Unable to determine version from " + match.group(0)
+        println("Connector Version = " + match.group(1))
+        return match.group(1)
+    }
+    if (against == 'maven') {
+        return System.env.CONNECTOR_VERSION ?: '1.4.0-M3'
+    }
+}
 
 // Parameters for buliding against Maven Libs
-def ConnectorVersion = System.env.CONNECTOR_VERSION ?: '1.4.0-M3'
+def ConnectorVersion = determineConnectorVersion()
 def SparkVersion = System.env.SPARK_VERSION ?: '1.4.1'
 
 // Parameter for building against Connector Repository
 def SparkCCHome = System.env.SPARKCC_HOME ?:
         "$Home/repos/spark-cassandra-connector/"
 
-def determineSparkVersion = {
-    if (against == dse) {
-        def connector = fileTree(dir: "$DseResources/spark/lib", include: '*connector_*.jar')
-        def connectorJarName = (connector as List)[0].name
-        def match = connectorJarName =~ /connector_.*-(.*?)-?.*\.jar/
-        assert match.find(), "Unable to find Spark Cassandra Connector"
-        assert match.group(1) != null, "Unable to determine version from " + match.group(0)
-        println("Connector Version = " + match.group(1))
-        ConnectorVersion = match.group(1)
-    }
-}
+
 
 def deps = [
         dse   : {
@@ -55,7 +60,6 @@ def deps = [
             ].each { dir ->
                 provided fileTree(dir: "$DseHome/$dir", include: '*.jar')
             }
-            determineSparkVersion
 
 
         },
@@ -145,7 +149,6 @@ sourceSets {
             }
 
             //Api Change Catcher -- This is done to catch the CassandraCount Change in connector 1.2.4
-            determineSparkVersion
             println(ConnectorVersion)
             def (major, minor, patch) = ConnectorVersion.split(/\./,3).collect { (it.find(/^\d+/).toInteger()) }
             if (major == 1 && minor == 2 && patch < 4){
