@@ -172,10 +172,10 @@ class JWCPDClusteringAllColumns(config: Config, sc: SparkContext) extends ReadTa
  */
 class RetrieveSinglePartition(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
-    val filterResults = sc.cassandraTable[Int](keyspace, table)
-      .where("store = ? ", "store 5")
+    val filterResults = sc.cassandraTable[String](keyspace, table)
+      .where("store = ? ", "Store 5")
       .collect
-    println(filterResults)
+    println(filterResults.length)
   }
 }
 
