@@ -10,24 +10,30 @@ case class Config(
   testName: String ="writeshortrow",
   keyspace: String = "ks",
   table: String = "tab",
+  trials: Int = 1,
+  verboseOutput: Boolean = false,
+  //Write Options
   replicationFactor: Int = 1,
   numPartitions: Int = 400,
   totalOps: Long = 20 * 1000000,
   numTotalKeys: Long =  1 * 1000000,
-  trials: Int = 1,
   deleteKeyspace: Boolean = false,
-  verboseOutput: Boolean = false,
+  secondaryIndex: Boolean = false,
   // csv file to append results
   file: Option[Writer] = Option.empty,
   saveMethod: String = "driver",
   //Spark Options
-  sparkOps: Map[String,String] = Map.empty
+  sparkOps: Map[String,String] = Map.empty,
+  //Streaming Params
+  numReceivers: Int = 1,
+  receiverThroughputPerBatch: Long = 100000,
+  streamingBatchIntervalSeconds:  Int = 5
 )
 
 
 object SparkCassandraStress {
   val VALID_TESTS =
-    WriteTask.ValidTasks ++ ReadTask.ValidTasks
+    WriteTask.ValidTasks ++ ReadTask.ValidTasks ++ StreamingTask.ValidTasks
 
   val KeyGroupings = Seq("none", "replica_set", "partition")
 
@@ -40,15 +46,36 @@ object SparkCassandraStress {
         config.copy(testName = arg.toLowerCase())
       } text {  s"""Tests :
               |Write Tests:  ${WriteTask.ValidTasks.mkString(" , ")}
-              |Read Tests: ${ReadTask.ValidTasks.mkString(" , ")}""".stripMargin}
+              |Read Tests: ${ReadTask.ValidTasks.mkString(" , ")}
+              |Streaming Tests: ${StreamingTask.ValidTasks.mkString(" , ")}""".stripMargin}
+
+      arg[String]("master") optional() action { (arg,config) =>
+        config.copy(sparkOps = config.sparkOps + ("spark.master" -> arg))
+      } text {"Spark Address of Master Node"}
 
       opt[String]('S', "save") optional() action { (arg,config) =>
         config.copy(file = Option(new FileWriter(arg, true)))
       } text {"Name of the file to append results"}
 
-      arg[String]("master") optional() action { (arg,config) =>
-        config.copy(sparkOps = config.sparkOps + ("spark.master" -> arg))
-      } text {"Spark Address of Master Node"}
+      opt[Unit]('d',"deleteKeyspace") optional() action { (_,config) =>
+        config.copy(deleteKeyspace = true)
+      } text {"Delete Keyspace before running"}
+
+      opt[Unit]('i',"secondaryIndex") optional() action { (_,config) =>
+        config.copy(secondaryIndex = true)
+      } text {"Adds Secondary Indexes to PerfRow DDL"}
+
+      opt[String]('k',"keyspace") optional() action { (arg,config) =>
+        config.copy(keyspace = arg)
+      } text {"Name of the keyspace to use/create"}
+
+      opt[String]('m',"saveMethod") optional() action { (arg,config) =>
+        config.copy(saveMethod = arg)
+      } text {"rdd save method. bulk: bulkSaveToCassandra, driver: saveToCassandra"}
+
+      opt[Int]('n',"trials")optional() action { (arg,config) =>
+        config.copy(trials = arg)
+      } text {"Trials to run"}
 
       opt[Long]('o',"totalOps") optional() action { (arg,config) =>
         config.copy(totalOps = arg)
@@ -58,26 +85,6 @@ object SparkCassandraStress {
         config.copy(numPartitions = arg)
       } text {"Number of Spark Partitions To Create"}
 
-      opt[Long]('y',"numTotalKeys") optional() action { (arg,config) =>
-        config.copy(numTotalKeys = arg)
-      } text {"Total Number of CQL Partition Key Values"}
-
-      opt[Int]('n',"trials")optional() action { (arg,config) =>
-        config.copy(trials = arg)
-      } text {"Trials to run"}
-
-      opt[Unit]('d',"deleteKeyspace") optional() action { (_,config) =>
-        config.copy(deleteKeyspace = true)
-      } text {"Delete Keyspace before running"}
-
-      opt[Unit]('v',"verbose") optional() action { (_,config) =>
-        config.copy(verboseOutput = true)
-      } text {"Display verbose output for debugging."}
-
-      opt[String]('k',"keyspace") optional() action { (arg,config) =>
-        config.copy(keyspace = arg)
-      } text {"Name of the keyspace to use/create"}
-
       opt[Int]('r',"replication") optional() action { (arg,config) =>
         config.copy(replicationFactor = arg)
       } text {"Replication Factor to set on new keyspace, will not change existing keyspaces"}
@@ -86,8 +93,24 @@ object SparkCassandraStress {
         config.copy(table = arg)
       } text {"Name of the table to use/create"}
 
-      opt[String]('m',"saveMethod") optional() action { (arg,config) =>
-        config.copy(saveMethod = arg)
+      opt[Unit]('v',"verbose") optional() action { (_,config) =>
+        config.copy(verboseOutput = true)
+      } text {"Display verbose output for debugging."}
+
+      opt[Long]('y',"numTotalKeys") optional() action { (arg,config) =>
+        config.copy(numTotalKeys = arg)
+      } text {"Total Number of CQL Partition Key Values"}
+
+      opt[Int]('w',"numReceivers") optional() action { (arg,config) =>
+        config.copy(numReceivers = arg)
+      } text {"Changes the number of receivers to make in Streaming Tests"}
+
+      opt[Long]('x',"receiverThroughputPerBatch") optional() action { (arg,config) =>
+        config.copy(receiverThroughputPerBatch = arg)
+      } text {"Changes the number of rows to emit per receiver per batch timing"}
+
+      opt[Int]('z',"streamingBatchLength") optional() action { (arg,config) =>
+        config.copy(streamingBatchIntervalSeconds = arg)
       } text {"rdd save method. bulk: bulkSaveToCassandra, driver: saveToCassandra"}
       
       arg[String]("connectorOpts") optional() text {"spark-cassandra-connector configs, Ex: --conf \"conf1=val1\" --conf \"conf2=val2\""}
@@ -132,11 +155,14 @@ object SparkCassandraStress {
 
     val test: StressTask =
       config.testName.toLowerCase match {
+          /** Write Tasks **/
         case "writeshortrow" => new WriteShortRow(config, sc)
         case "writewiderow" => new WriteWideRow(config, sc)
         case "writeperfrow" => new WritePerfRow(config, sc)
         case "writerandomwiderow" => new WriteRandomWideRow(config, sc)
         case "writewiderowbypartition" => new WriteWideRowByPartition(config, sc)
+
+          /** Read Tasks **/
         case "pdcount" => new PDCount(config, sc)
         case "ftsallcolumns" => new FTSAllColumns(config, sc)
         case "ftsfivecolumns" => new FTSFiveColumns(config, sc)
@@ -147,6 +173,9 @@ object SparkCassandraStress {
         case "jwcpdclusteringallcolumns" => new JWCPDClusteringAllColumns(config, sc)
         case "jwcrpallcolumns" => new JWCRPAllColumns(config, sc)
         case "retrievesinglepartition" => new RetrieveSinglePartition(config, sc)
+
+          /** Streaming Tasks **/
+        case "streamingwrite" => new StreamingWrite(config, sc)
       }
 
     val wallClockStartTime = System.nanoTime()
@@ -155,17 +184,28 @@ object SparkCassandraStress {
     val wallClockStopTime = System.nanoTime() 
     val wallClockTimeDiff = wallClockStopTime - wallClockStartTime
     val wallClockTimeSeconds = (wallClockTimeDiff / 1000000000.0) 
-    sc.stop()
     val timeSeconds = time.map{ _ / 1000000000.0}
     val opsPerSecond = timeSeconds.map{ config.totalOps/_}
-    printf(s"\n\nTimeInSeconds : %s\n",(timeSeconds.map{math.round(_)}).mkString(","))
-    //printf(s"TimeInMinutes : %s\n",((timeSeconds.mkString(","))/60.0))
-    //printf(s"WallClockTimeSeconds : %s\n",wallClockTimeSeconds)
-    //printf(s"WallClockTimeMinutes : %s\n",(wallClockTimeSeconds)/60.0)
-    printf(s"OpsPerSecond : %s\n",(opsPerSecond.map{math.round(_)}).mkString(","))
-    config.file.map(f => {f.write(csvResults(config, time));f.flush })
+    test match {
+      case x: WriteTask[_] =>  {
+        println(s"TimeInSeconds : ${(timeSeconds.map{math.round(_)}).mkString(",")}\n")
+        println(s"OpsPerSecond : ${(opsPerSecond.map{math.round(_)}).mkString(",")}\n")
+        config.file.map(f => {f.write(csvResults(config, time));f.flush })
+        sc.stop()
+      }
+      case x: ReadTask => {
+        println(s"TimeInSeconds : ${(timeSeconds.map{math.round(_)}).mkString(",")}\n")
+        config.file.map(f => {f.write(csvResults(config, time));f.flush })
+        sc.stop()
+      }
+      case y: StreamingTask[_] => {
+        println("Streaming Begun")
+        println(s"Running for ${y.terminationTime} Seconds")
+        Thread.sleep(y.terminationTime * 1000)
+        println("Times up, shutting down")
+        y.ssc.stop(true, true)
+      }
+    }
  }
-
-
 
 }

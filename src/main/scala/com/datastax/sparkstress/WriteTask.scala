@@ -101,10 +101,12 @@ class WritePerfRow(config: Config, sc: SparkContext) extends
        |size text,
        |qty int,
        |PRIMARY KEY (store, order_time, order_number))
-     """.stripMargin,
-    s"""CREATE INDEX IF NOT EXISTS color ON ${config.keyspace}.$tbName (color) """,
-    s"""CREATE INDEX IF NOT EXISTS size ON ${config.keyspace}.$tbName (size)"""
-    )
+     """.stripMargin) ++
+      ( if (config.secondaryIndex)
+        Seq(
+          s"""CREATE INDEX IF NOT EXISTS color ON ${config.keyspace}.$tbName (color) """,
+          s"""CREATE INDEX IF NOT EXISTS size ON ${config.keyspace}.$tbName (size)""")
+      else Seq.empty )
 
   def getRDD: RDD[PerfRowClass] =
     RowGenerator.getPerfRowRdd(sc, config.numPartitions, config.totalOps, config.numTotalKeys)

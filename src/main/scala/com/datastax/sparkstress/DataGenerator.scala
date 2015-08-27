@@ -8,6 +8,9 @@ import org.apache.spark.rdd.RDD
 import com.datastax.sparkstress.RowTypes._
 import org.joda.time.DateTime
 
+abstract class RowGenerator[T] extends Serializable{
+  def generatePartition(intdex: Int) : Iterator[T]
+}
 
 object RowGenerator {
 
@@ -87,7 +90,7 @@ object RowGenerator {
 
 
   /**
-   * This code mimics an internal DataStax perf row format. Since we are manily using this to test
+   * This code mimics an internal DataStax perf row format. Since we are mainly using this to test
    * Read speeds we will generate by C* partition.
    */
   val colors = List("red", "green", "blue", "yellow", "purple", "pink", "grey", "black", "white", "brown").view
@@ -96,11 +99,13 @@ object RowGenerator {
   val perftime = new DateTime(2000,1,1,0,0,0,0)
   val perfRandom = 42
 
-  def getPerfRowRdd(sc: SparkContext, numPartitions: Int, numTotalRows: Long, numTotalKeys: Long): RDD[PerfRowClass] = {
+  class PerfRowGenerator(numPartitions: Int, numTotalRows: Long, numTotalKeys: Long)
+    extends RowGenerator[PerfRowClass]() {
+
     val clusteringKeysPerPartitionKey = numTotalRows / numTotalKeys
     val partitionKeysPerSparkPartition = numTotalKeys / numPartitions
 
-    def generatePartition(index: Int): Iterator[PerfRowClass] = {
+    override def generatePartition(index: Int): Iterator[PerfRowClass] = {
       val offset = partitionKeysPerSparkPartition * index;
       val r = new scala.util.Random(index * perfRandom)
 
@@ -114,10 +119,15 @@ object RowGenerator {
         PerfRowClass(store, order_time, order_number, color, size, qty)
       }
     }
+  }
+
+  def getPerfRowRdd(sc: SparkContext, numPartitions: Int, numTotalRows: Long, numTotalKeys: Long): RDD[PerfRowClass] = {
+
+    val perfRowGenerator = new PerfRowGenerator(numPartitions, numTotalRows, numTotalKeys)
 
     sc.parallelize(Seq[Int](), numPartitions).mapPartitionsWithIndex {
       case (index, n) => {
-        generatePartition(index)
+        perfRowGenerator.generatePartition(index)
       }
     }
   }
