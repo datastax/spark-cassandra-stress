@@ -144,6 +144,8 @@ object SparkCassandraStress {
     val sparkConf =
       new SparkConf()
         .setAppName("SparkStress: "+config.testName)
+        //Make sure for streaming that the keep_alive is sufficently large
+        .set("spark.cassandra.connection.keep_alive_ms", (config.streamingBatchIntervalSeconds*1000*5).toString)
         .setAll(config.sparkOps)
 
     val sc = ConnectHelper.getContext(sparkConf)

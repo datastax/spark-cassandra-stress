@@ -65,7 +65,7 @@ abstract class StreamingTask[rowType](
     }
     dstreamOps(ssc.union(dstreams))
     ssc.start()
-  }
+t   }
 
   def dstreamOps(dstream: DStream[rowType]): Unit
 

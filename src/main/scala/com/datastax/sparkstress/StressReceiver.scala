@@ -19,7 +19,7 @@ class StressReceiver[T](
       val throughPutPerBlockInterval = (blockIntervalInMs / (config.streamingBatchIntervalSeconds * 1000.0) * config.receiverThroughputPerBatch).toLong
       while (rowIterator.hasNext) {
         val batchBegin = System.currentTimeMillis()
-        for (x <- 0l to throughPutPerBlockInterval if rowIterator.hasNext) {
+        for (x <- 1l to throughPutPerBlockInterval if rowIterator.hasNext) {
           store(rowIterator.next())
         }
         val batchEnd = System.currentTimeMillis()
