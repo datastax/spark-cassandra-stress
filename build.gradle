@@ -65,17 +65,18 @@ def deps = [
         },
         maven : {
             println "Using Maven Libraries"
-
             compile "com.datastax.spark:spark-cassandra-connector_2.10:$ConnectorVersion"
             provided "org.apache.spark:spark-core_2.10:$SparkVersion"
+            provided "org.apache.spark:spark-streaming_2.10:$SparkVersion"
         },
         source: {
             println "Using Assembly Jar from Source Repo"
 
             compile fileTree(dir: "$SparkCCHome/spark-cassandra-connector/target/scala-2.10/", include: "*.jar")
             provided "org.apache.spark:spark-core_2.10:$SparkVersion"
+            provided "org.apache.spark:spark-streaming_2.10:$SparkVersion"
+        },
 
-        }
 ]
 
 task build_connector(type: Exec) {
