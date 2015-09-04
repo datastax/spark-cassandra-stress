@@ -2,6 +2,7 @@ package com.datastax.sparkstress
 
 import java.util.UUID
 
+import com.datastax.spark.connector.cql.CassandraConnector
 import com.datastax.sparkstress.RowTypes.PerfRowClass
 import org.apache.spark.SparkContext
 import com.datastax.spark.connector._
@@ -29,6 +30,13 @@ abstract class ReadTask(config: Config, sc: SparkContext) extends StressTask {
   val timePivot =  new DateTime(2000,1,1,0,0,0,0).plusSeconds(500)
   val keyspace = config.keyspace
   val table = config.table
+
+  val numberNodes = CassandraConnector(sc.getConf).withClusterDo( _.getMetadata.getAllHosts.size)
+  val tenthKeys:Int = config.numTotalKeys.toInt / 10
+  /**
+   * total number of cores on all executor nodes or 2, whichever is larger
+   */
+  val coresPerNode:Int = sc.getConf.getInt("spark.default.parallelism",2)/numberNodes
 
   def run()
 
@@ -128,7 +136,7 @@ class FTSPDClusteringFiveColumns(config: Config, sc: SparkContext) extends ReadT
  */
 class JWCAllColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
-    val count = sc.parallelize(1 to 1000000)
+    val count = sc.parallelize(1 to tenthKeys)
       .map(num => Tuple1(s"Store $num"))
       .joinWithCassandraTable[PerfRowClass](keyspace, table)
       .count
@@ -143,9 +151,9 @@ class JWCAllColumns(config: Config, sc: SparkContext) extends ReadTask(config, s
 class JWCRPAllColumns(config: Config, sc: SparkContext) extends
 ReadTask(config, sc) {
   def run(): Unit = {
-    val count = sc.parallelize(1 to 1000000)
+    val count = sc.parallelize(1 to tenthKeys)
       .map(num => Tuple1(s"Store $num"))
-      .repartitionByCassandraReplica(keyspace, table, 2)
+      .repartitionByCassandraReplica(keyspace, table, coresPerNode)
       .joinWithCassandraTable[PerfRowClass](keyspace, table)
       .count
     println(s"Loaded $count rows")
@@ -158,7 +166,7 @@ ReadTask(config, sc) {
  */
 class JWCPDClusteringAllColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
-    val count = sc.parallelize(1 to 1000000)
+    val count = sc.parallelize(1 to tenthKeys)
       .map(num => Tuple1(s"Store $num"))
       .joinWithCassandraTable[PerfRowClass](keyspace, table)
       .where("order_time < ?", timePivot)
