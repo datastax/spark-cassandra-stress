@@ -23,7 +23,7 @@ def determineConnectorVersion() {
         return match.group(1)
     }
     if (against == 'maven') {
-        return System.env.CONNECTOR_VERSION ?: '1.4.0-M3'
+        return System.env.CONNECTOR_VERSION ?: '1.4.0'
     }
 }
 
@@ -48,6 +48,7 @@ def deps = [
                     'shark/lib',
                     'hadoop',
                     'hadoop/lib',
+                    'lib'
             ].each { dir ->
 
                 provided fileTree(dir: "$DseResources/$dir", include: '*.jar')
