@@ -49,6 +49,8 @@ def deps = [
                     'hadoop',
                     'hadoop/lib',
                     'lib'
+                    'common',
+                    ''
             ].each { dir ->
 
                 provided fileTree(dir: "$DseResources/$dir", include: '*.jar')
