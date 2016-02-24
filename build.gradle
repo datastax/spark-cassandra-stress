@@ -48,7 +48,7 @@ def deps = [
                     'shark/lib',
                     'hadoop',
                     'hadoop/lib',
-                    'lib'
+                    'lib',
                     'common',
                     ''
             ].each { dir ->
