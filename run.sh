@@ -8,16 +8,18 @@ done
 
 if [ $startConnIdx -eq $# ]; then 
   connectorArgs="" 
+  sparkmaster=""
   stressArgs=${*:2}
 else 
   connectorArgs=${*:$((startConnIdx))} 
+  sparkmaster=${*:$((startConnIdx-1)):1}
   stressArgs=${*:2:$((startConnIdx-2))}
 fi
 
 JAR=build/libs/SparkCassandraStress-1.0.jar
 CLASS=com.datastax.sparkstress.SparkCassandraStress
 
-SUBMIT="spark-submit $connectorArgs --class $CLASS $JAR $stressArgs"
+SUBMIT="spark-submit --master $sparkmaster $connectorArgs --class $CLASS $JAR $stressArgs"
 
 if [[ $1 == "dse" ]]; then
   dse $SUBMIT 
