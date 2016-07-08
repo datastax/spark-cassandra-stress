@@ -111,7 +111,7 @@ object SparkCassandraStress {
 
       opt[Int]('z',"streamingBatchLength") optional() action { (arg,config) =>
         config.copy(streamingBatchIntervalSeconds = arg)
-      } text {"rdd save method. bulk: bulkSaveToCassandra, driver: saveToCassandra"}
+      } text {"Batch interval in seconds used for defining a StreamingContext."}
       
       arg[String]("connectorOpts") optional() text {"spark-cassandra-connector configs, Ex: --conf \"conf1=val1\" --conf \"conf2=val2\""}
       
