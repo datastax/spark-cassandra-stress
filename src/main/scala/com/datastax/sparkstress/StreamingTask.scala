@@ -9,7 +9,7 @@ import org.apache.spark.SparkContext
 import org.apache.spark.storage.StorageLevel
 import org.apache.spark.streaming.{StreamingContext, _}
 import org.apache.spark.streaming.dstream.DStream
-
+import java.util.concurrent.TimeUnit
 import scala.reflect.ClassTag
 
 object StreamingTask {
@@ -25,7 +25,21 @@ abstract class StreamingTask[rowType](
 
   val ssc = new StreamingContext(sc, Seconds(config.streamingBatchIntervalSeconds))
   val opsPerBatch = (config.numReceivers * config.receiverThroughputPerBatch)
-  val terminationTime = config.totalOps / opsPerBatch * config.streamingBatchIntervalSeconds + 10
+  val estimatedReqRuntime: Long = ((config.totalOps / opsPerBatch) * config.streamingBatchIntervalSeconds) + 10
+  val terminationTime: Long = {
+    if (config.terminationTimeMinutes == 0) {
+      estimatedReqRuntime
+    } else {
+      val newTerminationTime: Long = TimeUnit.MINUTES.toSeconds(config.terminationTimeMinutes)
+      if (estimatedReqRuntime <= newTerminationTime) {
+        println(s"Using the estimated runtime (${estimatedReqRuntime} secs}) required to stream ${config.totalOps} since it is <= the requested runtime (${newTerminationTime} secs).")
+        estimatedReqRuntime
+      } else {
+        println(s"Converting requested runtime of ${config.terminationTimeMinutes} min to ${newTerminationTime} secs.")
+        newTerminationTime
+      }
+    }
+  }
 
   def setupCQL() = {
     CassandraConnector(sc.getConf).withSessionDo { session =>
@@ -69,9 +83,9 @@ abstract class StreamingTask[rowType](
 
   def dstreamOps(dstream: DStream[rowType]): Unit
 
-  def runTrials(sc: SparkContext): Seq[Long] = {
+  def runTrials(sc: SparkContext): Seq[TestResult] = {
     println("About to Start Trials")
-    for (trial <- 1 to config.trials) yield {setupCQL(); Thread.sleep(10000); time(run())}
+    for (trial <- 1 to config.trials) yield {setupCQL(); Thread.sleep(10000); TestResult(time(run()),0L)}
   }
 }
 

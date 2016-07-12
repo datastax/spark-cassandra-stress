@@ -39,6 +39,6 @@ class StressReceiver[T](
 
 
 
- def onStop() = {
+  def onStop() = {
   }
 }

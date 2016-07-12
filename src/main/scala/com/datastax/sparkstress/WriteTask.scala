@@ -3,11 +3,20 @@ package com.datastax.sparkstress
 import com.datastax.spark.connector.cql.CassandraConnector
 import com.datastax.spark.connector.writer.RowWriterFactory
 import org.apache.spark.rdd.RDD
-import org.apache.spark.SparkContext
+import org.apache.spark.{ExposeJobListener, SparkContext}
 import com.datastax.sparkstress.RowTypes._
 import com.datastax.spark.connector._
 import com.datastax.spark.connector.RDDFunctions
 import com.datastax.bdp.spark.writer.BulkTableWriter._
+import java.util.concurrent.TimeUnit
+import scala.concurrent.duration._
+import java.util.concurrent.TimeoutException
+import scala.concurrent.{Await,Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+
+import org.apache.commons.io.IOUtils
+import scala.util.parsing.json.{JSON, JSONType, JSONArray, JSONObject}
+import java.net.URL
 
 object WriteTask {
   val ValidTasks = Set(
@@ -47,19 +56,51 @@ abstract class WriteTask[rowType](
 
   def getRDD: RDD[rowType]
 
-  def run() = {
-    config.saveMethod match {
-      case "bulk" => getRDD.bulkSaveToCassandra(config.keyspace, config.table)
-      case _ => new RDDFunctions(getRDD).saveToCassandra(config.keyspace, config.table)
-      //For Some reason the implicit doesn't work here in Connector 1.[1,0].X
-  	}
+  /**
+   * Runs the write workload, returns when terminationTimeMinutes is reached or when the job completes, which ever is first.
+   * @return a tuple containing (runtime, totalCompletedOps)
+   */
+  def run(): TestResult = {
+    var totalCompletedOps: Long = 0L
+    val runtime = time({
+      val fs = Future {
+        config.saveMethod match {
+          case "bulk" => getRDD.bulkSaveToCassandra(config.keyspace, config.table)
+          case _ => new RDDFunctions(getRDD).saveToCassandra(config.keyspace, config.table)
+          //For Some reason the implicit doesn't work here in Connector 1.[1,0].X
+        }
+      }
+      try {
+        if (config.terminationTimeMinutes > 0) {
+          Await.result(fs, Duration(TimeUnit.MINUTES.toMillis(config.terminationTimeMinutes), MILLISECONDS))
+        } else {
+          Await.result(fs, Duration(Long.MaxValue, NANOSECONDS)) // max allowed duration 292 years :)
+        }
+      } catch {
+        case ex: TimeoutException => {
+          println(s"We hit our timeout limit for this test (${config.terminationTimeMinutes} min), shutting down.")
+          val host: String = sys.props.get("spark.master").getOrElse(sc.getConf.getOption("spark.master")).toString.split("://|:")(1)
+          val appId: String = sc.getConf.getAppId
+
+          /* Follow-up: For now we're only pulling stage id 0, if/when we want to support multiple trials we may want to
+          pass in the trial number to run() and use that as the stage id. */
+          val stageId = 0
+          val stageAttemptId = 0
+          val stageDataOption = ExposeJobListener.getjobListener(sc).stageIdToData.get((stageId, stageAttemptId))
+          val stageData = stageDataOption.get
+          val outputRecords = stageData.outputRecords
+          println(s"\n\noutputRecords: ${outputRecords}\n\n")
+          totalCompletedOps = outputRecords
+        }
+      }
+    })
+    if (totalCompletedOps == 0L) TestResult(runtime, config.totalOps) else TestResult(TimeUnit.MINUTES.toNanos(config.terminationTimeMinutes), totalCompletedOps)
   }
 
-  def runTrials(sc: SparkContext): Seq[Long] = {
+  def runTrials(sc: SparkContext): Seq[TestResult] = {
     println("About to Start Trials")
-    for (trial <- 1 to config.trials) yield {setupCQL(); Thread.sleep(10000); time(run())}
+    for (trial <- 1 to config.trials) yield {setupCQL(); Thread.sleep(10000); run()}
   }
-
 
 }
 
