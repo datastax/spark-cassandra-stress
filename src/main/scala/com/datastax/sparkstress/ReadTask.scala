@@ -37,10 +37,10 @@ abstract class ReadTask(config: Config, sc: SparkContext) extends StressTask {
 
   def run()
 
-  def runTrials(sc: SparkContext): Seq[Long] = {
+  def runTrials(sc: SparkContext): Seq[TestResult] = {
     println("About to Start Trials")
     for (trial <- 1 to config.trials) yield {
-      time(run())
+      TestResult(time(run()),0L)
     }
   }
 }

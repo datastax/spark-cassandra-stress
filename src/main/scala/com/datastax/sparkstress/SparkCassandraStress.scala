@@ -27,9 +27,11 @@ case class Config(
   //Streaming Params
   numReceivers: Int = 1,
   receiverThroughputPerBatch: Long = 100000,
+  terminationTimeMinutes: Long = 0,
   streamingBatchIntervalSeconds:  Int = 5
 )
 
+case class TestResult ( time: Long, ops: Long )
 
 object SparkCassandraStress {
   val VALID_TESTS =
@@ -48,12 +50,11 @@ object SparkCassandraStress {
               |Write Tests:  ${WriteTask.ValidTasks.mkString(" , ")}
               |Read Tests: ${ReadTask.ValidTasks.mkString(" , ")}
               |Streaming Tests: ${StreamingTask.ValidTasks.mkString(" , ")}""".stripMargin}
-
       arg[String]("master") optional() action { (arg,config) =>
         config.copy(sparkOps = config.sparkOps + ("spark.master" -> arg))
       } text {"Spark Address of Master Node"}
 
-      opt[String]('S', "save") optional() action { (arg,config) =>
+      opt[String]('f', "file") optional() action { (arg,config) =>
         config.copy(file = Option(new FileWriter(arg, true)))
       } text {"Name of the file to append results"}
 
@@ -69,7 +70,7 @@ object SparkCassandraStress {
         config.copy(keyspace = arg)
       } text {"Name of the keyspace to use/create"}
 
-      opt[String]('m',"saveMethod") optional() action { (arg,config) =>
+      opt[String]('s',"saveMethod") optional() action { (arg,config) =>
         config.copy(saveMethod = arg)
       } text {"rdd save method. bulk: bulkSaveToCassandra, driver: saveToCassandra"}
 
@@ -113,9 +114,14 @@ object SparkCassandraStress {
         config.copy(streamingBatchIntervalSeconds = arg)
       } text {"Batch interval in seconds used for defining a StreamingContext."}
       
-      arg[String]("connectorOpts") optional() text {"spark-cassandra-connector configs, Ex: --conf \"conf1=val1\" --conf \"conf2=val2\""}
-      
-      
+      } text {"rdd save method. bulk: bulkSaveToCassandra, driver: saveToCassandra"}
+
+      opt[Int]('m',"terminationTimeMinutes") optional() action { (arg,config) =>
+        config.copy(terminationTimeMinutes = arg)
+      } text { "The desired runtime (in minutes) for a given workload. WARNING: Not supported with multiple trials or read workloads."}
+
+      arg[String]("connectorOpts") optional() text { """spark-cassandra-connector configs, Ex: --conf "conf1=val1" --conf "conf2=val2" """}
+
       help("help") text {"CLI Help"}
       checkConfig{ c => if (VALID_TESTS.contains(c.testName)) success else failure(
         s"""${c.testName} is not a valid test :
@@ -124,7 +130,13 @@ object SparkCassandraStress {
     }
 
     parser.parse(args, Config()) map { config =>
-      runTask(config)
+      if (config.trials > 1 && config.terminationTimeMinutes > 0) {
+        println("\nERROR: A termination time was specified with multiple trials, this is not supported yet.\n")
+      } else if (ReadTask.ValidTasks(config.testName) && config.terminationTimeMinutes > 0) {
+        println(s"\nERROR: A termination time was specified with '${config.testName} which is a Read test, this is not supported yet.\n")
+      } else {
+        runTask(config)
+      }
     } getOrElse {
       System.exit(1)
     }
@@ -140,7 +152,6 @@ object SparkCassandraStress {
 
   def runTask(config:Config)
   {
-
     val sparkConf =
       new SparkConf()
         .setAppName("SparkStress_"+config.testName)
@@ -181,22 +192,26 @@ object SparkCassandraStress {
       }
 
     val wallClockStartTime = System.nanoTime()
-    val time = test.runTrials(sc)
+
+    val timesAndOps: Seq[TestResult]= test.runTrials(sc)
+    val time = for (x <- timesAndOps) yield {x.time}
+    val totalCompletedOps = for (x <- timesAndOps) yield {x.ops}
 
     val wallClockStopTime = System.nanoTime() 
     val wallClockTimeDiff = wallClockStopTime - wallClockStartTime
     val wallClockTimeSeconds = (wallClockTimeDiff / 1000000000.0) 
-    val timeSeconds = time.map{ _ / 1000000000.0}
-    val opsPerSecond = timeSeconds.map{ config.totalOps/_}
+    val timeSeconds = time.map{ x => math.round( x / 1000000000.0 ) }
+    val opsPerSecond = for (i <- 0 to timeSeconds.size-1) yield {math.round(totalCompletedOps(i)/timeSeconds(i))}
+
     test match {
       case x: WriteTask[_] =>  {
-        println(s"TimeInSeconds : ${(timeSeconds.map{math.round(_)}).mkString(",")}\n")
-        println(s"OpsPerSecond : ${(opsPerSecond.map{math.round(_)}).mkString(",")}\n")
+        println(s"TimeInSeconds : ${timeSeconds.mkString(",")}\n")
+        println(s"OpsPerSecond : ${opsPerSecond.mkString(",")}\n")
         config.file.map(f => {f.write(csvResults(config, time));f.flush })
         sc.stop()
       }
       case x: ReadTask => {
-        println(s"TimeInSeconds : ${(timeSeconds.map{math.round(_)}).mkString(",")}\n")
+        println(s"TimeInSeconds : ${timeSeconds.mkString(",")}\n")
         config.file.map(f => {f.write(csvResults(config, time));f.flush })
         sc.stop()
       }
