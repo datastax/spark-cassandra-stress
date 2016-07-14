@@ -114,8 +114,6 @@ object SparkCassandraStress {
         config.copy(streamingBatchIntervalSeconds = arg)
       } text {"Batch interval in seconds used for defining a StreamingContext."}
       
-      } text {"rdd save method. bulk: bulkSaveToCassandra, driver: saveToCassandra"}
-
       opt[Int]('m',"terminationTimeMinutes") optional() action { (arg,config) =>
         config.copy(terminationTimeMinutes = arg)
       } text { "The desired runtime (in minutes) for a given workload. WARNING: Not supported with multiple trials or read workloads."}
