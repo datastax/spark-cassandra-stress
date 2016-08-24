@@ -1,19 +1,35 @@
 #!/usr/bin/env bash
 
 startConnIdx=0
+connectorArgsFound=0
 for i in "$@"; do
   startConnIdx=$((startConnIdx+1))
-  if [ $i == "--conf" ]; then break; fi
+  if [ $i == "--conf" ]; then connectorArgsFound=1; break; fi
+  lastParam=$i
 done
 
-if [ $startConnIdx -eq $# ]; then 
+if [ $connectorArgsFound -eq 0 ]; then 
   connectorArgs="" 
-  sparkmaster=""
-  stressArgs=${*:2}
 else 
   connectorArgs=${*:$((startConnIdx))} 
-  sparkmaster="--master ${*:$((startConnIdx-1)):1}"
-  stressArgs=${*:2:$((startConnIdx-2))}
+fi
+
+echo "$lastParam" | grep -E "^(yarn|spark|mesos|local)" >& /dev/null
+noMasterProvided=$? 
+if [ $noMasterProvided -eq 1 ]; then
+  sparkmaster=""
+  if [ $connectorArgsFound -eq 0 ]; then
+    stressArgs=${*:2:$((startConnIdx-1))}
+  else
+    stressArgs=${*:2:$((startConnIdx-2))}
+  fi
+else
+  sparkmaster="--master $lastParam" 
+  if [ $connectorArgsFound -eq 0 ]; then
+    stressArgs=${*:2:$((startConnIdx-2))}
+  else
+    stressArgs=${*:2:$((startConnIdx-3))}
+  fi
 fi
 
 JAR=build/libs/SparkCassandraStress-1.0.jar
