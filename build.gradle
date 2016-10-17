@@ -48,6 +48,8 @@ def deps = [
                     'shark/lib',
                     'hadoop',
                     'hadoop/lib',
+                    'hadoop2-client',
+                    'hadoop2-client/lib',
                     'lib',
                     'common',
                     ''
