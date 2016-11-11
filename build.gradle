@@ -14,9 +14,9 @@ ext.mainClassName = "com.datastax.sparkstress.SparkCassandraStress"
 
 def determineConnectorVersion() {
     if (against == 'dse') {
-        def connector = fileTree(dir: "$DseResources/spark/lib", include: '*connector_*.jar')
+        def connector = fileTree(dir: "$DseResources/spark/lib", include: 'spark*connector*_*.jar')
         def connectorJarName = (connector as List)[0].name
-        def match = connectorJarName =~ /connector_.*-(\d+\.\d+.\d+).*\.jar/
+        def match = connectorJarName =~ /connector.*_.*-(\d+\.\d+.\d+).*\.jar/
         assert match.find(), "Unable to find Spark Cassandra Connector"
         assert match.group(1).length() != 0, "Unable to determine version from " + match.group(0)
         println("Connector Version = " + match.group(1))
