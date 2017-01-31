@@ -12,7 +12,7 @@ case class Config(
   table: String = "tab",
   trials: Int = 1,
   verboseOutput: Boolean = false,
-  //Write Options
+  // Write Options
   replicationFactor: Int = 1,
   numPartitions: Int = 400,
   totalOps: Long = 20 * 1000000,
@@ -22,13 +22,15 @@ case class Config(
   // csv file to append results
   file: Option[Writer] = Option.empty,
   saveMethod: String = "driver",
-  //Spark Options
+  // Spark Options
   sparkOps: Map[String,String] = Map.empty,
-  //Streaming Params
+  // Streaming Params
   numReceivers: Int = 1,
   receiverThroughputPerBatch: Long = 100000,
   terminationTimeMinutes: Long = 0,
-  streamingBatchIntervalSeconds:  Int = 5
+  streamingBatchIntervalSeconds:  Int = 5,
+  // Read Options
+  useSparkSQL: Boolean = false
 )
 
 case class TestResult ( time: Long, ops: Long )
@@ -118,6 +120,10 @@ object SparkCassandraStress {
         config.copy(terminationTimeMinutes = arg)
       } text { "The desired runtime (in minutes) for a given workload. WARNING: Not supported with multiple trials or read workloads."}
 
+      opt[Unit]('s',"sparkSql") optional() action { (_,config) =>
+        config.copy(useSparkSQL = true)
+      } text {"Use SparkSQL for read test queries."}
+
       arg[String]("connectorOpts") optional() text { """spark-cassandra-connector configs, Ex: --conf "conf1=val1" --conf "conf2=val2" """}
 
       help("help") text {"CLI Help"}
@@ -166,14 +172,14 @@ object SparkCassandraStress {
 
     val test: StressTask =
       config.testName.toLowerCase match {
-          /** Write Tasks **/
+        /** Write Tasks **/
         case "writeshortrow" => new WriteShortRow(config, sc)
         case "writewiderow" => new WriteWideRow(config, sc)
         case "writeperfrow" => new WritePerfRow(config, sc)
         case "writerandomwiderow" => new WriteRandomWideRow(config, sc)
         case "writewiderowbypartition" => new WriteWideRowByPartition(config, sc)
 
-          /** Read Tasks **/
+        /** Read Tasks **/
         case "pdcount" => new PDCount(config, sc)
         case "ftsallcolumns" => new FTSAllColumns(config, sc)
         case "ftsfivecolumns" => new FTSFiveColumns(config, sc)
@@ -185,7 +191,18 @@ object SparkCassandraStress {
         case "jwcrpallcolumns" => new JWCRPAllColumns(config, sc)
         case "retrievesinglepartition" => new RetrieveSinglePartition(config, sc)
 
-          /** Streaming Tasks **/
+        /** SparkSQL Read Tasks **/
+        case "sqlcount" => new SparkSqlCount(config, sc)
+        case "sqlftsallcolumns" => new SparkSqlFTSAllColumns(config, sc)
+        case "sqlftsfivecolumns" => new SparkSqlFTSFiveColumns(config, sc)
+        case "sqlftsonecolumn" => new SparkSqlFTSOneColumn(config, sc)
+        case "sqlftsclusteringallcolumns" => new SparkSqlFTSClusteringAllColumns(config, sc)
+        case "sqlftsclusteringfivecolumns" => new SparkSqlFTSClusteringFiveColumns(config, sc)
+        case "sqljoinallcolumns" => new SparkSqlJoinAllColumns(config, sc)
+        case "sqljoinclusteringallcolumns" => new SparkSqlJoinClusteringAllColumns(config, sc)
+        case "sqlretrievesinglepartition" => new SparkSqlRetrieveSinglePartition(config, sc)
+
+        /** Streaming Tasks **/
         case "streamingwrite" => new StreamingWrite(config, sc)
       }
 

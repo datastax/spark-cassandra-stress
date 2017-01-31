@@ -5,6 +5,7 @@ import java.util.UUID
 import com.datastax.spark.connector.cql.CassandraConnector
 import com.datastax.sparkstress.RowTypes.PerfRowClass
 import org.apache.spark.SparkContext
+import org.apache.spark.sql.SQLContext
 import com.datastax.spark.connector._
 import com.datastax.sparkstress.SparkStressImplicits._
 import org.joda.time.DateTime
@@ -20,7 +21,17 @@ object ReadTask {
     "jwcpdclusteringallcolumns",
     "jwcrpallcolumns",
     "pdcount",
-    "retrievesinglepartition"
+    "retrievesinglepartition",
+    // SparkSQL
+    "sqlftsallcolumns",
+    "sqlftsfivecolumns",
+    "sqlftsonecolumn",
+    "sqlftsclusteringallcolumns",
+    "sqlftsclusteringfivecolumns",
+    "sqljoinallcolumns",
+    "sqljoinclusteringallcolumns",
+    "sqlcount",
+    "sqlretrievesinglepartition"
   )
 }
 
@@ -33,6 +44,9 @@ abstract class ReadTask(config: Config, sc: SparkContext) extends StressTask {
 
   val numberNodes = CassandraConnector(sc.getConf).withClusterDo( _.getMetadata.getAllHosts.size)
   val tenthKeys:Int = config.numTotalKeys.toInt / 10
+
+  // deprecated approach, but compatible across all versions we care about right now
+  val sqlContext = new org.apache.spark.sql.SQLContext(sc)
 
   val cores = sys.env.getOrElse("SPARK_WORKER_CORES", "1").toInt * numberNodes 
   val defaultParallelism = math.max(sc.defaultParallelism, cores) 
@@ -55,7 +69,21 @@ abstract class ReadTask(config: Config, sc: SparkContext) extends StressTask {
 class PDCount(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
 
   def run(): Unit = {
-    val count = sc.cassandraTable(keyspace, table).cassandraCount()
+    val count = sc.cassandraTable("ks","tab").cassandraCount()
+    if (config.totalOps != count) {
+      println(s"Read verification failed! Expected ${config.totalOps}, returned $count");
+    }
+    println(count)
+  }
+}
+
+/**
+  * SparkSQL Count
+  */
+class SparkSqlCount(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
+
+  def run(): Unit = {
+    val count = sqlContext.sql("SELECT COUNT(*) FROM ks.tab").toDF("count").first.getAs[Long]("count")
     if (config.totalOps != count) {
       println(s"Read verification failed! Expected ${config.totalOps}, returned $count");
     }
@@ -65,7 +93,7 @@ class PDCount(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
 
 /**
  * Full Table Scan One Column
- * Performs a full table scan but only retreives a single column from the underlying
+ * Performs a full table scan but only retrieves a single column from the underlying
  * table.
  */
 class FTSOneColumn(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
@@ -77,13 +105,33 @@ class FTSOneColumn(config: Config, sc: SparkContext) extends ReadTask(config, sc
 }
 
 /**
+  * SparkSQL Full Table Scan One Column
+  */
+class SparkSqlFTSOneColumn(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
+
+  def run(): Unit = {
+    val colorCounts = sqlContext.sql("SELECT color FROM ks.tab").count
+    println(colorCounts)
+  }
+}
+
+/**
  * Full Table Scan One Column
- * Performs a full table scan but only retreives a single column from the underlying
- * table.
+ * Performs a full table scan, retrieves all columns and returns the count.
  */
 class FTSAllColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
     val count = sc.cassandraTable[PerfRowClass](keyspace, table).count
+    println(s"Loaded $count rows")
+  }
+}
+
+/**
+  * SparkSQL Full Table Scan One Column
+  */
+class SparkSqlFTSAllColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
+  def run(): Unit = {
+    val count = sqlContext.sql("SELECT * FROM ks.tab").count
     println(s"Loaded $count rows")
   }
 }
@@ -94,10 +142,19 @@ class FTSAllColumns(config: Config, sc: SparkContext) extends ReadTask(config, s
  */
 class FTSFiveColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
-    val count = sc.cassandraTable[(UUID, Int, String, String, org.joda.time.DateTime)](keyspace,
-      table)
+    val count = sc.cassandraTable[(UUID, Int, String, String, org.joda.time.DateTime)](keyspace, table)
       .select("order_number", "qty", "color", "size", "order_time")
       .count
+    println(s"Loaded $count rows")
+  }
+}
+
+/**
+  * SparkSQL Full Table Scan Five Columns
+  */
+class SparkSqlFTSFiveColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
+  def run(): Unit = {
+    val count = sqlContext.sql("SELECT order_number,qty,color,size,order_time FROM ks.tab").count
     println(s"Loaded $count rows")
   }
 }
@@ -116,16 +173,36 @@ class FTSPDClusteringAllColumns(config: Config, sc: SparkContext) extends ReadTa
 }
 
 /**
+  * SparkSQL Full Table Scan with a Clustering Column where clause
+  */
+class SparkSqlFTSClusteringAllColumns(config: Config, sc: SparkContext) extends ReadTask(config,
+  sc) {
+  def run(): Unit = {
+    val count = sqlContext.sql(s"""SELECT * FROM ks.tab WHERE order_time < "$timePivot" """).count
+    println(s"Loaded $count rows")
+  }
+}
+
+/**
  * Full Table Scan with a Clustering Column Predicate Pushed down to C*
  * Only 5 columns retreived per row
  */
 class FTSPDClusteringFiveColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
-    val count = sc.cassandraTable[(UUID, Int, String, String, org.joda.time.DateTime)](keyspace,
-      table)
+    val count = sc.cassandraTable[(UUID, Int, String, String, org.joda.time.DateTime)](keyspace, table)
       .where("order_time < ?", timePivot)
       .select("order_number", "qty", "color", "size", "order_time")
       .count
+    println(s"Loaded $count rows")
+  }
+}
+
+/**
+  * SparkSQL Full Table Scan with a Clustering Column where clause, only 5 columns retreived per row
+  */
+class SparkSqlFTSClusteringFiveColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
+  def run(): Unit = {
+    val count = sqlContext.sql(s"""SELECT qty,color,size,order_time FROM ks.tab WHERE order_time < "$timePivot" """).count
     println(s"Loaded $count rows")
   }
 }
@@ -144,8 +221,21 @@ class JWCAllColumns(config: Config, sc: SparkContext) extends ReadTask(config, s
 }
 
 /**
+  * SparkSQL join table with itself
+  */
+class SparkSqlJoinAllColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
+  def run(): Unit = {
+    val count = sqlContext.sql("SELECT COUNT(table_b.store) FROM ks.tab AS table_b JOIN ks.tab AS table_a ON table_b.store = table_a.store")
+      .toDF("count")
+      .first.getAs[Long]("count")
+    println(s"Loaded $count rows")
+  }
+}
+
+/**
  * Join With C* with 1M Partition Key requests
  * A repartitionByCassandraReplica occurs before retreiving the data
+ * Note: We do not have a SparkSQL equivalent example
  */
 class JWCRPAllColumns(config: Config, sc: SparkContext) extends
 ReadTask(config, sc) {
@@ -161,15 +251,30 @@ ReadTask(config, sc) {
 
 /**
  * Join With C* with 1M Partition Key requests
- * A clustering column predicate is pushed down to limit data retrevial
+ * A clustering column predicate is pushed down to limit data retrieval
  */
 class JWCPDClusteringAllColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
     val count = sc.parallelize(1 to tenthKeys)
-      .map(num => Tuple1(s"Store $num"))
-      .joinWithCassandraTable[PerfRowClass](keyspace, table)
-      .where("order_time < ?", timePivot)
-      .count
+          .map(num => Tuple1(s"Store $num"))
+          .joinWithCassandraTable[PerfRowClass](keyspace, table)
+          .where("order_time < ?", timePivot)
+          .count
+    println(s"Loaded $count rows")
+  }
+}
+
+/**
+  * SparkSQL join a table with itself, using where clause on clustering column
+  */
+class SparkSqlJoinClusteringAllColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
+  def run(): Unit = {
+    val count = sqlContext.sql(
+          s"""SELECT COUNT(table_b.store)
+              |FROM ks.tab AS table_b
+              |JOIN ks.tab AS table_a
+              |ON table_b.store = table_a.store
+              |WHERE table_a.order_time < "$timePivot" """.stripMargin).toDF("count").first.getAs[Long]("count")
     println(s"Loaded $count rows")
   }
 }
@@ -183,6 +288,16 @@ class RetrieveSinglePartition(config: Config, sc: SparkContext) extends ReadTask
       .where("store = ? ", "Store 5")
       .collect
     println(filterResults.length)
+  }
+}
+
+/**
+  * SparkSQL grab a single C* partition
+  */
+class SparkSqlRetrieveSinglePartition(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
+  def run(): Unit = {
+    val filterResults = sqlContext.sql(s"""SELECT * FROM ks.tab WHERE store = "Store 5" """).count
+    println(filterResults)
   }
 }
 
