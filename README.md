@@ -66,7 +66,7 @@ Will bring up the built in help.
 
 ## License
 
-Copyright 2014-16, DataStax, Inc.
+Copyright 2014-17, DataStax, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
