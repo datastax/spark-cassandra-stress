@@ -31,7 +31,8 @@ object ReadTask {
     "sqljoinallcolumns",
     "sqljoinclusteringallcolumns",
     "sqlcount",
-    "sqlretrievesinglepartition"
+    "sqlretrievesinglepartition",
+    "sqlrunuserquery"
   )
 }
 
@@ -44,6 +45,7 @@ abstract class ReadTask(config: Config, sc: SparkContext) extends StressTask {
 
   val numberNodes = CassandraConnector(sc.getConf).withClusterDo( _.getMetadata.getAllHosts.size)
   val tenthKeys:Int = config.numTotalKeys.toInt / 10
+  val userSqlQuery:String = config.userSqlQuery
 
   // deprecated approach, but compatible across all versions we care about right now
   val sqlContext = new org.apache.spark.sql.SQLContext(sc)
@@ -256,10 +258,10 @@ ReadTask(config, sc) {
 class JWCPDClusteringAllColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
     val count = sc.parallelize(1 to tenthKeys)
-          .map(num => Tuple1(s"Store $num"))
-          .joinWithCassandraTable[PerfRowClass](keyspace, table)
-          .where("order_time < ?", timePivot)
-          .count
+      .map(num => Tuple1(s"Store $num"))
+      .joinWithCassandraTable[PerfRowClass](keyspace, table)
+      .where("order_time < ?", timePivot)
+      .count
     println(s"Loaded $count rows")
   }
 }
@@ -298,6 +300,27 @@ class SparkSqlRetrieveSinglePartition(config: Config, sc: SparkContext) extends 
   def run(): Unit = {
     val filterResults = sqlContext.sql(s"""SELECT * FROM ks.tab WHERE store = "Store 5" """).count
     println(filterResults)
+  }
+}
+
+/**
+  * Run any user-provided SparkSQL query
+  */
+class SparkSqlRunUserQuery(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
+  def run(): Unit = {
+    if (userSqlQuery == null) {
+      println(s"No user query detected, use the -u or --userSqlQuery options to specify a custom query.")
+      val defaultQuery = s"""SELECT * FROM ks.tab WHERE order_time > "$timePivot" AND store = "Store 5" AND order_number < "$uuidPivot" """
+      println(s"Running default query: '$defaultQuery'")
+      val count = sqlContext.sql(defaultQuery).count
+      println(s"Loaded $count rows")
+
+    }
+    else {
+      println(s"The user defined query is: '$userSqlQuery'")
+      val results = sqlContext.sql(userSqlQuery)
+      println(results)
+    }
   }
 }
 

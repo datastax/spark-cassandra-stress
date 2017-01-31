@@ -30,7 +30,8 @@ case class Config(
   terminationTimeMinutes: Long = 0,
   streamingBatchIntervalSeconds:  Int = 5,
   // Read Options
-  useSparkSQL: Boolean = false
+  useSparkSQL: Boolean = false,
+  userSqlQuery: String = null
 )
 
 case class TestResult ( time: Long, ops: Long )
@@ -123,6 +124,10 @@ object SparkCassandraStress {
       opt[Unit]('s',"sparkSql") optional() action { (_,config) =>
         config.copy(useSparkSQL = true)
       } text {"Use SparkSQL for read test queries."}
+
+      opt[String]('u',"userSqlQuery") optional() action { (arg,config) =>
+        config.copy(userSqlQuery = arg)
+      } text {"EXPERIMENTAL (Not stable): User-defined SparkSQL query."}
 
       arg[String]("connectorOpts") optional() text { """spark-cassandra-connector configs, Ex: --conf "conf1=val1" --conf "conf2=val2" """}
 
