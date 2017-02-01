@@ -87,7 +87,7 @@ class PDCount(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
 class SparkSqlCount(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
 
   def run(): Unit = {
-    val count = sqlContext.sql("SELECT COUNT(*) FROM ks.tab").toDF("count").first.getAs[Long]("count")
+    val count = sqlContext.sql("SELECT COUNT(*) FROM ${keyspace}.${table}").toDF("count").first.getAs[Long]("count")
     if (config.totalOps != count) {
       println(s"Read verification failed! Expected ${config.totalOps}, returned $count");
     }
@@ -114,7 +114,7 @@ class FTSOneColumn(config: Config, sc: SparkContext) extends ReadTask(config, sc
 class SparkSqlFTSOneColumn(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
 
   def run(): Unit = {
-    val colorCounts = sqlContext.sql("SELECT color FROM ks.tab").count
+    val colorCounts = sqlContext.sql("SELECT color FROM ${keyspace}.${table}").count
     println(colorCounts)
   }
 }
@@ -135,7 +135,7 @@ class FTSAllColumns(config: Config, sc: SparkContext) extends ReadTask(config, s
   */
 class SparkSqlFTSAllColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
-    val count = sqlContext.sql("SELECT * FROM ks.tab").count
+    val count = sqlContext.sql("SELECT * FROM ${keyspace}.${table}").count
     println(s"Loaded $count rows")
   }
 }
@@ -158,7 +158,7 @@ class FTSFiveColumns(config: Config, sc: SparkContext) extends ReadTask(config, 
   */
 class SparkSqlFTSFiveColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
-    val count = sqlContext.sql("SELECT order_number,qty,color,size,order_time FROM ks.tab").count
+    val count = sqlContext.sql("SELECT order_number,qty,color,size,order_time FROM ${keyspace}.${table}").count
     println(s"Loaded $count rows")
   }
 }
@@ -182,7 +182,7 @@ class FTSPDClusteringAllColumns(config: Config, sc: SparkContext) extends ReadTa
 class SparkSqlFTSClusteringAllColumns(config: Config, sc: SparkContext) extends ReadTask(config,
   sc) {
   def run(): Unit = {
-    val count = sqlContext.sql(s"""SELECT * FROM ks.tab WHERE order_time < "$timePivot" """).count
+    val count = sqlContext.sql(s"""SELECT * FROM ${keyspace}.${table} WHERE order_time < "$timePivot" """).count
     println(s"Loaded $count rows")
   }
 }
@@ -206,7 +206,7 @@ class FTSPDClusteringFiveColumns(config: Config, sc: SparkContext) extends ReadT
   */
 class SparkSqlFTSClusteringFiveColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
-    val count = sqlContext.sql(s"""SELECT qty,color,size,order_time FROM ks.tab WHERE order_time < "$timePivot" """).count
+    val count = sqlContext.sql(s"""SELECT qty,color,size,order_time FROM ${keyspace}.${table} WHERE order_time < "$timePivot" """).count
     println(s"Loaded $count rows")
   }
 }
@@ -229,7 +229,7 @@ class JWCAllColumns(config: Config, sc: SparkContext) extends ReadTask(config, s
   */
 class SparkSqlJoinAllColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
-    val count = sqlContext.sql("SELECT COUNT(table_b.store) FROM ks.tab AS table_b JOIN ks.tab AS table_a ON table_b.store = table_a.store")
+    val count = sqlContext.sql("SELECT COUNT(table_b.store) FROM ${keyspace}.${table} AS table_b JOIN ${keyspace}.${table} AS table_a ON table_b.store = table_a.store")
       .toDF("count")
       .first.getAs[Long]("count")
     println(s"Loaded $count rows")
@@ -275,8 +275,8 @@ class SparkSqlJoinClusteringAllColumns(config: Config, sc: SparkContext) extends
   def run(): Unit = {
     val count = sqlContext.sql(
           s"""SELECT COUNT(table_b.store)
-              |FROM ks.tab AS table_b
-              |JOIN ks.tab AS table_a
+              |FROM ${keyspace}.${table} AS table_b
+              |JOIN ${keyspace}.${table} AS table_a
               |ON table_b.store = table_a.store
               |WHERE table_a.order_time < "$timePivot" """.stripMargin).toDF("count").first.getAs[Long]("count")
     println(s"Loaded $count rows")
@@ -300,7 +300,7 @@ class RetrieveSinglePartition(config: Config, sc: SparkContext) extends ReadTask
   */
 class SparkSqlRetrieveSinglePartition(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
-    val filterResults = sqlContext.sql(s"""SELECT * FROM ks.tab WHERE store = "Store 5" """).count
+    val filterResults = sqlContext.sql(s"""SELECT * FROM ${keyspace}.${table} WHERE store = "Store 5" """).count
     println(filterResults)
   }
 }
@@ -312,7 +312,7 @@ class SparkSqlRunUserQuery(config: Config, sc: SparkContext) extends ReadTask(co
   def run(): Unit = {
     if (userSqlQuery == null) {
       println(s"No user query detected, use the -u or --userSqlQuery options to specify a custom query.")
-      val defaultQuery = s"""SELECT * FROM ks.tab WHERE order_time > "$timePivot" AND store = "Store 5" AND order_number < "$uuidPivot" """
+      val defaultQuery = s"""SELECT * FROM ${keyspace}.${table} WHERE order_time > "$timePivot" AND store = "Store 5" AND order_number < "$uuidPivot" """
       println(s"Running default query: '$defaultQuery'")
       val count = sqlContext.sql(defaultQuery).count
       println(s"Loaded $count rows")
@@ -336,7 +336,7 @@ class SparkSqlRunUserQuery(config: Config, sc: SparkContext) extends ReadTask(co
 class SparkSlicePrimaryKey(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
     val count = sqlContext.sql(
-      s"""SELECT * FROM ks.tab
+      s"""SELECT * FROM ${keyspace}.${table}
          |WHERE order_time > "$timePivot"
          |AND store = "Store 5"
          |AND order_number < "$uuidPivot" """.stripMargin).count
@@ -353,7 +353,7 @@ class SparkSlicePrimaryKey(config: Config, sc: SparkContext) extends ReadTask(co
 class SparkSliceNonePrimaryKey(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
     val count = sqlContext.sql(
-      s"""SELECT * FROM ks.tab WHERE qty < 1000 """.stripMargin).count
+      s"""SELECT * FROM ${keyspace}.${table} WHERE qty < 1000 """.stripMargin).count
     println(s"Loaded $count rows")
   }
 }
