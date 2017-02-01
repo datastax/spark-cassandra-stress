@@ -58,7 +58,7 @@ abstract class StreamingTask[rowType](
     printf("Done Setting up CQL Keyspace/Table\n")
   }
 
-  def getKeyspaceCql(ksName: String): String = s"CREATE KEYSPACE IF NOT EXISTS $ksName WITH replication = {'class': 'NetworkTopologyStrategy', 'Analytics': ${config.replicationFactor} }"
+  def getKeyspaceCql(ksName: String): String = s"CREATE KEYSPACE IF NOT EXISTS $ksName WITH replication = {'class': '${config.replicationStrategy}', '${config.replicationDC}': ${config.replicationFactor} }"
 
   def getTableCql(tbName: String): Seq[String]
 

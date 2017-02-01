@@ -13,6 +13,8 @@ case class Config(
   trials: Int = 1,
   verboseOutput: Boolean = false,
   // Write Options
+  replicationStrategy: String = "NetworkTopologyStrategy",
+  replicationDC: String = "Analytics",
   replicationFactor: Int = 1,
   numPartitions: Int = 400,
   totalOps: Long = 20 * 1000000,
@@ -88,6 +90,14 @@ object SparkCassandraStress {
       opt[Int]('p',"numPartitions") optional() action { (arg,config) =>
         config.copy(numPartitions = arg)
       } text {"Number of Spark Partitions To Create"}
+
+      opt[String]('e',"replicationStrategy") optional() action { (arg,config) =>
+        config.copy(replicationStrategy = arg)
+      } text {"Replication strategy. Default: NetworkTopologyStrategy"}
+
+      opt[String]('c',"replicationDC") optional() action { (arg,config) =>
+        config.copy(replicationDC = arg)
+      } text {"The DC name where replicas should be placed. Default: Analytics"}
 
       opt[Int]('r',"replication") optional() action { (arg,config) =>
         config.copy(replicationFactor = arg)
