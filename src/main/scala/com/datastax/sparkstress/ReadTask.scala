@@ -32,7 +32,9 @@ object ReadTask {
     "sqljoinclusteringallcolumns",
     "sqlcount",
     "sqlretrievesinglepartition",
-    "sqlrunuserquery"
+    "sqlrunuserquery",
+    "sqlsliceprimarykey",
+    "sqlslicenonprimarykey"
   )
 }
 
@@ -324,3 +326,34 @@ class SparkSqlRunUserQuery(config: Config, sc: SparkContext) extends ReadTask(co
   }
 }
 
+/**
+  * SparkSQL query to slice on primary key columns
+  * Experimental: Temporary until SparkSqlRunUserQuery is finished.
+  * The timePivot should be roughly in the middle of the expected values.
+  * The uuidPivot is arbitrary (I think), the expected values are random.
+  * The store value is just to isolate on one parition key.
+  */
+class SparkSlicePrimaryKey(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
+  def run(): Unit = {
+    val count = sqlContext.sql(
+      s"""SELECT * FROM ks.tab
+         |WHERE order_time > "$timePivot"
+         |AND store = "Store 5"
+         |AND order_number < "$uuidPivot" """.stripMargin).count
+    println(s"Loaded $count rows")
+  }
+}
+
+/**
+  * SparkSQL query to slice non primary key columns
+  * Experimental: Temporary until SparkSqlRunUserQuery is finished.
+  * Here we are slicing on the qty column, the value upper-bound is 10,000, so we're cutting
+  *   out 90% of the data by using 'qty < 1000'.
+  */
+class SparkSliceNonePrimaryKey(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
+  def run(): Unit = {
+    val count = sqlContext.sql(
+      s"""SELECT * FROM ks.tab WHERE qty < 1000 """.stripMargin).count
+    println(s"Loaded $count rows")
+  }
+}

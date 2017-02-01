@@ -206,6 +206,9 @@ object SparkCassandraStress {
         case "sqljoinallcolumns" => new SparkSqlJoinAllColumns(config, sc)
         case "sqljoinclusteringallcolumns" => new SparkSqlJoinClusteringAllColumns(config, sc)
         case "sqlretrievesinglepartition" => new SparkSqlRetrieveSinglePartition(config, sc)
+        case "sqlrunuserquery" => new SparkSqlRetrieveSinglePartition(config, sc)
+        case "sqlsliceprimarykey" => new SparkSlicePrimaryKey(config, sc)
+        case "sqlslicenonprimarykey" => new SparkSliceNonePrimaryKey(config, sc)
 
         /** Streaming Tasks **/
         case "streamingwrite" => new StreamingWrite(config, sc)
