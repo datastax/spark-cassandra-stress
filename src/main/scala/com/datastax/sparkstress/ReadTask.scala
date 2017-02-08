@@ -34,8 +34,8 @@ abstract class ReadTask(config: Config, sc: SparkContext) extends StressTask {
   val numberNodes = CassandraConnector(sc.getConf).withClusterDo( _.getMetadata.getAllHosts.size)
   val tenthKeys:Int = config.numTotalKeys.toInt / 10
 
-  val cores = if (sys.env.get("SPARK_WORKER_CORES") == None) numberNodes else (sys.env.get("SPARK_WORKER_CORES").get.toInt * numberNodes)
-  val defaultParallelism = if (sc.defaultParallelism < numberNodes) cores else sc.defaultParallelism
+  val cores = sys.env.getOrElse("SPARK_WORKER_CORES", "1").toInt * numberNodes 
+  val defaultParallelism = math.max(sc.defaultParallelism, cores) 
   val coresPerNode:Int = defaultParallelism / numberNodes
   def run()
 
