@@ -337,9 +337,9 @@ class SparkSlicePrimaryKey(config: Config, sc: SparkContext) extends ReadTask(co
   def run(): Unit = {
     val count = sqlContext.sql(
       s"""SELECT * FROM ${keyspace}.${table}
-         |WHERE order_time > "$timePivot"
+         |WHERE order_time < "$timePivot"
          |AND store = "Store 5"
-         |AND order_number < "$uuidPivot" """.stripMargin).count
+         |AND order_number > "$uuidPivot" """.stripMargin).count
     println(s"Loaded $count rows")
   }
 }
