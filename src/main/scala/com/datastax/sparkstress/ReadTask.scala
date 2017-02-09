@@ -331,7 +331,7 @@ class SparkSqlRunUserQuery(config: Config, sc: SparkContext) extends ReadTask(co
   * Experimental: Temporary until SparkSqlRunUserQuery is finished.
   * The timePivot should be roughly in the middle of the expected values.
   * The uuidPivot is arbitrary (I think), the expected values are random.
-  * The store value is just to isolate on one parition key.
+  * The store value is just to isolate on one partition key.
   */
 class SparkSlicePrimaryKey(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
