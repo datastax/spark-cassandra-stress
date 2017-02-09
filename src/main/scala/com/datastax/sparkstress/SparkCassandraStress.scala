@@ -32,7 +32,6 @@ case class Config(
   terminationTimeMinutes: Long = 0,
   streamingBatchIntervalSeconds:  Int = 5,
   // Read Options
-  useSparkSQL: Boolean = false,
   userSqlQuery: String = null
 )
 
@@ -130,10 +129,6 @@ object SparkCassandraStress {
       opt[Int]('m',"terminationTimeMinutes") optional() action { (arg,config) =>
         config.copy(terminationTimeMinutes = arg)
       } text { "The desired runtime (in minutes) for a given workload. WARNING: Not supported with multiple trials or read workloads."}
-
-      opt[Unit]('s',"sparkSql") optional() action { (_,config) =>
-        config.copy(useSparkSQL = true)
-      } text {"Use SparkSQL for read test queries."}
 
       opt[String]('u',"userSqlQuery") optional() action { (arg,config) =>
         config.copy(userSqlQuery = arg)
