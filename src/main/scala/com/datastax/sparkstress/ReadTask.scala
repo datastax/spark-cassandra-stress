@@ -217,7 +217,7 @@ class SparkSqlFTSClusteringFiveColumns(config: Config, sc: SparkContext) extends
 class JWCAllColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
     val count = sc.parallelize(1 to tenthKeys)
-      .map(num => Tuple1(s"Store $num"))
+      .map(num => Tuple1(s"Store_$num"))
       .joinWithCassandraTable[PerfRowClass](keyspace, table)
       .count
     println(s"Loaded $count rows")
@@ -245,7 +245,7 @@ class JWCRPAllColumns(config: Config, sc: SparkContext) extends
 ReadTask(config, sc) {
   def run(): Unit = {
     val count = sc.parallelize(1 to tenthKeys)
-      .map(num => Tuple1(s"Store $num"))
+      .map(num => Tuple1(s"Store_$num"))
       .repartitionByCassandraReplica(keyspace, table, coresPerNode)
       .joinWithCassandraTable[PerfRowClass](keyspace, table)
       .count
@@ -260,7 +260,7 @@ ReadTask(config, sc) {
 class JWCPDClusteringAllColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
     val count = sc.parallelize(1 to tenthKeys)
-      .map(num => Tuple1(s"Store $num"))
+      .map(num => Tuple1(s"Store_$num"))
       .joinWithCassandraTable[PerfRowClass](keyspace, table)
       .where("order_time < ?", timePivot)
       .count
@@ -289,7 +289,7 @@ class SparkSqlJoinClusteringAllColumns(config: Config, sc: SparkContext) extends
 class RetrieveSinglePartition(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
     val filterResults = sc.cassandraTable[String](keyspace, table)
-      .where("store = ? ", "Store 5")
+      .where("store = ? ", "Store_5")
       .collect
     println(filterResults.length)
   }
@@ -300,7 +300,7 @@ class RetrieveSinglePartition(config: Config, sc: SparkContext) extends ReadTask
   */
 class SparkSqlRetrieveSinglePartition(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
-    val filterResults = sqlContext.sql(s"""SELECT * FROM ${keyspace}.${table} WHERE store = "Store 5" """).count
+    val filterResults = sqlContext.sql(s"""SELECT * FROM ${keyspace}.${table} WHERE store = "Store_5" """).count
     println(filterResults)
   }
 }
@@ -312,7 +312,7 @@ class SparkSqlRunUserQuery(config: Config, sc: SparkContext) extends ReadTask(co
   def run(): Unit = {
     if (userSqlQuery == null) {
       println(s"No user query detected, use the -u or --userSqlQuery options to specify a custom query.")
-      val defaultQuery = s"""SELECT * FROM ${keyspace}.${table} WHERE order_time > "$timePivot" AND store = "Store 5" AND order_number < "$uuidPivot" """
+      val defaultQuery = s"""SELECT * FROM ${keyspace}.${table} WHERE order_time > "$timePivot" AND store = "Store_5" AND order_number < "$uuidPivot" """
       println(s"Running default query: '$defaultQuery'")
       val count = sqlContext.sql(defaultQuery).count
       println(s"Loaded $count rows")
@@ -335,10 +335,11 @@ class SparkSqlRunUserQuery(config: Config, sc: SparkContext) extends ReadTask(co
   */
 class SparkSlicePrimaryKey(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
+    println(s"""SELECT * FROM ${keyspace}.${table} WHERE order_time < "$timePivot" AND store = "Store_5" AND order_number > "$uuidPivot" """.stripMargin)
     val count = sqlContext.sql(
       s"""SELECT * FROM ${keyspace}.${table}
          |WHERE order_time < "$timePivot"
-         |AND store = "Store 5"
+         |AND store = "Store_5"
          |AND order_number > "$uuidPivot" """.stripMargin).count
     println(s"Loaded $count rows")
   }

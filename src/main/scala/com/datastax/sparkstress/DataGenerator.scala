@@ -113,7 +113,7 @@ object RowGenerator {
         val color = colors(r.nextInt(colors.size))
         val size = sizes(r.nextInt(sizes.size))
         val qty = qtys(r.nextInt(qtys.size))
-        val store = s"Store ${pk + offset}"
+        val store = s"Store_${pk + offset}"
         val order_number = UUID.randomUUID()
         val order_time = perftime.plusSeconds(r.nextInt(1000))
         PerfRowClass(store, order_time, order_number, color, size, qty)
