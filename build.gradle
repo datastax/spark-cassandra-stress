@@ -1,7 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'scala'
 
-version = '1.0'
+version = '1.1'
 
 if (!hasProperty('against')) {
     ext.against = 'maven'    // default
@@ -11,6 +11,10 @@ ext.Home = System.env.HOME
 ext.DseHome = System.env.DSE_HOME ?: "$Home/dse"
 ext.DseResources = System.env.DSE_RESOURCES ?: "$Home/dse/resources/"
 ext.mainClassName = "com.datastax.sparkstress.SparkCassandraStress"
+
+ext.scalaVersion = "2.11"
+ext.defaultConnector = "1.6.3"
+ext.defaultSpark = "1.6.2"
 
 def determineConnectorVersion() {
     if (against == 'dse') {
@@ -23,19 +27,17 @@ def determineConnectorVersion() {
         return match.group(1)
     }
     if (against == 'maven') {
-        return System.env.CONNECTOR_VERSION ?: '1.4.0'
+        return System.env.CONNECTOR_VERSION ?: defaultConnector
     }
 }
 
 // Parameters for buliding against Maven Libs
 def ConnectorVersion = determineConnectorVersion()
-def SparkVersion = System.env.SPARK_VERSION ?: '1.4.1'
+def SparkVersion = System.env.SPARK_VERSION ?: defaultSpark
 
 // Parameter for building against Connector Repository
 def SparkCCHome = System.env.SPARKCC_HOME ?:
         "$Home/repos/spark-cassandra-connector/"
-
-
 
 def deps = [
         dse   : {
@@ -70,16 +72,17 @@ def deps = [
         },
         maven : {
             println "Using Maven Libraries"
-            compile "com.datastax.spark:spark-cassandra-connector_2.10:$ConnectorVersion"
-            provided "org.apache.spark:spark-core_2.10:$SparkVersion"
-            provided "org.apache.spark:spark-streaming_2.10:$SparkVersion"
+            compile "com.datastax.spark:spark-cassandra-connector_$scalaVersion:$ConnectorVersion"
+            provided "org.apache.spark:spark-core_$scalaVersion:$SparkVersion"
+            provided "org.apache.spark:spark-sql_$scalaVersion:$SparkVersion"
+            provided "org.apache.spark:spark-streaming_$scalaVersion:$SparkVersion"
         },
         source: {
             println "Using Assembly Jar from Source Repo"
-
-            compile fileTree(dir: "$SparkCCHome/spark-cassandra-connector/target/scala-2.10/", include: "*.jar")
-            provided "org.apache.spark:spark-core_2.10:$SparkVersion"
-            provided "org.apache.spark:spark-streaming_2.10:$SparkVersion"
+            compile fileTree(dir: "$SparkCCHome/spark-cassandra-connector/target/scala-$scalaVersion/", include: "*.jar")
+            provided "org.apache.spark:spark-sql_$scalaVersion:$SparkVersion"
+            provided "org.apache.spark:spark-core_$scalaVersion:$SparkVersion"
+            provided "org.apache.spark:spark-streaming_$scalaVersion:$SparkVersion"
         },
 
 ]
@@ -114,10 +117,6 @@ configurations {
     compile.extendsFrom provided
 }
 
-ext {
-    scalaVersion = '2.10.5'
-}
-
 repositories {
     mavenCentral()
 }
@@ -132,10 +131,9 @@ test {
 }
 
 dependencies {
-    testCompile "org.scala-lang:scala-library:2.10.5"
-    testCompile "com.datastax.spark:spark-cassandra-connector-embedded_2.10:1.2.1"
-    testCompile "org.scalatest:scalatest_2.10:2.2.4"
-    compile "com.github.scopt:scopt_2.10:3.2.0"
+    testCompile "com.datastax.spark:spark-cassandra-connector-embedded_$scalaVersion:$ConnectorVersion"
+    testCompile "org.scalatest:scalatest_$scalaVersion:2.2.4"
+    compile "com.github.scopt:scopt_$scalaVersion:3.2.0"
     compile "joda-time:joda-time:2.8.1"
 
     println "Checking dependency flag: $against"
