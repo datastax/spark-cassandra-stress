@@ -197,18 +197,20 @@ object SparkCassandraStress {
     val wallClockStopTime = System.nanoTime() 
     val wallClockTimeDiff = wallClockStopTime - wallClockStartTime
     val wallClockTimeSeconds = (wallClockTimeDiff / 1000000000.0) 
-    val timeSeconds = time.map{ x => math.round( x / 1000000000.0 ) }
-    val opsPerSecond = for (i <- 0 to timeSeconds.size-1) yield {math.round(totalCompletedOps(i)/timeSeconds(i))}
+    val timeSeconds = time.map{ x => x / 1000000000.0 }
+    val opsPerSecond = for (i <- 0 to timeSeconds.size-1) yield {totalCompletedOps(i)/timeSeconds(i)}
+    val formattedTimeSeconds = timeSeconds.map(time => f"$time%.2f")
+    val formattedOpsPerSecond = opsPerSecond.map(time => f"$time%.2f")
 
     test match {
       case x: WriteTask[_] =>  {
-        println(s"TimeInSeconds : ${timeSeconds.mkString(",")}\n")
-        println(s"OpsPerSecond : ${opsPerSecond.mkString(",")}\n")
+        println(s"TimeInSeconds : ${formattedTimeSeconds.mkString(",")}\n")
+        println(s"OpsPerSecond : ${formattedOpsPerSecond.mkString(",")}\n")
         config.file.map(f => {f.write(csvResults(config, time));f.flush })
         sc.stop()
       }
       case x: ReadTask => {
-        println(s"TimeInSeconds : ${timeSeconds.mkString(",")}\n")
+        println(s"TimeInSeconds : ${formattedTimeSeconds.mkString(",")}\n")
         config.file.map(f => {f.write(csvResults(config, time));f.flush })
         sc.stop()
       }

@@ -376,7 +376,7 @@ class SQLFTSData(config: Config, sc: SparkContext) extends SQLReadBase(config, s
   * Full Table Scan while restricting to only a fraction of loaded Cassandra Partitions
   */
 class SQLFTSPkRestriction(config: Config, sc: SparkContext) extends SQLReadBase(config, sc) {
-  val pivot = config.numPartitions/10
+  val pivot = config.numTotalKeys/10 + config.numTotalKeys/100
   override val query =
     s"""SELECT * FROM ${keyspace}.${table}
        |WHERE store <= "Store_$pivot" """.stripMargin
