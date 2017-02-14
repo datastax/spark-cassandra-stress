@@ -11,30 +11,36 @@ import com.datastax.sparkstress.SparkStressImplicits._
 import org.joda.time.DateTime
 
 object ReadTask {
-  val ValidTasks = Set(
-    "ftsallcolumns",
-    "ftsfivecolumns",
-    "ftsonecolumn",
-    "ftspdclusteringallcolumns",
-    "ftspdclusteringfivecolumns",
-    "jwcallcolumns",
-    "jwcpdclusteringallcolumns",
-    "jwcrpallcolumns",
-    "pdcount",
-    "retrievesinglepartition",
+  val ValidTasks = Map(
+    "ftsallcolumns" -> (new FTSAllColumns(_, _)),
+    "ftsfivecolumns" -> (new FTSFiveColumns(_, _)),
+    "ftsonecolumn" -> (new FTSOneColumn(_, _)),
+    "ftspdclusteringallcolumns" -> (new FTSPDClusteringAllColumns(_, _)),
+    "ftspdclusteringfivecolumns" -> (new FTSPDClusteringFiveColumns(_, _)),
+    "jwcallcolumns" -> (new JWCAllColumns(_, _)),
+    "jwcpdclusteringallcolumns" -> (new JWCPDClusteringAllColumns(_, _)),
+    "jwcrpallcolumns" -> (new JWCRPAllColumns(_, _)),
+    "pdcount" -> (new PDCount(_, _)),
+    "retrievesinglepartition" -> (new RetrieveSinglePartition(_, _)),
     // SparkSQL
-    "sqlftsallcolumns",
-    "sqlftsfivecolumns",
-    "sqlftsonecolumn",
-    "sqlftsclusteringallcolumns",
-    "sqlftsclusteringfivecolumns",
-    "sqljoinallcolumns",
-    "sqljoinclusteringallcolumns",
-    "sqlcount",
-    "sqlretrievesinglepartition",
-    "sqlrunuserquery",
-    "sqlsliceprimarykey",
-    "sqlslicenonprimarykey"
+    "sqlftsallcolumns" -> (new SparkSqlFTSAllColumns(_, _)),
+    "sqlftsfivecolumns" -> (new SparkSqlFTSFiveColumns(_, _)),
+    "sqlftsonecolumn" -> (new SparkSqlFTSOneColumn(_, _)),
+    "sqlftsclusteringallcolumns" -> (new SparkSqlFTSClusteringAllColumns(_, _)),
+    "sqlftsclusteringfivecolumns" -> (new SparkSqlFTSClusteringFiveColumns(_, _)),
+    "sqljoinallcolumns" -> (new SparkSqlJoinAllColumns(_, _)),
+    "sqljoinclusteringallcolumns" -> (new SparkSqlJoinClusteringAllColumns(_, _)),
+    "sqlcount" -> (new SparkSqlCount(_, _)),
+    "sqlretrievesinglepartition" -> (new SparkSqlRetrieveSinglePartition(_, _)),
+    "sqlrunuserquery" -> (new SparkSqlRunUserQuery(_, _)),
+    "sqlsliceprimarykey" -> (new SparkSlicePrimaryKey(_, _)),
+    "sqlslicenonprimarykey" -> (new SparkSliceNonePrimaryKey(_, _)),
+
+    // Solr benchmarking tests
+    "sqlftsclustering" -> (new SQLFTSClustering(_, _)),
+    "sqlftsclusteringdata"  -> (new SQLFTSClusteringData(_, _)),
+    "sqlftsdata" -> (new SQLFTSData(_, _)),
+    "sqlftspk" -> (new SQLFTSPkRestriction(_, _))
   )
 }
 
@@ -182,7 +188,7 @@ class FTSPDClusteringAllColumns(config: Config, sc: SparkContext) extends ReadTa
 class SparkSqlFTSClusteringAllColumns(config: Config, sc: SparkContext) extends ReadTask(config,
   sc) {
   def run(): Unit = {
-    val count = sqlContext.sql(s"""SELECT * FROM ${keyspace}.${table} WHERE order_time < "$timePivot" """).count
+    val count = sqlContext.sql(s"""SELECT * FROM ${keyspace}.${table} WHERE order_time < cast("$timePivot" as timestamp) """).count
     println(s"Loaded $count rows")
   }
 }
@@ -206,7 +212,7 @@ class FTSPDClusteringFiveColumns(config: Config, sc: SparkContext) extends ReadT
   */
 class SparkSqlFTSClusteringFiveColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
-    val count = sqlContext.sql(s"""SELECT qty,color,size,order_time FROM ${keyspace}.${table} WHERE order_time < "$timePivot" """).count
+    val count = sqlContext.sql(s"""SELECT qty,color,size,order_time FROM ${keyspace}.${table} WHERE order_time < cast("$timePivot" as timestamp)""").count
     println(s"Loaded $count rows")
   }
 }
@@ -278,7 +284,7 @@ class SparkSqlJoinClusteringAllColumns(config: Config, sc: SparkContext) extends
               |FROM ${keyspace}.${table} AS table_b
               |JOIN ${keyspace}.${table} AS table_a
               |ON table_b.store = table_a.store
-              |WHERE table_a.order_time < "$timePivot" """.stripMargin).toDF("count").first.getAs[Long]("count")
+              |WHERE table_a.order_time < cast("$timePivot" as timeStamp) """.stripMargin).toDF("count").first.getAs[Long]("count")
     println(s"Loaded $count rows")
   }
 }
@@ -312,7 +318,7 @@ class SparkSqlRunUserQuery(config: Config, sc: SparkContext) extends ReadTask(co
   def run(): Unit = {
     if (userSqlQuery == null) {
       println(s"No user query detected, use the -u or --userSqlQuery options to specify a custom query.")
-      val defaultQuery = s"""SELECT * FROM ${keyspace}.${table} WHERE order_time > "$timePivot" AND store = "Store_5" AND order_number < "$uuidPivot" """
+      val defaultQuery = s"""SELECT * FROM ${keyspace}.${table} WHERE order_time > cast("$timePivot" as timestamp) AND store = "Store_5" AND order_number < "$uuidPivot" """
       println(s"Running default query: '$defaultQuery'")
       val count = sqlContext.sql(defaultQuery).count
       println(s"Loaded $count rows")
@@ -326,6 +332,56 @@ class SparkSqlRunUserQuery(config: Config, sc: SparkContext) extends ReadTask(co
   }
 }
 
+abstract class SQLReadBase(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
+  val query: String
+
+  override def run() = {
+    println(query)
+    val count = sqlContext.sql(query).count
+    println(s"Loaded $count rows")
+  }
+
+}
+
+/**
+  * SparkSql Query doing a Full Table Scan while slicing on a Clustering Column
+  */
+class SQLFTSClustering(config: Config, sc: SparkContext) extends SQLReadBase(config, sc) {
+  val oneTenthPivot = timePivot.minusSeconds(400)
+  override val query =
+    s"""SELECT * FROM ${keyspace}.${table} WHERE order_time < cast("$timePivot" as timestamp) """.stripMargin
+}
+
+/**
+  * Full table scan while slicing on a clustering column and selecting for a data column
+  */
+class SQLFTSClusteringData(config: Config, sc: SparkContext) extends SQLReadBase(config, sc) {
+  val oneTenthPivot = timePivot.minusSeconds(400)
+  override val query =
+    s"""SELECT * FROM ${keyspace}.${table}
+       |WHERE order_time < cast("$timePivot" as timestamp)
+       |AND size = "XXL" """.stripMargin
+}
+
+/**
+  * Full Table Scan While Selecting for a data column
+  */
+class SQLFTSData(config: Config, sc: SparkContext) extends SQLReadBase(config, sc) {
+  override val query =
+    s"""SELECT * FROM ${keyspace}.${table}
+       |WHERE size = "XXL" """.stripMargin
+}
+
+/**
+  * Full Table Scan while restricting to only a fraction of loaded Cassandra Partitions
+  */
+class SQLFTSPkRestriction(config: Config, sc: SparkContext) extends SQLReadBase(config, sc) {
+  val pivot = config.numPartitions/10
+  override val query =
+    s"""SELECT * FROM ${keyspace}.${table}
+       |WHERE store <= "Store_$pivot" """.stripMargin
+}
+
 /**
   * SparkSQL query to slice on primary key columns
   * Experimental: Temporary until SparkSqlRunUserQuery is finished.
@@ -335,7 +391,7 @@ class SparkSqlRunUserQuery(config: Config, sc: SparkContext) extends ReadTask(co
   */
 class SparkSlicePrimaryKey(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
   def run(): Unit = {
-    println(s"""SELECT * FROM ${keyspace}.${table} WHERE order_time < "$timePivot" AND store = "Store_5" AND order_number > "$uuidPivot" """.stripMargin)
+    println(s"""SELECT * FROM ${keyspace}.${table} WHERE order_time < cast("$timePivot" as timestamp) AND store = "Store_5" AND order_number > "$uuidPivot" """.stripMargin)
     val count = sqlContext.sql(
       s"""SELECT * FROM ${keyspace}.${table}
          |WHERE order_time < "$timePivot"

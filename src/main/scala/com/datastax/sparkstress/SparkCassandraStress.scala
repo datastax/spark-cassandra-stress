@@ -2,7 +2,7 @@ package com.datastax.sparkstress
 
 import java.io.{FileWriter, Writer}
 
-import org.apache.spark.SparkConf
+import org.apache.spark.{SparkConf, SparkContext}
 
 
 case class Config(
@@ -38,8 +38,8 @@ case class Config(
 case class TestResult ( time: Long, ops: Long )
 
 object SparkCassandraStress {
-  val VALID_TESTS =
-    WriteTask.ValidTasks ++ ReadTask.ValidTasks ++ StreamingTask.ValidTasks
+  val VALID_TESTS: Set[String] =
+    WriteTask.ValidTasks.keys.toSet ++ ReadTask.ValidTasks.keys.toSet ++ StreamingTask.ValidTasks.keys.toSet
 
   val KeyGroupings = Seq("none", "replica_set", "partition")
 
@@ -51,9 +51,9 @@ object SparkCassandraStress {
       arg[String]("testName") optional() action { (arg,config) =>
         config.copy(testName = arg.toLowerCase())
       } text {  s"""Tests :
-              |Write Tests:  ${WriteTask.ValidTasks.mkString(" , ")}
-              |Read Tests: ${ReadTask.ValidTasks.mkString(" , ")}
-              |Streaming Tests: ${StreamingTask.ValidTasks.mkString(" , ")}""".stripMargin}
+              |Write Tests:  ${WriteTask.ValidTasks.keys.mkString(" , ")}
+              |Read Tests: ${ReadTask.ValidTasks.keys.mkString(" , ")}
+              |Streaming Tests: ${StreamingTask.ValidTasks.keys.mkString(" , ")}""".stripMargin}
       arg[String]("master") optional() action { (arg,config) =>
         config.copy(sparkOps = config.sparkOps + ("spark.master" -> arg))
       } text {"Spark Address of Master Node"}
@@ -146,7 +146,7 @@ object SparkCassandraStress {
     parser.parse(args, Config()) map { config =>
       if (config.trials > 1 && config.terminationTimeMinutes > 0) {
         println("\nERROR: A termination time was specified with multiple trials, this is not supported yet.\n")
-      } else if (ReadTask.ValidTasks(config.testName) && config.terminationTimeMinutes > 0) {
+      } else if (ReadTask.ValidTasks.keys.toSet.contains(config.testName) && config.terminationTimeMinutes > 0) {
         println(s"\nERROR: A termination time was specified with '${config.testName} which is a Read test, this is not supported yet.\n")
       } else {
         runTask(config)
@@ -180,44 +180,13 @@ object SparkCassandraStress {
       println(sc.getConf.toDebugString+"\n")
     }
 
-    val test: StressTask =
-      config.testName.toLowerCase match {
-        /** Write Tasks **/
-        case "writeshortrow" => new WriteShortRow(config, sc)
-        case "writewiderow" => new WriteWideRow(config, sc)
-        case "writeperfrow" => new WritePerfRow(config, sc)
-        case "writerandomwiderow" => new WriteRandomWideRow(config, sc)
-        case "writewiderowbypartition" => new WriteWideRowByPartition(config, sc)
-
-        /** Read Tasks **/
-        case "pdcount" => new PDCount(config, sc)
-        case "ftsallcolumns" => new FTSAllColumns(config, sc)
-        case "ftsfivecolumns" => new FTSFiveColumns(config, sc)
-        case "ftsonecolumn" => new FTSOneColumn(config, sc)
-        case "ftspdclusteringallcolumns" => new FTSPDClusteringAllColumns(config, sc)
-        case "ftspdclusteringfivecolumns" => new FTSPDClusteringFiveColumns(config, sc)
-        case "jwcallcolumns" => new JWCAllColumns(config, sc)
-        case "jwcpdclusteringallcolumns" => new JWCPDClusteringAllColumns(config, sc)
-        case "jwcrpallcolumns" => new JWCRPAllColumns(config, sc)
-        case "retrievesinglepartition" => new RetrieveSinglePartition(config, sc)
-
-        /** SparkSQL Read Tasks **/
-        case "sqlcount" => new SparkSqlCount(config, sc)
-        case "sqlftsallcolumns" => new SparkSqlFTSAllColumns(config, sc)
-        case "sqlftsfivecolumns" => new SparkSqlFTSFiveColumns(config, sc)
-        case "sqlftsonecolumn" => new SparkSqlFTSOneColumn(config, sc)
-        case "sqlftsclusteringallcolumns" => new SparkSqlFTSClusteringAllColumns(config, sc)
-        case "sqlftsclusteringfivecolumns" => new SparkSqlFTSClusteringFiveColumns(config, sc)
-        case "sqljoinallcolumns" => new SparkSqlJoinAllColumns(config, sc)
-        case "sqljoinclusteringallcolumns" => new SparkSqlJoinClusteringAllColumns(config, sc)
-        case "sqlretrievesinglepartition" => new SparkSqlRetrieveSinglePartition(config, sc)
-        case "sqlrunuserquery" => new SparkSqlRetrieveSinglePartition(config, sc)
-        case "sqlsliceprimarykey" => new SparkSlicePrimaryKey(config, sc)
-        case "sqlslicenonprimarykey" => new SparkSliceNonePrimaryKey(config, sc)
-
-        /** Streaming Tasks **/
-        case "streamingwrite" => new StreamingWrite(config, sc)
-      }
+    val test: StressTask = {
+      val testName = config.testName.toLowerCase
+      (ReadTask.ValidTasks ++ WriteTask.ValidTasks ++ StreamingTask.ValidTasks)
+        .get(testName)
+        .getOrElse(throw new IllegalArgumentException(s"Couldn't find test $testName"))
+        .apply(config, sc)
+    }
 
     val wallClockStartTime = System.nanoTime()
 
@@ -251,6 +220,7 @@ object SparkCassandraStress {
         y.ssc.stop(true, true)
       }
     }
+    sys.exit(0)
  }
 
 }

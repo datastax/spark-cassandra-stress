@@ -13,8 +13,8 @@ import java.util.concurrent.TimeUnit
 import scala.reflect.ClassTag
 
 object StreamingTask {
-  val ValidTasks = Set(
-    "streamingwrite"
+  val ValidTasks = Map(
+    "streamingwrite" -> (new StreamingWrite(_, _))
   )
 }
 
