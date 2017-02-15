@@ -305,8 +305,9 @@ class RetrieveSinglePartition(config: Config, sc: SparkContext) extends ReadTask
   * SparkSQL grab a single C* partition
   */
 class SparkSqlRetrieveSinglePartition(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
+  val storenum = 5
   def run(): Unit = {
-    val filterResults = sqlContext.sql(s"""SELECT * FROM ${keyspace}.${table} WHERE store = "Store_5" """).count
+    val filterResults = sqlContext.sql(f"""SELECT * FROM ${keyspace}.${table} WHERE store = "Store_$storenum%012d" """).count
     println(filterResults)
   }
 }
@@ -315,10 +316,13 @@ class SparkSqlRetrieveSinglePartition(config: Config, sc: SparkContext) extends 
   * Run any user-provided SparkSQL query
   */
 class SparkSqlRunUserQuery(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
+  val defaultQuery =
+    s"""SELECT * FROM ${keyspace}.${table}
+       |WHERE order_time > cast("$timePivot" as timestamp)
+       |AND order_number < "$uuidPivot" """.stripMargin
   def run(): Unit = {
     if (userSqlQuery == null) {
       println(s"No user query detected, use the -u or --userSqlQuery options to specify a custom query.")
-      val defaultQuery = s"""SELECT * FROM ${keyspace}.${table} WHERE order_time > cast("$timePivot" as timestamp) AND store = "Store_5" AND order_number < "$uuidPivot" """
       println(s"Running default query: '$defaultQuery'")
       val count = sqlContext.sql(defaultQuery).count
       println(s"Loaded $count rows")
@@ -376,10 +380,10 @@ class SQLFTSData(config: Config, sc: SparkContext) extends SQLReadBase(config, s
   * Full Table Scan while restricting to only a fraction of loaded Cassandra Partitions
   */
 class SQLFTSPkRestriction(config: Config, sc: SparkContext) extends SQLReadBase(config, sc) {
-  val pivot = config.numTotalKeys/10 + config.numTotalKeys/100
+  val pivot = math.round(config.numTotalKeys * config.fractionOfData)
   override val query =
-    s"""SELECT * FROM ${keyspace}.${table}
-       |WHERE store <= "Store_$pivot" """.stripMargin
+    f"""SELECT * FROM ${keyspace}.${table}
+       |WHERE store <= "Store_$pivot%012d" """.stripMargin
 }
 
 /**
@@ -390,13 +394,14 @@ class SQLFTSPkRestriction(config: Config, sc: SparkContext) extends SQLReadBase(
   * The store value is just to isolate on one partition key.
   */
 class SparkSlicePrimaryKey(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
+  val storenum = 5
+  val query =
+    f"""SELECT * FROM ${keyspace}.${table}
+      |WHERE order_time < cast("$timePivot" as timestamp)
+      |AND store = "Store_$storenum%012d" AND order_number > "$uuidPivot" """.stripMargin
   def run(): Unit = {
-    println(s"""SELECT * FROM ${keyspace}.${table} WHERE order_time < cast("$timePivot" as timestamp) AND store = "Store_5" AND order_number > "$uuidPivot" """.stripMargin)
-    val count = sqlContext.sql(
-      s"""SELECT * FROM ${keyspace}.${table}
-         |WHERE order_time < "$timePivot"
-         |AND store = "Store_5"
-         |AND order_number > "$uuidPivot" """.stripMargin).count
+    println(query)
+    val count = sqlContext.sql(query).count
     println(s"Loaded $count rows")
   }
 }

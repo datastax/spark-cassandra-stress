@@ -32,7 +32,8 @@ case class Config(
   terminationTimeMinutes: Long = 0,
   streamingBatchIntervalSeconds:  Int = 5,
   // Read Options
-  userSqlQuery: String = null
+  userSqlQuery: String = null ,
+  fractionOfData: Double = 0.01
 )
 
 case class TestResult ( time: Long, ops: Long )
@@ -133,6 +134,10 @@ object SparkCassandraStress {
       opt[String]('u',"userSqlQuery") optional() action { (arg,config) =>
         config.copy(userSqlQuery = arg)
       } text {"EXPERIMENTAL (Not stable): User-defined SparkSQL query."}
+
+      opt[Double]("fraction") optional() action { (arg,config) =>
+        config.copy(fractionOfData = arg)
+      } text {"Fraction of data to read, only implemented for SqlPKRestriction atm"}
 
       arg[String]("connectorOpts") optional() text { """spark-cassandra-connector configs, Ex: --conf "conf1=val1" --conf "conf2=val2" """}
 
