@@ -40,7 +40,8 @@ object ReadTask {
     "sqlftsclustering" -> (new SQLFTSClustering(_, _)),
     "sqlftsclusteringdata"  -> (new SQLFTSClusteringData(_, _)),
     "sqlftsdata" -> (new SQLFTSData(_, _)),
-    "sqlftspk" -> (new SQLFTSPkRestriction(_, _))
+    "sqlftspk" -> (new SQLFTSPkRestriction(_, _)),
+    "sqlftspks" -> (new SQLFTSPkRestrictionSelect(_, _))
   )
 }
 
@@ -383,6 +384,13 @@ class SQLFTSPkRestriction(config: Config, sc: SparkContext) extends SQLReadBase(
   val pivot = math.round(config.numTotalKeys * config.fractionOfData)
   override val query =
     f"""SELECT * FROM ${keyspace}.${table}
+       |WHERE store <= "Store_$pivot%012d" """.stripMargin
+}
+
+class SQLFTSPkRestrictionSelect(config: Config, sc: SparkContext) extends SQLReadBase(config, sc) {
+  val pivot = math.round(config.numTotalKeys * config.fractionOfData)
+  override val query =
+    f"""SELECT store FROM ${keyspace}.${table}
        |WHERE store <= "Store_$pivot%012d" """.stripMargin
 }
 
