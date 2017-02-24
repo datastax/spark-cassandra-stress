@@ -12,7 +12,12 @@ ext.DseHome = System.env.DSE_HOME ?: "$Home/dse"
 ext.DseResources = System.env.DSE_RESOURCES ?: "$Home/dse/resources/"
 ext.mainClassName = "com.datastax.sparkstress.SparkCassandraStress"
 
-ext.scalaVersion = "2.11"
+def sparkLibDir = System.getenv("SPARK_LIB_DIR") ?: ext.DseHome+"/resources/spark/lib"
+def dseScalaCompilerJar = fileTree(dir:"$sparkLibDir").matching{include "scala-compiler*jar"}
+def dseScalaVersionArr = dseScalaCompilerJar.getSingleFile().toString().split("-").last().split(".jar").first().split("\\.")
+ext.scalaVersion = String.join(".", Arrays.copyOfRange(dseScalaVersionArr,0,2))
+println("Compiling with Scala version "+ext.scalaVersion)
+
 ext.defaultConnector = "1.6.3"
 ext.defaultSpark = "1.6.2"
 
