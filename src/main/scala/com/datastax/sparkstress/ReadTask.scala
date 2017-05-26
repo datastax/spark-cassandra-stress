@@ -14,7 +14,11 @@ object ReadTask {
   val ValidTasks = Map(
     "ftsallcolumns" -> (new FTSAllColumns(_, _)),
     "ftsfivecolumns" -> (new FTSFiveColumns(_, _)),
+    "ftsfourcolumns" -> (new FTSFourColumns(_, _)),
+    "ftsthreecolumns" -> (new FTSThreeColumns(_, _)),
+    "ftstwocolumns" -> (new FTSTwoColumns(_, _)),
     "ftsonecolumn" -> (new FTSOneColumn(_, _)),
+
     "ftspdclusteringallcolumns" -> (new FTSPDClusteringAllColumns(_, _)),
     "ftspdclusteringfivecolumns" -> (new FTSPDClusteringFiveColumns(_, _)),
     "jwcallcolumns" -> (new JWCAllColumns(_, _)),
@@ -116,6 +120,45 @@ class FTSOneColumn(config: Config, sc: SparkContext) extends ReadTask(config, sc
 }
 
 /**
+  * Full Table Scan Two Columns
+  * Performs a full table scan but only retrieves two columns from the underlying
+  * table.
+  */
+class FTSTwoColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
+
+  def run(): Unit = {
+    val colorCounts = sc.cassandraTable[(String, String)](keyspace, table).select("color", "size").count
+    println(colorCounts)
+  }
+}
+
+/**
+  * Full Table Scan Three Columns
+  * Performs a full table scan but only retrieves three columns from the underlying
+  * table.
+  */
+class FTSThreeColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
+
+  def run(): Unit = {
+    val colorCounts = sc.cassandraTable[(String, String, Int)](keyspace, table).select("color", "size", "qty").count
+    println(colorCounts)
+  }
+}
+
+/**
+  * Full Table Scan Four Columns
+  * Performs a full table scan but only retrieves four columns from the underlying
+  * table.
+  */
+class FTSFourColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
+
+  def run(): Unit = {
+    val colorCounts = sc.cassandraTable[(String, String, Int, UUID)](keyspace, table).select("color", "size", "qty", "order_number").count
+    println(colorCounts)
+  }
+}
+
+/**
   * SparkSQL Full Table Scan One Column
   */
 class SparkSqlFTSOneColumn(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
@@ -127,7 +170,7 @@ class SparkSqlFTSOneColumn(config: Config, sc: SparkContext) extends ReadTask(co
 }
 
 /**
- * Full Table Scan One Column
+ * Full Table Scan All Columns
  * Performs a full table scan, retrieves all columns and returns the count.
  */
 class FTSAllColumns(config: Config, sc: SparkContext) extends ReadTask(config, sc) {
