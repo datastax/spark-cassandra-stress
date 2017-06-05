@@ -1,7 +1,5 @@
 package com.datastax.sparkstress
 
-import java.util.UUID
-
 object RowTypes {
 
   sealed trait StressRow
@@ -12,8 +10,8 @@ object RowTypes {
 
   case class PerfRowClass(
    store: String,
-   order_time:org.joda.time.DateTime,
-   order_number:UUID,
+   order_time:String,   // org.joda.time.DateTime format
+   order_number:String, // java.util.UUID format
    color: String,
    size: String,
    qty: Int) extends StressRow
