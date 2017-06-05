@@ -1,6 +1,7 @@
 package com.datastax.sparkstress
 
 import org.apache.spark.{SparkContext, SparkConf}
+import org.apache.spark.sql.SparkSession
 
 object ConnectHelper {
 
@@ -8,5 +9,11 @@ object ConnectHelper {
   Get a normal SparkContext Object
    */
   def getContext(conf: SparkConf): SparkContext =
-    new SparkContext(conf)
+    this.getSparkSession(conf).sparkContext
+
+  /*
+  Get a SparkSession Object
+ */
+  def getSparkSession(conf: SparkConf): SparkSession =
+    SparkSession.builder().config(conf).getOrCreate()
 }

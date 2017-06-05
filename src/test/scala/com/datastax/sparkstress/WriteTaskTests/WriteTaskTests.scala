@@ -32,7 +32,7 @@ class WriteTaskTests extends FlatSpec
 
   "The RDD" should "have the correct configurations" in {
     val config = new Config(keyspace = "test1", numPartitions = 1, totalOps = 20, numTotalKeys = 1)
-    val writer = new WriteShortRow(config, sc)
+    val writer = new WriteShortRow(config, ss)
     val rdd = writer.getRDD
     rdd.partitions.length should be (config.numPartitions)
     rdd.count should be (config.totalOps)
@@ -40,10 +40,10 @@ class WriteTaskTests extends FlatSpec
 
  "WriteShortRow" should "save correctly" in {
     val config = new Config(keyspace = "test3", numPartitions = 1, totalOps = 6, numTotalKeys = 1)
-    val writer = new WriteShortRow(config, sc)
+    val writer = new WriteShortRow(config, ss)
     writer.setupCQL
     writer.run
-    sc.cassandraTable(config.keyspace,config.table).count should be (6)
+    ss.sparkContext.cassandraTable(config.keyspace,config.table).count should be (6)
   }
 
   "WriteWideRow" should "save correctly" in {
@@ -53,10 +53,10 @@ class WriteTaskTests extends FlatSpec
       numPartitions = 1, 
       totalOps = 8, 
       numTotalKeys = 1)
-    val writer = new WriteWideRow(config, sc)
+    val writer = new WriteWideRow(config, ss)
     writer.setupCQL
     writer.run
-    sc.cassandraTable(config.keyspace,config.table).count should be (8)
+    ss.sparkContext.cassandraTable(config.keyspace,config.table).count should be (8)
   }
 
   "WriteRandomWideRow" should "save correctly" in {
@@ -66,10 +66,10 @@ class WriteTaskTests extends FlatSpec
       numPartitions = 10, 
       totalOps = 20, 
       numTotalKeys = 1)
-    val writer = new WriteRandomWideRow(config, sc)
+    val writer = new WriteRandomWideRow(config, ss)
     writer.setupCQL
     writer.run
-    sc.cassandraTable(config.keyspace,config.table).count should be (20)
+    ss.sparkContext.cassandraTable(config.keyspace,config.table).count should be (20)
   }
 
   "WriteWideRowByPartition" should "save correctly" in {
@@ -79,10 +79,10 @@ class WriteTaskTests extends FlatSpec
       numPartitions = 1, 
       totalOps = 40, 
       numTotalKeys = 5)
-    val writer = new WriteWideRowByPartition(config, sc)
+    val writer = new WriteWideRowByPartition(config, ss)
     writer.setupCQL
     writer.run
-    sc.cassandraTable(config.keyspace,config.table).count should be (40)
+    ss.sparkContext.cassandraTable(config.keyspace,config.table).count should be (40)
   }
 
   "WritePerfRow" should " generate the correct number of pks" in {
@@ -92,7 +92,7 @@ class WriteTaskTests extends FlatSpec
       numPartitions = 5,
       totalOps = 1000,
       numTotalKeys = 200)
-    val writer = new WritePerfRow(config, sc)
+    val writer = new WritePerfRow(config, ss)
     val results = writer.getRDD.map(_.store).countByValue()
     results should have size (200)
   }
@@ -104,7 +104,7 @@ class WriteTaskTests extends FlatSpec
       numPartitions = 2,
       totalOps = 40,
       numTotalKeys = 4)
-    val writer = new WritePerfRow(config, sc)
+    val writer = new WritePerfRow(config, ss)
     val rowLengths = writer.getRDD.groupBy( u=> u.store).map(row => row._2).collect
     for (row <- rowLengths)
       row should have size 10
@@ -117,10 +117,10 @@ class WriteTaskTests extends FlatSpec
       numPartitions = 10,
       totalOps = 1000,
       numTotalKeys = 200)
-    val writer = new WritePerfRow(config, sc)
+    val writer = new WritePerfRow(config, ss)
     writer.setupCQL
     writer.run
-    sc.cassandraTable(config.keyspace, config.table).count should be (1000)
+    ss.sparkContext.cassandraTable(config.keyspace, config.table).count should be (1000)
   }
 
 }

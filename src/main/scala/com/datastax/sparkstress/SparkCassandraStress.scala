@@ -1,7 +1,7 @@
 package com.datastax.sparkstress
 
 import java.io.{FileWriter, Writer}
-
+import java.lang.Math.round
 import org.apache.spark.SparkConf
 
 
@@ -22,6 +22,7 @@ case class Config(
   // csv file to append results
   file: Option[Writer] = Option.empty,
   saveMethod: String = "driver",
+  distributedDataType: String = "rdd",
   //Spark Options
   sparkOps: Map[String,String] = Map.empty,
   //Streaming Params
@@ -70,9 +71,13 @@ object SparkCassandraStress {
         config.copy(keyspace = arg)
       } text {"Name of the keyspace to use/create"}
 
+      opt[String]('e',"distributedDataType") optional() action { (arg,config) =>
+        config.copy(distributedDataType = arg)
+      } text {"See 'saveMethod'.\n\t\t\t   rdd: Resilient Distributed Dataset, the basic abstraction in Spark.\n\t\t\t   dataset: A DataSet is a strongly typed collection of domain-specific objects."}
+
       opt[String]('s',"saveMethod") optional() action { (arg,config) =>
         config.copy(saveMethod = arg)
-      } text {"rdd save method. bulk: bulkSaveToCassandra, driver: saveToCassandra"}
+      } text {"See 'distributedDataType'.\n\t\t\t   rdd save methods:\n\t\t\t     bulk: bulkSaveToCassandra, driver: saveToCassandra\n\t\t\t   dataset save methods:\n\t\t\t     driver: ds.write.cassandraFormat(..).mode(..).save()\n\t\t\t     parquet: format to save in dsefs\n\t\t\t     text: format to save in dsefs\n\t\t\t     json: format to save in dsefs\n\t\t\t     csv: format to save in dsefs"}
 
       opt[Int]('n',"trials")optional() action { (arg,config) =>
         config.copy(trials = arg)
@@ -159,61 +164,74 @@ object SparkCassandraStress {
         .set("spark.cassandra.output.metrics", "true")
         .setAll(config.sparkOps)
 
-    val sc = ConnectHelper.getContext(sparkConf)
-
-    if (config.verboseOutput) {
+    val ss = ConnectHelper.getSparkSession(sparkConf)
+    
+    if (config.verboseOutput) { 
       println("\nDumping debugging output")
-      println(sc.getConf.toDebugString+"\n")
+      println(ss.sparkContext.getConf.toDebugString+"\n")
     }
 
     val test: StressTask =
       config.testName.toLowerCase match {
           /** Write Tasks **/
-        case "writeshortrow" => new WriteShortRow(config, sc)
-        case "writewiderow" => new WriteWideRow(config, sc)
-        case "writeperfrow" => new WritePerfRow(config, sc)
-        case "writerandomwiderow" => new WriteRandomWideRow(config, sc)
-        case "writewiderowbypartition" => new WriteWideRowByPartition(config, sc)
+        case "writeshortrow" => new WriteShortRow(config, ss)
+        case "writewiderow" => new WriteWideRow(config, ss)
+        case "writeperfrow" => new WritePerfRow(config, ss)
+        case "writerandomwiderow" => new WriteRandomWideRow(config, ss)
+        case "writewiderowbypartition" => new WriteWideRowByPartition(config, ss)
 
-          /** Read Tasks **/
-        case "pdcount" => new PDCount(config, sc)
-        case "ftsallcolumns" => new FTSAllColumns(config, sc)
-        case "ftsfivecolumns" => new FTSFiveColumns(config, sc)
-        case "ftsonecolumn" => new FTSOneColumn(config, sc)
-        case "ftspdclusteringallcolumns" => new FTSPDClusteringAllColumns(config, sc)
-        case "ftspdclusteringfivecolumns" => new FTSPDClusteringFiveColumns(config, sc)
-        case "jwcallcolumns" => new JWCAllColumns(config, sc)
-        case "jwcpdclusteringallcolumns" => new JWCPDClusteringAllColumns(config, sc)
-        case "jwcrpallcolumns" => new JWCRPAllColumns(config, sc)
-        case "retrievesinglepartition" => new RetrieveSinglePartition(config, sc)
+          /** RDD Read Tasks **/
+        case "pdcount" => new PDCount(config, ss)
+        case "ftsallcolumns" => new FTSAllColumns(config, ss)
+        case "ftsfivecolumns" => new FTSFiveColumns(config, ss)
+        case "ftsonecolumn" => new FTSOneColumn(config, ss)
+        case "ftspdclusteringallcolumns" => new FTSPDClusteringAllColumns(config, ss)
+        case "ftspdclusteringfivecolumns" => new FTSPDClusteringFiveColumns(config, ss)
+        case "jwcallcolumns" => new JWCAllColumns(config, ss)
+        case "jwcpdclusteringallcolumns" => new JWCPDClusteringAllColumns(config, ss)
+        case "jwcrpallcolumns" => new JWCRPAllColumns(config, ss)
+        case "retrievesinglepartition" => new RetrieveSinglePartition(config, ss)
 
-          /** Streaming Tasks **/
-        case "streamingwrite" => new StreamingWrite(config, sc)
+          /** Dataset Read Tasks **/
+        case "ftsallcolumns_ds" => new FTSAllColumns_DS(config, ss)
+        case "ftsfivecolumns_ds" => new FTSFiveColumns_DS(config, ss)
+        case "ftsfourcolumns_ds" => new FTSFourColumns_DS(config, ss)
+        case "ftsthreecolumns_ds" => new FTSThreeColumns_DS(config, ss)
+        case "ftstwocolumns_ds" => new FTSTwoColumns_DS(config, ss)
+        case "ftsonecolumn_ds" => new FTSOneColumn_DS(config, ss)
+
+        case "dsefsreadparquet_ds" => new DSEFSReadParquet_DS(config, ss)
+        case "dsefsreadtext_ds" => new DSEFSReadText_DS(config, ss)
+        case "dsefsreadjson_ds" => new DSEFSReadJson_DS(config, ss)
+        case "dsefsreadcsv_ds" => new DSEFSReadCsv_DS(config, ss)
+
+        /** Streaming Tasks **/
+        case "streamingwrite" => new StreamingWrite(config, ss)
       }
 
     val wallClockStartTime = System.nanoTime()
 
-    val timesAndOps: Seq[TestResult]= test.runTrials(sc)
+    val timesAndOps: Seq[TestResult]= test.runTrials(ss)
     val time = for (x <- timesAndOps) yield {x.time}
     val totalCompletedOps = for (x <- timesAndOps) yield {x.ops}
 
     val wallClockStopTime = System.nanoTime() 
     val wallClockTimeDiff = wallClockStopTime - wallClockStartTime
     val wallClockTimeSeconds = (wallClockTimeDiff / 1000000000.0) 
-    val timeSeconds = time.map{ x => math.round( x / 1000000000.0 ) }
-    val opsPerSecond = for (i <- 0 to timeSeconds.size-1) yield {math.round(totalCompletedOps(i)/timeSeconds(i))}
+    val timeSeconds = time.map{ x => round( x / 1000000000.0 ) }
+    val opsPerSecond = for (i <- 0 to timeSeconds.size-1) yield {round((totalCompletedOps(i)).toDouble/timeSeconds(i))}
 
     test match {
       case x: WriteTask[_] =>  {
         println(s"TimeInSeconds : ${timeSeconds.mkString(",")}\n")
         println(s"OpsPerSecond : ${opsPerSecond.mkString(",")}\n")
         config.file.map(f => {f.write(csvResults(config, time));f.flush })
-        sc.stop()
+        ss.stop()
       }
       case x: ReadTask => {
         println(s"TimeInSeconds : ${timeSeconds.mkString(",")}\n")
         config.file.map(f => {f.write(csvResults(config, time));f.flush })
-        sc.stop()
+        ss.stop()
       }
       case y: StreamingTask[_] => {
         println("Streaming Begun")

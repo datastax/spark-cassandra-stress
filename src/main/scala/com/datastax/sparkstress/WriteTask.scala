@@ -3,7 +3,9 @@ package com.datastax.sparkstress
 import com.datastax.spark.connector.cql.CassandraConnector
 import com.datastax.spark.connector.writer.RowWriterFactory
 import org.apache.spark.rdd.RDD
+import org.apache.spark.sql.Dataset
 import org.apache.spark.{ExposeJobListener, SparkContext}
+import org.apache.spark.sql.SparkSession
 import com.datastax.sparkstress.RowTypes._
 import com.datastax.spark.connector._
 import com.datastax.spark.connector.RDDFunctions
@@ -30,8 +32,11 @@ object WriteTask {
 
 abstract class WriteTask[rowType](
   val config: Config,
-  val sc: SparkContext)
+  val ss: SparkSession)
   (implicit rwf: RowWriterFactory[rowType]) extends StressTask {
+
+  val sc = ss.sparkContext
+  val sqlContext = ss.sqlContext
 
   def setupCQL() = {
     CassandraConnector(sc.getConf).withSessionDo{ session =>
@@ -56,19 +61,42 @@ abstract class WriteTask[rowType](
 
   def getRDD: RDD[rowType]
 
+  def getDataset: org.apache.spark.sql.Dataset[rowType]
+
   /**
    * Runs the write workload, returns when terminationTimeMinutes is reached or when the job completes, which ever is first.
    * @return a tuple containing (runtime, totalCompletedOps)
    */
   def run(): TestResult = {
+    import sqlContext.implicits._
     var totalCompletedOps: Long = 0L
     val runtime = time({
       val fs = Future {
-        config.saveMethod match {
-          case "bulk" => getRDD.bulkSaveToCassandra(config.keyspace, config.table)
-          case _ => new RDDFunctions(getRDD).saveToCassandra(config.keyspace, config.table)
-          //For Some reason the implicit doesn't work here in Connector 1.[1,0].X
+        config.distributedDataType match {
+          case "rdd" => {
+            config.saveMethod match {
+              case "bulk" => getRDD.bulkSaveToCassandra(config.keyspace, config.table)
+              case _ => new RDDFunctions(getRDD).saveToCassandra(config.keyspace, config.table)
+            }
+          }
+          case _ => {
+            config.saveMethod match {
+              // filesystem save methods
+              case "parquet" => getDataset.write.parquet(s"dsefs:///${config.keyspace}.${config.table}")
+              case "text" => getDataset.map(row => row.toString()).write.text(s"dsefs:///${config.keyspace}.${config.table}") // requires a single column so we convert to a string
+              case "json" => getDataset.write.json(s"dsefs:///${config.keyspace}.${config.table}")
+              case "csv" => getDataset.write.csv(s"dsefs:///${config.keyspace}.${config.table}")
+              // regular save method to DSE/Cassandra
+              case _ => getDataset
+                .write
+                .format("org.apache.spark.sql.cassandra")
+                .options(Map("table" -> config.table, "keyspace" -> config.keyspace))
+                .mode("append")
+                .save()
+            }
+          }
         }
+        //For Some reason the implicit doesn't work here in Connector 1.[1,0].X
       }
       try {
         if (config.terminationTimeMinutes > 0) {
@@ -97,9 +125,13 @@ abstract class WriteTask[rowType](
     if (totalCompletedOps == 0L) TestResult(runtime, config.totalOps) else TestResult(TimeUnit.MINUTES.toNanos(config.terminationTimeMinutes), totalCompletedOps)
   }
 
-  def runTrials(sc: SparkContext): Seq[TestResult] = {
+  def runTrials(ss: SparkSession): Seq[TestResult] = {
     println("About to Start Trials")
-    for (trial <- 1 to config.trials) yield {setupCQL(); Thread.sleep(10000); run()}
+    for (trial <- 1 to config.trials) yield {
+      if (config.saveMethod == "driver" || config.saveMethod == "bulk") setupCQL()
+      Thread.sleep(10000)
+      run()
+    }
   }
 
 }
@@ -108,8 +140,8 @@ abstract class WriteTask[rowType](
  * Writes data to a schema which contains no clustering keys, no partitions will be
  * overwritten.
  */
-class WriteShortRow(config: Config, sc: SparkContext) extends
-  WriteTask[ShortRowClass](config, sc)(implicitly[RowWriterFactory[ShortRowClass]]) {
+class WriteShortRow(config: Config, ss: SparkSession) extends
+  WriteTask[ShortRowClass](config, ss)(implicitly[RowWriterFactory[ShortRowClass]]) {
 
   def getTableCql(tbName: String): Seq[String] =
     Seq(s"""CREATE TABLE IF NOT EXISTS $tbName
@@ -121,7 +153,11 @@ class WriteShortRow(config: Config, sc: SparkContext) extends
          |${config.totalOps} Total Writes
          |${config.numPartitions} Num Partitions""".stripMargin
     )
-    RowGenerator.getShortRowRDD(sc, config.numPartitions, config.totalOps)
+    RowGenerator.getShortRowRDD(ss, config.numPartitions, config.totalOps)
+  }
+
+  def getDataset: org.apache.spark.sql.Dataset[ShortRowClass] = {
+    RowGenerator.getShortRowDataset(ss, config.numPartitions, config.totalOps)
   }
 
 }
@@ -129,8 +165,8 @@ class WriteShortRow(config: Config, sc: SparkContext) extends
 /**
  * Writes data in a format similar to the DataStax legacy 'tshirt' schema
  */
-class WritePerfRow(config: Config, sc: SparkContext) extends
-  WriteTask[PerfRowClass](config, sc)(implicitly[RowWriterFactory[PerfRowClass]]) {
+class WritePerfRow(config: Config, ss: SparkSession) extends
+  WriteTask[PerfRowClass](config, ss)(implicitly[RowWriterFactory[PerfRowClass]]) {
 
   def getTableCql(tbName: String): Seq[String] =
     Seq(
@@ -150,7 +186,11 @@ class WritePerfRow(config: Config, sc: SparkContext) extends
       else Seq.empty )
 
   def getRDD: RDD[PerfRowClass] =
-    RowGenerator.getPerfRowRdd(sc, config.numPartitions, config.totalOps, config.numTotalKeys)
+    RowGenerator.getPerfRowRdd(ss, config.numPartitions, config.totalOps, config.numTotalKeys)
+
+  def getDataset: org.apache.spark.sql.Dataset[PerfRowClass] = {
+    RowGenerator.getPerfRowDataset(ss, config.numPartitions, config.totalOps, config.numTotalKeys)
+  }
 
 }
 
@@ -158,8 +198,8 @@ class WritePerfRow(config: Config, sc: SparkContext) extends
  * Runs inserts to partitions in a round robin fashion. This means partition key 1 will not
  * be written to twice until partition key n is written to once.
  */
-class WriteWideRow(config: Config, sc: SparkContext) extends
-  WriteTask[WideRowClass](config, sc)(implicitly[RowWriterFactory[WideRowClass]]) {
+class WriteWideRow(config: Config, ss: SparkSession) extends
+  WriteTask[WideRowClass](config, ss)(implicitly[RowWriterFactory[WideRowClass]]) {
 
   def getTableCql(tbName: String): Seq[String] =
     Seq(s"""CREATE TABLE IF NOT EXISTS $tbName
@@ -174,7 +214,11 @@ class WriteWideRow(config: Config, sc: SparkContext) extends
          |${config.numTotalKeys} Cassandra Partitions""".stripMargin
     )
     RowGenerator
-      .getWideRowRdd(sc, config.numPartitions, config.totalOps, config.numTotalKeys)
+      .getWideRowRdd(ss, config.numPartitions, config.totalOps, config.numTotalKeys)
+  }
+
+  def getDataset: org.apache.spark.sql.Dataset[WideRowClass] = {
+    RowGenerator.getWideRowDataset(ss, config.numPartitions, config.totalOps, config.numTotalKeys)
   }
 
 }
@@ -183,8 +227,8 @@ class WriteWideRow(config: Config, sc: SparkContext) extends
  * Runs inserts to partitions in a random fashion. The chance that any particular partition
  * key will be written to at a time is 1/N. (flat distribution)
  */
-class WriteRandomWideRow(config: Config, sc: SparkContext) extends
-  WriteTask[WideRowClass](config, sc)(implicitly[RowWriterFactory[WideRowClass]]) {
+class WriteRandomWideRow(config: Config, ss: SparkSession) extends
+  WriteTask[WideRowClass](config, ss)(implicitly[RowWriterFactory[WideRowClass]]) {
 
   def getTableCql(tbName: String): Seq[String] =
     Seq(s"""CREATE TABLE IF NOT EXISTS $tbName
@@ -198,7 +242,11 @@ class WriteRandomWideRow(config: Config, sc: SparkContext) extends
          |${config.totalOps} Total Writes,
          |${config.numTotalKeys} Cassandra Partitions""".stripMargin
     )
-    RowGenerator.getRandomWideRow(sc, config.numPartitions, config.totalOps, config.numTotalKeys)
+    RowGenerator.getRandomWideRow(ss, config.numPartitions, config.totalOps, config.numTotalKeys)
+  }
+
+  def getDataset: org.apache.spark.sql.Dataset[WideRowClass] = {
+    RowGenerator.getRandomWideRowDataset(ss, config.numPartitions, config.totalOps, config.numTotalKeys)
   }
 
 }
@@ -207,8 +255,8 @@ class WriteRandomWideRow(config: Config, sc: SparkContext) extends
  *  Runs inserts to partitions in an ordered fashion. All writes to partition 1 occur before any
  *  writes to partition 2.
  */
-class WriteWideRowByPartition(config: Config, sc: SparkContext) extends
-  WriteTask[WideRowClass](config, sc)(implicitly[RowWriterFactory[WideRowClass]]) {
+class WriteWideRowByPartition(config: Config, ss: SparkSession) extends
+  WriteTask[WideRowClass](config, ss)(implicitly[RowWriterFactory[WideRowClass]]) {
 
   def getTableCql(tbName: String): Seq[String] =
     Seq(s"""CREATE TABLE IF NOT EXISTS $tbName
@@ -222,9 +270,11 @@ class WriteWideRowByPartition(config: Config, sc: SparkContext) extends
          |${config.totalOps} Total Writes,
          |${config.numTotalKeys} Cassandra Partitions""".stripMargin
     )
-    RowGenerator.getWideRowByPartition(sc, config.numPartitions, config.totalOps, config.numTotalKeys)
+    RowGenerator.getWideRowByPartition(ss, config.numPartitions, config.totalOps, config.numTotalKeys)
   }
 
-
+  def getDataset: org.apache.spark.sql.Dataset[WideRowClass] = {
+    RowGenerator.getWideRowByPartitionDataset(ss, config.numPartitions, config.totalOps, config.numTotalKeys)
+  }
 
 }

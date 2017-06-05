@@ -3,8 +3,10 @@ package com.datastax.sparkstress
 import java.util.UUID
 
 import org.apache.spark.SparkContext
+import org.apache.spark.sql.SparkSession
 import scala.util.{Random, Failure, Success, Try}
 import org.apache.spark.rdd.RDD
+import org.apache.spark.sql.Dataset
 import com.datastax.sparkstress.RowTypes._
 import org.joda.time.DateTime
 
@@ -15,79 +17,122 @@ abstract class RowGenerator[T] extends Serializable{
 object RowGenerator {
 
 
-  def getShortRowRDD(sc: SparkContext, numPartitions: Int, numTotalRows: Long):
+  def generateShortRowPartition(index: Int, opsPerPartition: Long) = {
+    val r = new scala.util.Random(index * System.currentTimeMillis())
+    val start = opsPerPartition*index
+    (0L until opsPerPartition).map { i =>
+      new ShortRowClass(i + start, r.nextString(20), r.nextString(20), r.nextString(20))
+    }.iterator
+  }
+
+  def getShortRowRDD(ss: SparkSession, numPartitions: Int, numTotalRows: Long):
   RDD[ShortRowClass] = {
+
     val opsPerPartition = numTotalRows / numPartitions
 
-    def generatePartition(index: Int) = {
-      val r = new scala.util.Random(index * System.currentTimeMillis())
-      val start = opsPerPartition*index
-      (0L until opsPerPartition).map { i =>
-        new ShortRowClass(i + start, r.nextString(20), r.nextString(20), r.nextString(20))
-      }.iterator
-    }
-
-    sc.parallelize(Seq[Int](), numPartitions).mapPartitionsWithIndex {
+    ss.sparkContext.parallelize(Seq[Int](), numPartitions).mapPartitionsWithIndex {
       case (index, n) => {
-        generatePartition(index)
-      }
-    }
-
-  }
-
-  def getWideRowByPartition(sc: SparkContext, numPartitions: Int, numTotalOps: Long, numTotalKeys: Long):
-  RDD[WideRowClass] = {
-    val opsPerPartition = numTotalOps /numPartitions
-
-    def generatePartition(index: Int) = {
-      val r = new scala.util.Random(index * System.currentTimeMillis())
-      val keysPerPartition = numTotalKeys / numPartitions
-      val start = keysPerPartition * numPartitions
-      val ckeysPerPkey = numTotalOps / numTotalKeys
-
-      for ( pk <- (0L until keysPerPartition).iterator; ck <- (0L until ckeysPerPkey).iterator) yield
-        new WideRowClass((start + pk), (ck).toString, r.nextString(20), r.nextString(20)) 
-    }
-
-    sc.parallelize(Seq[Int](), numPartitions)
-      .mapPartitionsWithIndex { case (index, n) => generatePartition(index) }
-  }
-
-  def getWideRowRdd(sc: SparkContext, numPartitions: Int, numTotalOps: Long, numTotalKeys: Long):
-  RDD[WideRowClass] = {
-    val opsPerPartition = numTotalOps /numPartitions
-
-    def generatePartition(index: Int) = {
-      val r = new scala.util.Random(index * System.currentTimeMillis())
-      val start = opsPerPartition*index:Long
-      (0L until opsPerPartition).map { i =>
-        new WideRowClass((i + start) % numTotalKeys, (i + start).toString, r.nextString(20), r.nextString(20)) 
-      }.iterator
-    }
-     sc.parallelize(Seq[Int](), numPartitions).mapPartitionsWithIndex {
-      case (index, n) => {
-        generatePartition(index)
+        generateShortRowPartition(index, opsPerPartition)
       }
     }
   }
 
-  def getRandomWideRow(sc: SparkContext, numPartitions: Int, numTotalOps: Long, numTotalKeys:
+  def getShortRowDataset(ss: SparkSession, numPartitions: Int, numTotalRows: Long): org.apache.spark.sql.Dataset[ShortRowClass] = {
+    import ss.implicits._
+
+    val opsPerPartition = numTotalRows / numPartitions
+
+    ss.sparkContext.parallelize(Seq[Int](), numPartitions).mapPartitionsWithIndex {
+      case (index, n) => {
+        generateShortRowPartition(index, opsPerPartition)
+      }
+    }.toDS()
+  }
+
+  def generateWideRowByPartitionPartition(index: Int, numPartitions: Int, numTotalKeys: Long, numTotalOps: Long) = {
+    val r = new scala.util.Random(index * System.currentTimeMillis())
+    val keysPerPartition = numTotalKeys / numPartitions
+    val start = keysPerPartition * numPartitions
+    val ckeysPerPkey = numTotalOps / numTotalKeys
+
+    for ( pk <- (0L until keysPerPartition).iterator; ck <- (0L until ckeysPerPkey).iterator) yield
+      new WideRowClass((start + pk), (ck).toString, r.nextString(20), r.nextString(20))
+  }
+
+  def getWideRowByPartition(ss: SparkSession, numPartitions: Int, numTotalOps: Long, numTotalKeys: Long):
+  RDD[WideRowClass] = {
+
+    ss.sparkContext.parallelize(Seq[Int](), numPartitions)
+      .mapPartitionsWithIndex { case (index, n) => generateWideRowByPartitionPartition(index, numPartitions, numTotalKeys, numTotalOps) }
+  }
+
+  def getWideRowByPartitionDataset(ss: SparkSession, numPartitions: Int, numTotalOps: Long, numTotalKeys: Long): org.apache.spark.sql.Dataset[WideRowClass] = {
+    import ss.implicits._
+
+    ss.sparkContext.parallelize(Seq[Int](), numPartitions)
+      .mapPartitionsWithIndex { case (index, n) => generateWideRowByPartitionPartition(index, numPartitions, numTotalKeys, numTotalOps) }.toDS()
+  }
+
+  def generateWideRowPartition(index: Int, numTotalKeys: Long, opsPerPartition: Long) = {
+    val r = new scala.util.Random(index * System.currentTimeMillis())
+    val start = opsPerPartition*index:Long
+    (0L until opsPerPartition).map { i =>
+      new WideRowClass((i + start) % numTotalKeys, (i + start).toString, r.nextString(20), r.nextString(20))
+    }.iterator
+  }
+
+  def getWideRowRdd(ss: SparkSession, numPartitions: Int, numTotalOps: Long, numTotalKeys: Long):
+  RDD[WideRowClass] = {
+    val opsPerPartition = numTotalOps /numPartitions
+
+     ss.sparkContext.parallelize(Seq[Int](), numPartitions).mapPartitionsWithIndex {
+      case (index, n) => {
+        generateWideRowPartition(index, numTotalKeys, opsPerPartition)
+      }
+    }
+  }
+
+  def getWideRowDataset(ss: SparkSession, numPartitions: Int, numTotalOps: Long, numTotalKeys: Long): org.apache.spark.sql.Dataset[WideRowClass] = {
+    import ss.implicits._
+
+    val opsPerPartition = numTotalOps /numPartitions
+
+    ss.sparkContext.parallelize(Seq[Int](), numPartitions).mapPartitionsWithIndex {
+      case (index, n) => {
+        generateWideRowPartition(index, numTotalKeys, opsPerPartition)
+      }
+    }.toDS()
+  }
+
+  def generateRandomWideRowPartition(index: Int, numTotalKeys: Long, opsPerPartition: Long) = {
+    val r = new scala.util.Random(index * System.currentTimeMillis())
+    (0L until opsPerPartition).map { i =>
+      new WideRowClass(math.abs(r.nextLong()) % numTotalKeys, r.nextInt.toString, r.nextString(20), r.nextString(20))
+    }.iterator
+  }
+
+  def getRandomWideRow(ss: SparkSession, numPartitions: Int, numTotalOps: Long, numTotalKeys:
   Long): RDD[WideRowClass] = {
     val opsPerPartition = numTotalOps / numPartitions
 
-    def generatePartition(index: Int) = {
-      val r = new scala.util.Random(index * System.currentTimeMillis())
-      (0L until opsPerPartition).map { i =>
-        new WideRowClass(math.abs(r.nextLong()) % numTotalKeys, r.nextInt.toString, r.nextString(20), r.nextString(20)) 
-      }.iterator
-    }
-    sc.parallelize(Seq[Int](), numPartitions).mapPartitionsWithIndex {
+    ss.sparkContext.parallelize(Seq[Int](), numPartitions).mapPartitionsWithIndex {
       case (index, n) => {
-        generatePartition(index)
+        generateRandomWideRowPartition(index, numTotalKeys, opsPerPartition)
       }
     }
   }
 
+  def getRandomWideRowDataset(ss: SparkSession, numPartitions: Int, numTotalOps: Long, numTotalKeys: Long): org.apache.spark.sql.Dataset[WideRowClass] = {
+    import ss.implicits._
+
+    val opsPerPartition = numTotalOps / numPartitions
+
+    ss.sparkContext.parallelize(Seq[Int](), numPartitions).mapPartitionsWithIndex {
+      case (index, n) => {
+        generateRandomWideRowPartition(index, numTotalKeys, opsPerPartition)
+      }
+    }.toDS()
+  }
 
   /**
    * This code mimics an internal DataStax perf row format. Since we are mainly using this to test
@@ -114,24 +159,35 @@ object RowGenerator {
         val size = sizes(r.nextInt(sizes.size))
         val qty = qtys(r.nextInt(qtys.size))
         val store = s"Store ${pk + offset}"
-        val order_number = UUID.randomUUID()
-        val order_time = perftime.plusSeconds(r.nextInt(1000))
+        val order_number = UUID.randomUUID().toString()
+        val order_time = perftime.plusSeconds(r.nextInt(1000)).toString()
         PerfRowClass(store, order_time, order_number, color, size, qty)
       }
     }
   }
 
-  def getPerfRowRdd(sc: SparkContext, numPartitions: Int, numTotalRows: Long, numTotalKeys: Long): RDD[PerfRowClass] = {
+  def getPerfRowRdd(ss: SparkSession, numPartitions: Int, numTotalRows: Long, numTotalKeys: Long): RDD[PerfRowClass] = {
 
     val perfRowGenerator = new PerfRowGenerator(numPartitions, numTotalRows, numTotalKeys)
 
-    sc.parallelize(Seq[Int](), numPartitions).mapPartitionsWithIndex {
+    ss.sparkContext.parallelize(Seq[Int](), numPartitions).mapPartitionsWithIndex {
       case (index, n) => {
         perfRowGenerator.generatePartition(index)
       }
     }
   }
 
+  def getPerfRowDataset(ss: SparkSession, numPartitions: Int, numTotalRows: Long, numTotalKeys: Long): org.apache.spark.sql.Dataset[PerfRowClass] = {
+    import ss.implicits._
+
+    val perfRowGenerator = new PerfRowGenerator(numPartitions, numTotalRows, numTotalKeys)
+
+    ss.sparkContext.parallelize(Seq[Int](), numPartitions).mapPartitionsWithIndex {
+      case (index, n) => {
+        perfRowGenerator.generatePartition(index)
+      }
+    }.toDS()
+  }
 
 }
 

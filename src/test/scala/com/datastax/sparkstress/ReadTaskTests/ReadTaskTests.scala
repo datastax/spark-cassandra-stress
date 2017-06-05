@@ -36,49 +36,49 @@ class ReadTaskTests extends FlatSpec
            |REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """
           .stripMargin)}
 
-    val writer = new WritePerfRow(config, sc)
+    val writer = new WritePerfRow(config, ss)
     writer.setupCQL
     writer.run
   }
 
   "FTSOneColumn" should " be able to run" in {
-    new FTSOneColumn(config, sc).run
+    new FTSOneColumn(config, ss).run
   }
 
   "FTSAllColumns" should " be able to run" in {
-    new FTSAllColumns(config, sc).run
+    new FTSAllColumns(config, ss).run
   }
 
   "PDCount" should " be able to run" in {
-    new PDCount(config, sc).run
+    new PDCount(config, ss).run
   }
 
   "FTSFiveColumns" should " be able to run " in {
-    new FTSFiveColumns(config, sc).run
+    new FTSFiveColumns(config, ss).run
   }
 
   "FTSPDClusteringAllColumns" should " be able to run" in {
-    new FTSPDClusteringAllColumns(config, sc).run
+    new FTSPDClusteringAllColumns(config, ss).run
   }
 
   "FTSPDClusteringFiveColumns" should " be able to run" in {
-    new FTSPDClusteringFiveColumns(config, sc).run
+    new FTSPDClusteringFiveColumns(config, ss).run
   }
 
   "JWCAllColumns" should " be able to run" in {
-    new JWCAllColumns(config, sc).run
+    new JWCAllColumns(config, ss).run
   }
 
   "JWCRPAllColumns" should " be able to run " in {
-    new JWCRPAllColumns(config, sc).run
+    new JWCRPAllColumns(config, ss).run
   }
 
   "JWCPDClusteringAllColumns" should " be able to run " in {
-    new JWCPDClusteringAllColumns(config, sc).run
+    new JWCPDClusteringAllColumns(config, ss).run
   }
 
   "RetrieveSinglePartiton" should " be able to run " in {
-    new RetrieveSinglePartition(config,sc).run
+    new RetrieveSinglePartition(config,ss).run
   }
 
 

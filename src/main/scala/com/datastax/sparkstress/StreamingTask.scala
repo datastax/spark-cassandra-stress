@@ -6,6 +6,7 @@ import com.datastax.spark.connector.writer.RowWriterFactory
 import com.datastax.sparkstress.RowGenerator.PerfRowGenerator
 import com.datastax.sparkstress.RowTypes._
 import org.apache.spark.SparkContext
+import org.apache.spark.sql.SparkSession
 import org.apache.spark.storage.StorageLevel
 import org.apache.spark.streaming.{StreamingContext, _}
 import org.apache.spark.streaming.dstream.DStream
@@ -20,10 +21,10 @@ object StreamingTask {
 
 abstract class StreamingTask[rowType](
   val config: Config,
-  val sc: SparkContext)
+  val ss: SparkSession)
 (implicit ct:ClassTag[rowType]) extends StressTask {
 
-  val ssc = new StreamingContext(sc, Seconds(config.streamingBatchIntervalSeconds))
+  val ssc = new StreamingContext(ss.sparkContext, Seconds(config.streamingBatchIntervalSeconds))
   val opsPerBatch = (config.numReceivers * config.receiverThroughputPerBatch)
   val estimatedReqRuntime: Long = ((config.totalOps / opsPerBatch) * config.streamingBatchIntervalSeconds) + 10
   val terminationTime: Long = {
@@ -42,7 +43,7 @@ abstract class StreamingTask[rowType](
   }
 
   def setupCQL() = {
-    CassandraConnector(sc.getConf).withSessionDo { session =>
+    CassandraConnector(ss.sparkContext.getConf).withSessionDo { session =>
       if (config.deleteKeyspace) {
         println(s"Destroying Keyspace")
         session.execute(s"DROP KEYSPACE IF EXISTS ${config.keyspace}")
@@ -73,7 +74,7 @@ abstract class StreamingTask[rowType](
           i,
           getGenerator,
           config,
-          sc.getConf.getInt("spark.streaming.blockInterval", 200),
+          ss.sparkContext.getConf.getInt("spark.streaming.blockInterval", 200),
           StorageLevel.MEMORY_AND_DISK_2)
       )
     }
@@ -83,17 +84,17 @@ abstract class StreamingTask[rowType](
 
   def dstreamOps(dstream: DStream[rowType]): Unit
 
-  def runTrials(sc: SparkContext): Seq[TestResult] = {
+  def runTrials(ss: SparkSession): Seq[TestResult] = {
     println("About to Start Trials")
     for (trial <- 1 to config.trials) yield {setupCQL(); Thread.sleep(10000); TestResult(time(run()),0L)}
   }
 }
 
-class StreamingWrite(config: Config, sc: SparkContext) extends
-  StreamingTask[PerfRowClass](config,sc)(implicitly[ClassTag[PerfRowClass]]){
+class StreamingWrite(config: Config, ss: SparkSession) extends
+  StreamingTask[PerfRowClass](config,ss)(implicitly[ClassTag[PerfRowClass]]){
 
   /** Use the write task for gettingTableCql : TODO make this more elegent, part of the Generator?**/
-  @transient val _writeTask = new WritePerfRow(config, sc)
+  @transient val _writeTask = new WritePerfRow(config, ss)
   val generator = new PerfRowGenerator(config.numReceivers, config.totalOps, config.numTotalKeys)
 
   override def getTableCql(tbName: String): Seq[String] = _writeTask.getTableCql(tbName)
