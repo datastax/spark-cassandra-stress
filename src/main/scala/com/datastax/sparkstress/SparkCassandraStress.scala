@@ -113,7 +113,7 @@ object SparkCassandraStress {
       opt[Int]('z',"streamingBatchLength") optional() action { (arg,config) =>
         config.copy(streamingBatchIntervalSeconds = arg)
       } text {"Batch interval in seconds used for defining a StreamingContext."}
-      
+
       opt[Int]('m',"terminationTimeMinutes") optional() action { (arg,config) =>
         config.copy(terminationTimeMinutes = arg)
       } text { "The desired runtime (in minutes) for a given workload. WARNING: Not supported with multiple trials or read workloads."}
@@ -155,11 +155,13 @@ object SparkCassandraStress {
         .setAppName("SparkStress_"+config.testName)
         //Make sure for streaming that the keep_alive is sufficently large
         .set("spark.cassandra.connection.keep_alive_ms", (config.streamingBatchIntervalSeconds*1000*5).toString)
+        .set("spark.cassandra.input.metrics", "true")
+        .set("spark.cassandra.output.metrics", "true")
         .setAll(config.sparkOps)
 
     val sc = ConnectHelper.getContext(sparkConf)
-    
-    if (config.verboseOutput) { 
+
+    if (config.verboseOutput) {
       println("\nDumping debugging output")
       println(sc.getConf.toDebugString+"\n")
     }
