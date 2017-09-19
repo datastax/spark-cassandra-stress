@@ -5,7 +5,6 @@ import com.datastax.spark.connector.writer.RowWriterFactory
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{ExposeJobListener, SparkContext}
 import com.datastax.sparkstress.RowTypes._
-import com.datastax.spark.connector._
 import com.datastax.spark.connector.RDDFunctions
 import com.datastax.bdp.spark.writer.BulkTableWriter._
 import java.util.concurrent.TimeUnit
@@ -14,17 +13,13 @@ import java.util.concurrent.TimeoutException
 import scala.concurrent.{Await,Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 
-import org.apache.commons.io.IOUtils
-import scala.util.parsing.json.{JSON, JSONType, JSONArray, JSONObject}
-import java.net.URL
-
 object WriteTask {
-  val ValidTasks = Set(
-    "writeshortrow",
-    "writeperfrow",
-    "writewiderow",
-    "writerandomwiderow",
-    "writewiderowbypartition"
+  val ValidTasks = Map(
+    "writeshortrow" -> (new WriteShortRow(_, _)),
+    "writewiderow" -> (new WriteWideRow(_, _)),
+    "writeperfrow" -> (new WritePerfRow(_, _)),
+    "writerandomwiderow" -> (new WriteRandomWideRow(_, _)),
+    "writewiderowbypartition" -> (new WriteWideRowByPartition(_, _))
   )
 }
 
@@ -50,7 +45,7 @@ abstract class WriteTask[rowType](
     printf("Done Setting up CQL Keyspace/Table\n")
   }
 
-  def getKeyspaceCql(ksName: String): String = s"CREATE KEYSPACE IF NOT EXISTS $ksName WITH replication = {'class': 'NetworkTopologyStrategy', 'Analytics': ${config.replicationFactor} }"
+  def getKeyspaceCql(ksName: String): String = s"CREATE KEYSPACE IF NOT EXISTS $ksName WITH replication = {'class': '${config.replicationStrategy}', '${config.replicationDC}': ${config.replicationFactor} }"
 
   def getTableCql(tbName: String): Seq[String]
 

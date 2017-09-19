@@ -32,7 +32,7 @@ else
   fi
 fi
 
-JAR=build/libs/SparkCassandraStress-1.0.jar
+JAR=build/libs/SparkCassandraStress-1.1.jar
 CLASS=com.datastax.sparkstress.SparkCassandraStress
 
 SUBMIT="spark-submit $sparkmaster $connectorArgs --class $CLASS $JAR $stressArgs"

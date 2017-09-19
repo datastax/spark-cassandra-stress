@@ -2,7 +2,7 @@ package com.datastax.sparkstress
 
 import java.io.{FileWriter, Writer}
 
-import org.apache.spark.SparkConf
+import org.apache.spark.{SparkConf, SparkContext}
 
 
 case class Config(
@@ -12,7 +12,9 @@ case class Config(
   table: String = "tab",
   trials: Int = 1,
   verboseOutput: Boolean = false,
-  //Write Options
+  // Write Options
+  replicationStrategy: String = "NetworkTopologyStrategy",
+  replicationDC: String = "Analytics",
   replicationFactor: Int = 1,
   numPartitions: Int = 400,
   totalOps: Long = 20 * 1000000,
@@ -22,20 +24,23 @@ case class Config(
   // csv file to append results
   file: Option[Writer] = Option.empty,
   saveMethod: String = "driver",
-  //Spark Options
+  // Spark Options
   sparkOps: Map[String,String] = Map.empty,
-  //Streaming Params
+  // Streaming Params
   numReceivers: Int = 1,
   receiverThroughputPerBatch: Long = 100000,
   terminationTimeMinutes: Long = 0,
-  streamingBatchIntervalSeconds:  Int = 5
+  streamingBatchIntervalSeconds:  Int = 5,
+  // Read Options
+  userSqlQuery: String = null ,
+  fractionOfData: Double = 0.01
 )
 
 case class TestResult ( time: Long, ops: Long )
 
 object SparkCassandraStress {
-  val VALID_TESTS =
-    WriteTask.ValidTasks ++ ReadTask.ValidTasks ++ StreamingTask.ValidTasks
+  val VALID_TESTS: Set[String] =
+    WriteTask.ValidTasks.keys.toSet ++ ReadTask.ValidTasks.keys.toSet ++ StreamingTask.ValidTasks.keys.toSet
 
   val KeyGroupings = Seq("none", "replica_set", "partition")
 
@@ -47,9 +52,9 @@ object SparkCassandraStress {
       arg[String]("testName") optional() action { (arg,config) =>
         config.copy(testName = arg.toLowerCase())
       } text {  s"""Tests :
-              |Write Tests:  ${WriteTask.ValidTasks.mkString(" , ")}
-              |Read Tests: ${ReadTask.ValidTasks.mkString(" , ")}
-              |Streaming Tests: ${StreamingTask.ValidTasks.mkString(" , ")}""".stripMargin}
+              |Write Tests:  ${WriteTask.ValidTasks.keys.mkString(" , ")}
+              |Read Tests: ${ReadTask.ValidTasks.keys.mkString(" , ")}
+              |Streaming Tests: ${StreamingTask.ValidTasks.keys.mkString(" , ")}""".stripMargin}
       arg[String]("master") optional() action { (arg,config) =>
         config.copy(sparkOps = config.sparkOps + ("spark.master" -> arg))
       } text {"Spark Address of Master Node"}
@@ -86,6 +91,14 @@ object SparkCassandraStress {
         config.copy(numPartitions = arg)
       } text {"Number of Spark Partitions To Create"}
 
+      opt[String]('e',"replicationStrategy") optional() action { (arg,config) =>
+        config.copy(replicationStrategy = arg)
+      } text {"Replication strategy. Default: NetworkTopologyStrategy"}
+
+      opt[String]('c',"replicationDC") optional() action { (arg,config) =>
+        config.copy(replicationDC = arg)
+      } text {"The DC name where replicas should be placed. Default: Analytics"}
+
       opt[Int]('r',"replication") optional() action { (arg,config) =>
         config.copy(replicationFactor = arg)
       } text {"Replication Factor to set on new keyspace, will not change existing keyspaces"}
@@ -118,6 +131,14 @@ object SparkCassandraStress {
         config.copy(terminationTimeMinutes = arg)
       } text { "The desired runtime (in minutes) for a given workload. WARNING: Not supported with multiple trials or read workloads."}
 
+      opt[String]('u',"userSqlQuery") optional() action { (arg,config) =>
+        config.copy(userSqlQuery = arg)
+      } text {"EXPERIMENTAL (Not stable): User-defined SparkSQL query."}
+
+      opt[Double]("fraction") optional() action { (arg,config) =>
+        config.copy(fractionOfData = arg)
+      } text {"Fraction of data to read, only implemented for SqlPKRestriction atm"}
+
       arg[String]("connectorOpts") optional() text { """spark-cassandra-connector configs, Ex: --conf "conf1=val1" --conf "conf2=val2" """}
 
       help("help") text {"CLI Help"}
@@ -130,7 +151,7 @@ object SparkCassandraStress {
     parser.parse(args, Config()) map { config =>
       if (config.trials > 1 && config.terminationTimeMinutes > 0) {
         println("\nERROR: A termination time was specified with multiple trials, this is not supported yet.\n")
-      } else if (ReadTask.ValidTasks(config.testName) && config.terminationTimeMinutes > 0) {
+      } else if (ReadTask.ValidTasks.keys.toSet.contains(config.testName) && config.terminationTimeMinutes > 0) {
         println(s"\nERROR: A termination time was specified with '${config.testName} which is a Read test, this is not supported yet.\n")
       } else {
         runTask(config)
@@ -166,30 +187,13 @@ object SparkCassandraStress {
       println(sc.getConf.toDebugString+"\n")
     }
 
-    val test: StressTask =
-      config.testName.toLowerCase match {
-          /** Write Tasks **/
-        case "writeshortrow" => new WriteShortRow(config, sc)
-        case "writewiderow" => new WriteWideRow(config, sc)
-        case "writeperfrow" => new WritePerfRow(config, sc)
-        case "writerandomwiderow" => new WriteRandomWideRow(config, sc)
-        case "writewiderowbypartition" => new WriteWideRowByPartition(config, sc)
-
-          /** Read Tasks **/
-        case "pdcount" => new PDCount(config, sc)
-        case "ftsallcolumns" => new FTSAllColumns(config, sc)
-        case "ftsfivecolumns" => new FTSFiveColumns(config, sc)
-        case "ftsonecolumn" => new FTSOneColumn(config, sc)
-        case "ftspdclusteringallcolumns" => new FTSPDClusteringAllColumns(config, sc)
-        case "ftspdclusteringfivecolumns" => new FTSPDClusteringFiveColumns(config, sc)
-        case "jwcallcolumns" => new JWCAllColumns(config, sc)
-        case "jwcpdclusteringallcolumns" => new JWCPDClusteringAllColumns(config, sc)
-        case "jwcrpallcolumns" => new JWCRPAllColumns(config, sc)
-        case "retrievesinglepartition" => new RetrieveSinglePartition(config, sc)
-
-          /** Streaming Tasks **/
-        case "streamingwrite" => new StreamingWrite(config, sc)
-      }
+    val test: StressTask = {
+      val testName = config.testName.toLowerCase
+      (ReadTask.ValidTasks ++ WriteTask.ValidTasks ++ StreamingTask.ValidTasks)
+        .get(testName)
+        .getOrElse(throw new IllegalArgumentException(s"Couldn't find test $testName"))
+        .apply(config, sc)
+    }
 
     val wallClockStartTime = System.nanoTime()
 
@@ -200,18 +204,20 @@ object SparkCassandraStress {
     val wallClockStopTime = System.nanoTime() 
     val wallClockTimeDiff = wallClockStopTime - wallClockStartTime
     val wallClockTimeSeconds = (wallClockTimeDiff / 1000000000.0) 
-    val timeSeconds = time.map{ x => math.round( x / 1000000000.0 ) }
-    val opsPerSecond = for (i <- 0 to timeSeconds.size-1) yield {math.round(totalCompletedOps(i)/timeSeconds(i))}
+    val timeSeconds = time.map{ x => x / 1000000000.0 }
+    val opsPerSecond = for (i <- 0 to timeSeconds.size-1) yield {totalCompletedOps(i)/timeSeconds(i)}
+    val formattedTimeSeconds = timeSeconds.map(time => f"$time%.2f")
+    val formattedOpsPerSecond = opsPerSecond.map(time => f"$time%.2f")
 
     test match {
       case x: WriteTask[_] =>  {
-        println(s"TimeInSeconds : ${timeSeconds.mkString(",")}\n")
-        println(s"OpsPerSecond : ${opsPerSecond.mkString(",")}\n")
+        println(s"TimeInSeconds : ${formattedTimeSeconds.mkString(",")}\n")
+        println(s"OpsPerSecond : ${formattedOpsPerSecond.mkString(",")}\n")
         config.file.map(f => {f.write(csvResults(config, time));f.flush })
         sc.stop()
       }
       case x: ReadTask => {
-        println(s"TimeInSeconds : ${timeSeconds.mkString(",")}\n")
+        println(s"TimeInSeconds : ${formattedTimeSeconds.mkString(",")}\n")
         config.file.map(f => {f.write(csvResults(config, time));f.flush })
         sc.stop()
       }
@@ -223,6 +229,7 @@ object SparkCassandraStress {
         y.ssc.stop(true, true)
       }
     }
+    sys.exit(0)
  }
 
 }
