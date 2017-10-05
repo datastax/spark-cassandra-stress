@@ -79,7 +79,7 @@ class FTSOneColumn_DS(config: Config, ss: SparkSession) extends ReadTask(config,
 
 /**
   * Full Table Scan Two Columns using DataSets
-  * Performs a full table scan but only retrieves a single column from the underlying
+  * Performs a full table scan retrieving two columns from the underlying
   * table.
   */
 class FTSTwoColumns_DS(config: Config, ss: SparkSession) extends ReadTask(config, ss) {

@@ -7,6 +7,7 @@ import org.apache.spark.SparkConf
 
 case class Config(
   //Test Options
+  seed: Long = System.currentTimeMillis(),
   testName: String ="writeshortrow",
   keyspace: String = "ks",
   table: String = "tab",
@@ -73,11 +74,23 @@ object SparkCassandraStress {
 
       opt[String]('e',"distributedDataType") optional() action { (arg,config) =>
         config.copy(distributedDataType = arg)
-      } text {"See 'saveMethod'.\n\t\t\t   rdd: Resilient Distributed Dataset, the basic abstraction in Spark.\n\t\t\t   dataset: A DataSet is a strongly typed collection of domain-specific objects."}
+      } text {
+        """See 'saveMethod'.
+          |                           rdd: Resilient Distributed Dataset, the basic abstraction in Spark.
+          |                           dataset: A DataSet is a strongly typed collection of domain-specific objects.""".stripMargin}
 
       opt[String]('s',"saveMethod") optional() action { (arg,config) =>
         config.copy(saveMethod = arg)
-      } text {"See 'distributedDataType'.\n\t\t\t   rdd save methods:\n\t\t\t     bulk: bulkSaveToCassandra, driver: saveToCassandra\n\t\t\t   dataset save methods:\n\t\t\t     driver: ds.write.cassandraFormat(..).mode(..).save()\n\t\t\t     parquet: format to save in dsefs\n\t\t\t     text: format to save in dsefs\n\t\t\t     json: format to save in dsefs\n\t\t\t     csv: format to save in dsefs"}
+      } text {
+        """See 'distributedDataType'.
+          |                           rdd save methods:
+          |                           bulk: bulkSaveToCassandra, driver: saveToCassandra
+          |                           dataset save methods:
+          |                             driver: ds.write.cassandraFormat(..).mode(..).save()
+          |                             parquet: format to save in dsefs
+          |                             text: format to save in dsefs
+          |                             json: format to save in dsefs
+          |                             csv: format to save in dsefs""".stripMargin}
 
       opt[Int]('n',"trials")optional() action { (arg,config) =>
         config.copy(trials = arg)
@@ -90,6 +103,10 @@ object SparkCassandraStress {
       opt[Int]('p',"numPartitions") optional() action { (arg,config) =>
         config.copy(numPartitions = arg)
       } text {"Number of Spark Partitions To Create"}
+
+      opt[Long]('c',"seed") optional() action { (arg,config) =>
+        config.copy(seed = arg)
+      } text {"Seed used for randomly generating cell data, reuse a previous seed for 100% repeatability between runs. Min: -9223372036854775808, Max: 9223372036854775807"}
 
       opt[Int]('r',"replication") optional() action { (arg,config) =>
         config.copy(replicationFactor = arg)
@@ -165,7 +182,8 @@ object SparkCassandraStress {
         .setAll(config.sparkOps)
 
     val ss = ConnectHelper.getSparkSession(sparkConf)
-    
+
+
     if (config.verboseOutput) { 
       println("\nDumping debugging output")
       println(ss.sparkContext.getConf.toDebugString+"\n")

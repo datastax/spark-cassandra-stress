@@ -12,7 +12,7 @@ object ConnectHelper {
     this.getSparkSession(conf).sparkContext
 
   /*
-  Get a SparkSession Object
+  Get a normal SparkContext Object
  */
   def getSparkSession(conf: SparkConf): SparkSession =
     SparkSession.builder().config(conf).getOrCreate()

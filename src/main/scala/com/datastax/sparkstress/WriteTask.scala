@@ -153,11 +153,11 @@ class WriteShortRow(config: Config, ss: SparkSession) extends
          |${config.totalOps} Total Writes
          |${config.numPartitions} Num Partitions""".stripMargin
     )
-    RowGenerator.getShortRowRDD(ss, config.numPartitions, config.totalOps)
+    RowGenerator.getShortRowRDD(ss, config.seed, config.numPartitions, config.totalOps)
   }
 
   def getDataset: org.apache.spark.sql.Dataset[ShortRowClass] = {
-    RowGenerator.getShortRowDataset(ss, config.numPartitions, config.totalOps)
+    RowGenerator.getShortRowDataset(ss, config.seed, config.numPartitions, config.totalOps)
   }
 
 }
@@ -186,10 +186,10 @@ class WritePerfRow(config: Config, ss: SparkSession) extends
       else Seq.empty )
 
   def getRDD: RDD[PerfRowClass] =
-    RowGenerator.getPerfRowRdd(ss, config.numPartitions, config.totalOps, config.numTotalKeys)
+    RowGenerator.getPerfRowRdd(ss, config.seed, config.numPartitions, config.totalOps, config.numTotalKeys)
 
   def getDataset: org.apache.spark.sql.Dataset[PerfRowClass] = {
-    RowGenerator.getPerfRowDataset(ss, config.numPartitions, config.totalOps, config.numTotalKeys)
+    RowGenerator.getPerfRowDataset(ss, config.seed, config.numPartitions, config.totalOps, config.numTotalKeys)
   }
 
 }
@@ -214,11 +214,11 @@ class WriteWideRow(config: Config, ss: SparkSession) extends
          |${config.numTotalKeys} Cassandra Partitions""".stripMargin
     )
     RowGenerator
-      .getWideRowRdd(ss, config.numPartitions, config.totalOps, config.numTotalKeys)
+      .getWideRowRdd(ss, config.seed, config.numPartitions, config.totalOps, config.numTotalKeys)
   }
 
   def getDataset: org.apache.spark.sql.Dataset[WideRowClass] = {
-    RowGenerator.getWideRowDataset(ss, config.numPartitions, config.totalOps, config.numTotalKeys)
+    RowGenerator.getWideRowDataset(ss, config.seed, config.numPartitions, config.totalOps, config.numTotalKeys)
   }
 
 }
@@ -242,11 +242,11 @@ class WriteRandomWideRow(config: Config, ss: SparkSession) extends
          |${config.totalOps} Total Writes,
          |${config.numTotalKeys} Cassandra Partitions""".stripMargin
     )
-    RowGenerator.getRandomWideRow(ss, config.numPartitions, config.totalOps, config.numTotalKeys)
+    RowGenerator.getRandomWideRow(ss, config.seed, config.numPartitions, config.totalOps, config.numTotalKeys)
   }
 
   def getDataset: org.apache.spark.sql.Dataset[WideRowClass] = {
-    RowGenerator.getRandomWideRowDataset(ss, config.numPartitions, config.totalOps, config.numTotalKeys)
+    RowGenerator.getRandomWideRowDataset(ss, config.seed, config.numPartitions, config.totalOps, config.numTotalKeys)
   }
 
 }
@@ -270,11 +270,11 @@ class WriteWideRowByPartition(config: Config, ss: SparkSession) extends
          |${config.totalOps} Total Writes,
          |${config.numTotalKeys} Cassandra Partitions""".stripMargin
     )
-    RowGenerator.getWideRowByPartition(ss, config.numPartitions, config.totalOps, config.numTotalKeys)
+    RowGenerator.getWideRowByPartition(ss, config.seed, config.numPartitions, config.totalOps, config.numTotalKeys)
   }
 
   def getDataset: org.apache.spark.sql.Dataset[WideRowClass] = {
-    RowGenerator.getWideRowByPartitionDataset(ss, config.numPartitions, config.totalOps, config.numTotalKeys)
+    RowGenerator.getWideRowByPartitionDataset(ss, config.seed, config.numPartitions, config.totalOps, config.numTotalKeys)
   }
 
 }
