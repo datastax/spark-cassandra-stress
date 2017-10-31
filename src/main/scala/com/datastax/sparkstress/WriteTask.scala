@@ -101,7 +101,6 @@ abstract class WriteTask[rowType](
             save_dataset(config.saveMethod)
           }
         }
-        //For Some reason the implicit doesn't work here in Connector 1.[1,0].X
       }
       try {
         if (config.terminationTimeMinutes > 0) {
