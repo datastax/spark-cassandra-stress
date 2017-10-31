@@ -39,7 +39,6 @@ object RowGenerator {
 
   def getShortRowDataset(ss: SparkSession, seed: Long, numPartitions: Int, numTotalRows: Long): org.apache.spark.sql.Dataset[ShortRowClass] = {
     import ss.implicits._
-
     val opsPerPartition = numTotalRows / numPartitions
 
     ss.sparkContext.parallelize(Seq[Int](), numPartitions).mapPartitionsWithIndex {
@@ -166,9 +165,7 @@ object RowGenerator {
   }
 
   def getPerfRowRdd(ss: SparkSession, seed: Long, numPartitions: Int, numTotalRows: Long, numTotalKeys: Long): RDD[PerfRowClass] = {
-
     val perfRowGenerator = new PerfRowGenerator(numPartitions, numTotalRows, numTotalKeys)
-
     ss.sparkContext.parallelize(Seq[Int](), numPartitions).mapPartitionsWithIndex {
       case (index, n) => {
         perfRowGenerator.generatePartition(seed, index)

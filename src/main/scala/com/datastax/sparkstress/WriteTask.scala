@@ -86,6 +86,7 @@ abstract class WriteTask[rowType](
    * @return a tuple containing (runtime, totalCompletedOps)
    */
   def run(): TestResult = {
+    import sqlContext.implicits._
     var totalCompletedOps: Long = 0L
     val runtime = time({
       val fs = Future {

@@ -185,7 +185,7 @@ object SparkCassandraStress {
     val ss = ConnectHelper.getSparkSession(sparkConf)
 
 
-    if (config.verboseOutput) { 
+    if (config.verboseOutput) {
       println("\nDumping debugging output")
       println(ss.sparkContext.getConf.toDebugString+"\n")
     }
