@@ -84,7 +84,8 @@ object SparkCassandraStress {
       } text {
         """See 'distributedDataType'.
           |                           rdd save methods:
-          |                           bulk: bulkSaveToCassandra, driver: saveToCassandra
+          |                             bulk: bulkSaveToCassandra
+          |                             driver: saveToCassandra
           |                           dataset save methods:
           |                             driver: ds.write.cassandraFormat(..).mode(..).save()
           |                             parquet: format to save in dsefs

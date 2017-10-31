@@ -37,6 +37,7 @@ abstract class WriteTask[rowType](
 
   val sc = ss.sparkContext
   val sqlContext = ss.sqlContext
+  import sqlContext.implicits._
 
   def setupCQL() = {
     CassandraConnector(sc.getConf).withSessionDo{ session =>
@@ -63,12 +64,28 @@ abstract class WriteTask[rowType](
 
   def getDataset: org.apache.spark.sql.Dataset[rowType]
 
+  def save_dataset(saveMethod: String): Unit = {
+    saveMethod match {
+      // filesystem save methods
+      case "parquet" => getDataset.write.parquet(s"dsefs:///${config.keyspace}.${config.table}")
+      case "text" => getDataset.map(row => row.toString()).write.text(s"dsefs:///${config.keyspace}.${config.table}") // requires a single column so we convert to a string
+      case "json" => getDataset.write.json(s"dsefs:///${config.keyspace}.${config.table}")
+      case "csv" => getDataset.write.csv(s"dsefs:///${config.keyspace}.${config.table}")
+      // regular save method to DSE/Cassandra
+      case _ => getDataset
+        .write
+        .format("org.apache.spark.sql.cassandra")
+        .options(Map("table" -> config.table, "keyspace" -> config.keyspace))
+        .mode("append")
+        .save()
+    }
+  }
+
   /**
    * Runs the write workload, returns when terminationTimeMinutes is reached or when the job completes, which ever is first.
    * @return a tuple containing (runtime, totalCompletedOps)
    */
   def run(): TestResult = {
-    import sqlContext.implicits._
     var totalCompletedOps: Long = 0L
     val runtime = time({
       val fs = Future {
@@ -80,20 +97,7 @@ abstract class WriteTask[rowType](
             }
           }
           case _ => {
-            config.saveMethod match {
-              // filesystem save methods
-              case "parquet" => getDataset.write.parquet(s"dsefs:///${config.keyspace}.${config.table}")
-              case "text" => getDataset.map(row => row.toString()).write.text(s"dsefs:///${config.keyspace}.${config.table}") // requires a single column so we convert to a string
-              case "json" => getDataset.write.json(s"dsefs:///${config.keyspace}.${config.table}")
-              case "csv" => getDataset.write.csv(s"dsefs:///${config.keyspace}.${config.table}")
-              // regular save method to DSE/Cassandra
-              case _ => getDataset
-                .write
-                .format("org.apache.spark.sql.cassandra")
-                .options(Map("table" -> config.table, "keyspace" -> config.keyspace))
-                .mode("append")
-                .save()
-            }
+            save_dataset(config.saveMethod)
           }
         }
         //For Some reason the implicit doesn't work here in Connector 1.[1,0].X
