@@ -11,26 +11,23 @@ import org.joda.time.DateTime
 
 object ReadTask {
   val ValidTasks = Set(
-    "ftsallcolumns",
-    "ftsfivecolumns",
-    "ftsonecolumn",
-    "ftspdclusteringallcolumns",
-    "ftspdclusteringfivecolumns",
-    "jwcallcolumns",
-    "jwcpdclusteringallcolumns",
-    "jwcrpallcolumns",
-    "pdcount",
-    "ftsonecolumn_ds",
-    "ftstwocolumns_ds",
-    "ftsthreecolumns_ds",
-    "ftsfourcolumns_ds",
-    "ftsfivecolumns_ds",
-    "ftsallcolumns_ds",
-    "dsefsreadparquet_ds",
-    "dsefsreadtext_ds",
-    "dsefsreadjson_ds",
-    "dsefsreadcsv_ds",
-    "retrievesinglepartition"
+    "FTSAllColumns",
+    "FTSFiveColumns",
+    "FTSOneColumn",
+    "FTSPDClusteringAllColumns",
+    "FTSPDClusteringFiveColumns",
+    "JWCAllColumns",
+    "JWCPDClusteringAllColumns",
+    "JWCRPAllColumns",
+    "PDCount",
+    "FTSOneColumn_DS",
+    "FTSTwoColumns_DS",
+    "FTSThreeColumns_DS",
+    "FTSFourColumns_DS",
+    "FTSFiveColumns_DS",
+    "FTSAllColumns_DS",
+    "DSEFSRead_DS",
+    "RetrieveSinglePartition"
   )
 }
 
@@ -59,20 +56,38 @@ abstract class ReadTask(config: Config, ss: SparkSession) extends StressTask {
 }
 
 /**
+  * Supertype used to encapsulate reading logic for all dataset read methods.
+  */
+abstract class DatasetReadTask(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
+  import org.apache.spark.sql.functions._ // needed to use col()
+  def read_columns(columnNames: Seq[String]): Unit = {
+    val columns: Seq[org.apache.spark.sql.Column] = columnNames.map(col(_))
+    config.saveMethod match {
+      // filesystem read methods
+      case "parquet" => ss.read.parquet(s"dsefs:///${keyspace}.${table}").count
+      case "text" => ss.read.text(s"dsefs:///${keyspace}.${table}").count
+      case "json" => ss.read.json(s"dsefs:///${keyspace}.${table}").count
+      case "csv" => ss.read.csv(s"dsefs:///${keyspace}.${table}").count
+      // regular read method from DSE/Cassandra
+      case _ => ss
+        .read
+        .format("org.apache.spark.sql.cassandra")
+        .options(Map("table" -> table, "keyspace" -> keyspace))
+        .load()
+        .select(columns:_*)
+        .count()
+    }
+  }
+}
+
+/**
   * Full Table Scan One Column using DataSets
   * Performs a full table scan but only retrieves a single column from the underlying
   * table.
   */
-class FTSOneColumn_DS(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
-
-  def run(): Unit = {
-    //val colorCounts = ss.read.cassandraFormat(table, keyspace).load().select("color").count
-    val count = ss.read
-      .format("org.apache.spark.sql.cassandra")
-      .options(Map("table" -> table, "keyspace" -> keyspace))
-      .load()
-      .select("color")
-      .count
+class FTSOneColumn_DS(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
+  override def run(): Unit = {
+    val count = read_columns(Seq("color"))
     println(s"Loaded $count rows")
   }
 }
@@ -82,15 +97,9 @@ class FTSOneColumn_DS(config: Config, ss: SparkSession) extends ReadTask(config,
   * Performs a full table scan retrieving two columns from the underlying
   * table.
   */
-class FTSTwoColumns_DS(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
-
-  def run(): Unit = {
-    val count = ss.read
-      .format("org.apache.spark.sql.cassandra")
-      .options(Map("table" -> table, keyspace -> "keyspace"))
-      .load()
-      .select("color", "size")
-      .count
+class FTSTwoColumns_DS(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
+  override def run(): Unit = {
+    val count = read_columns(Seq("color", "size"))
     println(s"Loaded $count rows")
   }
 }
@@ -100,15 +109,9 @@ class FTSTwoColumns_DS(config: Config, ss: SparkSession) extends ReadTask(config
   * Performs a full table scan but only retrieves a single column from the underlying
   * table.
   */
-class FTSThreeColumns_DS(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
-
-  def run(): Unit = {
-    val count = ss.read
-      .format("org.apache.spark.sql.cassandra")
-      .options(Map("table" -> table, keyspace -> "keyspace"))
-      .load()
-      .select("color", "size", "qty")
-      .count
+class FTSThreeColumns_DS(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
+  override def run(): Unit = {
+    val count = read_columns(Seq("color", "size", "qty"))
     println(s"Loaded $count rows")
   }
 }
@@ -118,15 +121,9 @@ class FTSThreeColumns_DS(config: Config, ss: SparkSession) extends ReadTask(conf
   * Performs a full table scan but only retrieves a single column from the underlying
   * table.
   */
-class FTSFourColumns_DS(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
-
-  def run(): Unit = {
-    val count = ss.read
-      .format("org.apache.spark.sql.cassandra")
-      .options(Map("table" -> table, keyspace -> "keyspace"))
-      .load()
-      .select("color", "size", "qty", "order_number")
-      .count
+class FTSFourColumns_DS(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
+  override def run(): Unit = {
+    val count = read_columns(Seq("color", "size", "qty", "order_number"))
     println(s"Loaded $count rows")
   }
 }
@@ -136,15 +133,9 @@ class FTSFourColumns_DS(config: Config, ss: SparkSession) extends ReadTask(confi
   * Performs a full table scan but only retrieves a single column from the underlying
   * table.
   */
-class FTSFiveColumns_DS(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
-
-  def run(): Unit = {
-    val count = ss.read
-      .format("org.apache.spark.sql.cassandra")
-      .options(Map("table" -> table, keyspace -> "keyspace"))
-      .load()
-      .select("order_number", "qty", "color", "size", "order_time")
-      .count
+class FTSFiveColumns_DS(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
+  override def run(): Unit = {
+    val count = read_columns(Seq("order_number", "qty", "color", "size", "order_time"))
     println(s"Loaded $count rows")
   }
 }
@@ -154,61 +145,23 @@ class FTSFiveColumns_DS(config: Config, ss: SparkSession) extends ReadTask(confi
   * Performs a full table scan but only retrieves a single column from the underlying
   * table.
   */
-class FTSAllColumns_DS(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
-
+class FTSAllColumns_DS(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
   def run(): Unit = {
-    val count = ss.read
-      .format ("org.apache.spark.sql.cassandra")
-      .options (Map ("table" -> table, keyspace -> "keyspace") )
-      .load()
-      .count
+    val count = read_columns(Seq("order_number", "qty", "color", "size", "order_time", "store"))
     println(s"Loaded $count rows")
   }
 }
 
 /**
-  * Read Parquet file from DSEFS using Datasets.
+  * Read a file from DSEFS using Datasets. The file format is determined by the config.saveMethod in the helper method read_columns()
   */
-class DSEFSReadParquet_DS(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
-
+class DSEFSRead_DS(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
   def run(): Unit = {
-    val count = ss.read.parquet(s"dsefs:///${config.keyspace}.${config.table}").count
+    val count = read_columns(Seq())
     println(s"Loaded $count rows")
   }
 }
 
-/**
-  * Read Text file from DSEFS using Datasets.
-  */
-class DSEFSReadText_DS(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
-
-  def run(): Unit = {
-    val count = ss.read.text(s"dsefs:///${config.keyspace}.${config.table}").count
-    println(s"Loaded $count rows")
-  }
-}
-
-/**
-  * Read JSON file from DSEFS using Datasets.
-  */
-class DSEFSReadJson_DS(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
-
-  def run(): Unit = {
-    val count = ss.read.json(s"dsefs:///${config.keyspace}.${config.table}").count
-    println(s"Loaded $count rows")
-  }
-}
-
-/**
-  * Read CSV file from DSEFS using Datasets.
-  */
-class DSEFSReadCsv_DS(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
-
-  def run(): Unit = {
-    val count = ss.read.csv(s"dsefs:///${config.keyspace}.${config.table}").count
-    println(s"Loaded $count rows")
-  }
-}
 /**
  * Push Down Count
  * Uses our internally cassandra count pushdown, this means all of the aggregation

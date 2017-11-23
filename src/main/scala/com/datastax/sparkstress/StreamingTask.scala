@@ -15,7 +15,7 @@ import scala.reflect.ClassTag
 
 object StreamingTask {
   val ValidTasks = Set(
-    "streamingwrite"
+    "StreamingWrite"
   )
 }
 

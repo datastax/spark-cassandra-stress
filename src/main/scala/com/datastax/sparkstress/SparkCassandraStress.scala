@@ -3,7 +3,7 @@ package com.datastax.sparkstress
 import java.io.{FileWriter, Writer}
 import java.lang.Math.round
 import org.apache.spark.SparkConf
-
+import scala.reflect.runtime.{universe, _}
 
 case class Config(
   //Test Options
@@ -47,7 +47,7 @@ object SparkCassandraStress {
       head("SparkCassandraStress", "1.0")
 
       arg[String]("testName") optional() action { (arg,config) =>
-        config.copy(testName = arg.toLowerCase())
+        config.copy(testName = arg)
       } text {  s"""Tests :
               |Write Tests:  ${WriteTask.ValidTasks.mkString(" , ")}
               |Read Tests: ${ReadTask.ValidTasks.mkString(" , ")}
@@ -75,23 +75,23 @@ object SparkCassandraStress {
       opt[String]('e',"distributedDataType") optional() action { (arg,config) =>
         config.copy(distributedDataType = arg)
       } text {
-        """See 'saveMethod'.
+        """See 'saveMethod'. **Note**: Use for both read and write workloads.
           |                           rdd: Resilient Distributed Dataset, the basic abstraction in Spark.
           |                           dataset: A DataSet is a strongly typed collection of domain-specific objects.""".stripMargin}
 
       opt[String]('s',"saveMethod") optional() action { (arg,config) =>
         config.copy(saveMethod = arg)
       } text {
-        """See 'distributedDataType'.
+        """See 'distributedDataType'. **Note**: Use for both read and write workloads.
           |                           rdd save methods:
           |                             bulk: bulkSaveToCassandra
           |                             driver: saveToCassandra
           |                           dataset save methods:
-          |                             driver: ds.write.cassandraFormat(..).mode(..).save()
-          |                             parquet: format to save in dsefs
-          |                             text: format to save in dsefs
-          |                             json: format to save in dsefs
-          |                             csv: format to save in dsefs""".stripMargin}
+          |                             driver: ds.write...save() or ds.read...load()
+          |                             parquet: data format in dsefs
+          |                             text: data format in dsefs
+          |                             json: data format in dsefs
+          |                             csv: data format in dsefs""".stripMargin}
 
       opt[Int]('n',"trials")optional() action { (arg,config) =>
         config.copy(trials = arg)
@@ -190,43 +190,16 @@ object SparkCassandraStress {
       println(ss.sparkContext.getConf.toDebugString+"\n")
     }
 
-    val test: StressTask =
-      config.testName.toLowerCase match {
-          /** Write Tasks **/
-        case "writeshortrow" => new WriteShortRow(config, ss)
-        case "writewiderow" => new WriteWideRow(config, ss)
-        case "writeperfrow" => new WritePerfRow(config, ss)
-        case "writerandomwiderow" => new WriteRandomWideRow(config, ss)
-        case "writewiderowbypartition" => new WriteWideRowByPartition(config, ss)
-
-          /** RDD Read Tasks **/
-        case "pdcount" => new PDCount(config, ss)
-        case "ftsallcolumns" => new FTSAllColumns(config, ss)
-        case "ftsfivecolumns" => new FTSFiveColumns(config, ss)
-        case "ftsonecolumn" => new FTSOneColumn(config, ss)
-        case "ftspdclusteringallcolumns" => new FTSPDClusteringAllColumns(config, ss)
-        case "ftspdclusteringfivecolumns" => new FTSPDClusteringFiveColumns(config, ss)
-        case "jwcallcolumns" => new JWCAllColumns(config, ss)
-        case "jwcpdclusteringallcolumns" => new JWCPDClusteringAllColumns(config, ss)
-        case "jwcrpallcolumns" => new JWCRPAllColumns(config, ss)
-        case "retrievesinglepartition" => new RetrieveSinglePartition(config, ss)
-
-          /** Dataset Read Tasks **/
-        case "ftsallcolumns_ds" => new FTSAllColumns_DS(config, ss)
-        case "ftsfivecolumns_ds" => new FTSFiveColumns_DS(config, ss)
-        case "ftsfourcolumns_ds" => new FTSFourColumns_DS(config, ss)
-        case "ftsthreecolumns_ds" => new FTSThreeColumns_DS(config, ss)
-        case "ftstwocolumns_ds" => new FTSTwoColumns_DS(config, ss)
-        case "ftsonecolumn_ds" => new FTSOneColumn_DS(config, ss)
-
-        case "dsefsreadparquet_ds" => new DSEFSReadParquet_DS(config, ss)
-        case "dsefsreadtext_ds" => new DSEFSReadText_DS(config, ss)
-        case "dsefsreadjson_ds" => new DSEFSReadJson_DS(config, ss)
-        case "dsefsreadcsv_ds" => new DSEFSReadCsv_DS(config, ss)
-
-        /** Streaming Tasks **/
-        case "streamingwrite" => new StreamingWrite(config, ss)
-      }
+    val test: StressTask = {
+      val cl = getClass.getClassLoader
+      val m = universe.runtimeMirror(cl)
+      val className = Class.forName(List(getClass.getPackage.getName, config.testName).mkString("."))
+      val classSymbol = m.classSymbol(className)
+      val classMirror = m.reflectClass(classSymbol)
+      val methodSymbol = classSymbol.selfType.decl(universe.termNames.CONSTRUCTOR).asMethod
+      val methodMirror = classMirror.reflectConstructor(methodSymbol)
+      methodMirror(config, ss).asInstanceOf[StressTask]
+    }
 
     val wallClockStartTime = System.nanoTime()
 

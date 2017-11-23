@@ -22,11 +22,11 @@ import java.net.URL
 
 object WriteTask {
   val ValidTasks = Set(
-    "writeshortrow",
-    "writeperfrow",
-    "writewiderow",
-    "writerandomwiderow",
-    "writewiderowbypartition"
+    "WriteShortRow",
+    "WritePerfRow",
+    "WriteWideRow",
+    "WriteRandomWideRow",
+    "WriteWideRowByPartition"
   )
 }
 
@@ -64,8 +64,8 @@ abstract class WriteTask[rowType](
 
   def getDataset: org.apache.spark.sql.Dataset[rowType]
 
-  def save_dataset(saveMethod: String): Unit = {
-    saveMethod match {
+  def save_dataset(): Unit = {
+    config.saveMethod match {
       // filesystem save methods
       case "parquet" => getDataset.write.parquet(s"dsefs:///${config.keyspace}.${config.table}")
       case "text" => getDataset.map(row => row.toString()).write.text(s"dsefs:///${config.keyspace}.${config.table}") // requires a single column so we convert to a string
@@ -86,7 +86,6 @@ abstract class WriteTask[rowType](
    * @return a tuple containing (runtime, totalCompletedOps)
    */
   def run(): TestResult = {
-    import sqlContext.implicits._
     var totalCompletedOps: Long = 0L
     val runtime = time({
       val fs = Future {
@@ -98,7 +97,7 @@ abstract class WriteTask[rowType](
             }
           }
           case _ => {
-            save_dataset(config.saveMethod)
+            save_dataset()
           }
         }
       }
