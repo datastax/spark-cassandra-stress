@@ -16,7 +16,6 @@ class ReadTaskTests extends FlatSpec
   with Matchers{
 
   def clearCache(): Unit = CassandraConnector.evictCache()
-
   useCassandraConfig(Seq("cassandra-default.yaml.template"))
   useSparkConf(defaultSparkConf)
 
@@ -26,6 +25,8 @@ class ReadTaskTests extends FlatSpec
     numPartitions = 10,
     totalOps = 10000,
     numTotalKeys = 200)
+
+  val ss = ConnectHelper.getSparkSession(defaultSparkConf)
 
   override def beforeAll(): Unit = {
     val conn = CassandraConnector(Set(EmbeddedCassandra.getHost(0)))

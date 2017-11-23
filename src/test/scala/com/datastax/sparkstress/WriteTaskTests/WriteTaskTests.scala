@@ -30,6 +30,8 @@ class WriteTaskTests extends FlatSpec
     session.execute(s"""CREATE KEYSPACE IF NOT EXISTS test7 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
   }
 
+  val ss = ConnectHelper.getSparkSession(defaultSparkConf)
+
   "The RDD" should "have the correct configurations" in {
     val config = new Config(keyspace = "test1", numPartitions = 1, totalOps = 20, numTotalKeys = 1)
     val writer = new WriteShortRow(config, ss)
