@@ -29,7 +29,11 @@ class ReadTaskTests extends FlatSpec
   val ss = ConnectHelper.getSparkSession(defaultSparkConf)
 
   override def beforeAll(): Unit = {
+    // Allow us to rerun tests with a clean slate
     val conn = CassandraConnector(Set(EmbeddedCassandra.getHost(0)))
+    conn.withSessionDo { session => session.execute(s"""DROP KEYSPACE IF EXISTS readperfks """)}
+    Thread.sleep(5000)
+
     conn.withSessionDo { session =>
       session.execute(
         s"""
@@ -82,6 +86,29 @@ class ReadTaskTests extends FlatSpec
     new RetrieveSinglePartition(config,ss).run
   }
 
+  // Dataset tests
+  "FTSOneColumn_DS" should " be able to run" in {
+    new FTSOneColumn_DS(config, ss).run
+  }
 
+  "FTSTwoColumns_DS" should " be able to run" in {
+    new FTSTwoColumns_DS(config, ss).run
+  }
+
+  "FTSThreeColumns_DS" should " be able to run" in {
+    new FTSThreeColumns_DS(config, ss).run
+  }
+
+  "FTSFourColumns_DS" should " be able to run" in {
+    new FTSFourColumns_DS(config, ss).run
+  }
+
+  "FTSFiveColumns_DS" should " be able to run" in {
+    new FTSFiveColumns_DS(config, ss).run
+  }
+
+  "FTSAllColumns_DS" should " be able to run" in {
+    new FTSAllColumns_DS(config, ss).run
+  }
 
 }

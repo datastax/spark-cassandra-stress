@@ -19,15 +19,27 @@ class WriteTaskTests extends FlatSpec
   useCassandraConfig(Seq("cassandra-default.yaml.template"))
   useSparkConf(defaultSparkConf)
 
+  // Allow us to rerun tests with a clean slate
   val conn = CassandraConnector(Set(EmbeddedCassandra.getHost(0)))
   conn.withSessionDo { session =>
-    session.execute(s"""CREATE KEYSPACE IF NOT EXISTS test1 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
-    session.execute(s"""CREATE KEYSPACE IF NOT EXISTS test2 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
-    session.execute(s"""CREATE KEYSPACE IF NOT EXISTS test3 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
-    session.execute(s"""CREATE KEYSPACE IF NOT EXISTS test4 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
-    session.execute(s"""CREATE KEYSPACE IF NOT EXISTS test5 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
-    session.execute(s"""CREATE KEYSPACE IF NOT EXISTS test6 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
-    session.execute(s"""CREATE KEYSPACE IF NOT EXISTS test7 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
+    session.execute(s"""DROP KEYSPACE IF EXISTS test1 """)
+    session.execute(s"""DROP KEYSPACE IF EXISTS test2 """)
+    session.execute(s"""DROP KEYSPACE IF EXISTS test3 """)
+    session.execute(s"""DROP KEYSPACE IF EXISTS test4 """)
+    session.execute(s"""DROP KEYSPACE IF EXISTS test5 """)
+    session.execute(s"""DROP KEYSPACE IF EXISTS test6 """)
+    session.execute(s"""DROP KEYSPACE IF EXISTS test7 """)
+  }
+  Thread.sleep(5000)
+
+  conn.withSessionDo { session =>
+    session.execute(s"""CREATE KEYSPACE test1 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
+    session.execute(s"""CREATE KEYSPACE test2 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
+    session.execute(s"""CREATE KEYSPACE test3 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
+    session.execute(s"""CREATE KEYSPACE test4 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
+    session.execute(s"""CREATE KEYSPACE test5 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
+    session.execute(s"""CREATE KEYSPACE test6 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
+    session.execute(s"""CREATE KEYSPACE test7 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
   }
 
   val ss = ConnectHelper.getSparkSession(defaultSparkConf)
@@ -50,7 +62,7 @@ class WriteTaskTests extends FlatSpec
 
   "WriteWideRow" should "save correctly" in {
     val config = new Config(
-      testName = "writewiderow", 
+      testName = "WriteWideRow",
       keyspace = "test4", 
       numPartitions = 1, 
       totalOps = 8, 
@@ -63,7 +75,7 @@ class WriteTaskTests extends FlatSpec
 
   "WriteRandomWideRow" should "save correctly" in {
     val config = new Config(
-      testName = "writerandomwiderow", 
+      testName = "WriteRandomWideRow",
       keyspace = "test5", 
       numPartitions = 10, 
       totalOps = 20, 
@@ -76,7 +88,7 @@ class WriteTaskTests extends FlatSpec
 
   "WriteWideRowByPartition" should "save correctly" in {
     val config = new Config(
-      testName = "writewiderowbypartition", 
+      testName = "WriteWideRowByPartition",
       keyspace = "test6", 
       numPartitions = 1, 
       totalOps = 40, 
@@ -89,7 +101,7 @@ class WriteTaskTests extends FlatSpec
 
   "WritePerfRow" should " generate the correct number of pks" in {
     val config = new Config(
-      testName = "writeperfrow",
+      testName = "WritePerfRow",
       keyspace = "test7",
       numPartitions = 5,
       totalOps = 1000,
@@ -101,7 +113,7 @@ class WriteTaskTests extends FlatSpec
 
   it should "generate the correct number of cks per pk" in {
     val config = new Config(
-      testName = "writeperfrow",
+      testName = "WritePerfRow",
       keyspace = "test7",
       numPartitions = 2,
       totalOps = 40,
@@ -114,7 +126,7 @@ class WriteTaskTests extends FlatSpec
 
   it should " write to C*" in {
      val config = new Config(
-      testName = "writeperfrow",
+      testName = "WritePerfRow",
       keyspace = "test7",
       numPartitions = 10,
       totalOps = 1000,
@@ -125,4 +137,35 @@ class WriteTaskTests extends FlatSpec
     ss.sparkContext.cassandraTable(config.keyspace, config.table).count should be (1000)
   }
 
+  it should " save to C* using Dataset API" in {
+    val config = new Config(
+      testName = "WritePerfRow_DS_Cass",
+      keyspace = "test2",
+      numPartitions = 10,
+      totalOps = 1000,
+      numTotalKeys = 200,
+      distributedDataType = "dataset",
+      saveMethod = "driver")
+    val writer = new WritePerfRow(config, ss)
+    writer.setupCQL
+    writer.run
+    ss.sparkContext.cassandraTable(config.keyspace, config.table).count should be (1000)
+  }
+
+  /* WIP: need to resolve `java.io.IOException: No FileSystem for scheme: dsefs`
+  it should " save to DSEFS using parquet format" in {
+    val config = new Config(
+      testName = "WritePerfRow",
+      keyspace = "test2",
+      numPartitions = 10,
+      totalOps = 1000,
+      numTotalKeys = 200,
+      distributedDataType = "dataset",
+      saveMethod = "parquet")
+
+    val writer = new WritePerfRow(config, ss)
+    writer.run
+    ss.read.parquet(s"dsefs:///${config.keyspace}.${config.table}").count should be (1000)
+  }
+  */
 }

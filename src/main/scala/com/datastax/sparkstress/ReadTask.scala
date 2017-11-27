@@ -26,7 +26,6 @@ object ReadTask {
     "FTSFourColumns_DS",
     "FTSFiveColumns_DS",
     "FTSAllColumns_DS",
-    "DSEFSRead_DS",
     "RetrieveSinglePartition"
   )
 }
@@ -60,14 +59,14 @@ abstract class ReadTask(config: Config, ss: SparkSession) extends StressTask {
   */
 abstract class DatasetReadTask(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
   import org.apache.spark.sql.functions._ // needed to use col()
-  def read_columns(columnNames: Seq[String]): Unit = {
+  def read_columns(columnNames: Seq[String]): Long = {
     val columns: Seq[org.apache.spark.sql.Column] = columnNames.map(col(_))
     config.saveMethod match {
       // filesystem read methods
-      case "parquet" => ss.read.parquet(s"dsefs:///${keyspace}.${table}").count
-      case "text" => ss.read.text(s"dsefs:///${keyspace}.${table}").count
-      case "json" => ss.read.json(s"dsefs:///${keyspace}.${table}").count
-      case "csv" => ss.read.csv(s"dsefs:///${keyspace}.${table}").count
+      case "parquet" => ss.read.parquet(s"dsefs:///${keyspace}.${table}").select(columnNames.head, columnNames.tail:_*).count
+      case "text" => ss.read.text(s"dsefs:///${keyspace}.${table}").select(columnNames.head, columnNames.tail:_*).count
+      case "json" => ss.read.json(s"dsefs:///${keyspace}.${table}").select(columnNames.head, columnNames.tail:_*).count
+      case "csv" => ss.read.csv(s"dsefs:///${keyspace}.${table}").select(columnNames.head, columnNames.tail:_*).count
       // regular read method from DSE/Cassandra
       case _ => ss
         .read
@@ -148,16 +147,6 @@ class FTSFiveColumns_DS(config: Config, ss: SparkSession) extends DatasetReadTas
 class FTSAllColumns_DS(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
   def run(): Unit = {
     val count = read_columns(Seq("order_number", "qty", "color", "size", "order_time", "store"))
-    println(s"Loaded $count rows")
-  }
-}
-
-/**
-  * Read a file from DSEFS using Datasets. The file format is determined by the config.saveMethod in the helper method read_columns()
-  */
-class DSEFSRead_DS(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
-  def run(): Unit = {
-    val count = read_columns(Seq())
     println(s"Loaded $count rows")
   }
 }
