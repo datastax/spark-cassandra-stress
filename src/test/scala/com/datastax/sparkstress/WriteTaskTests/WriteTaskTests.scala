@@ -8,6 +8,9 @@ import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
 import com.datastax.sparkstress._
 import org.apache.spark.SparkConf
+import com.datastax.bdp.fs.client.{DseFsClient,DseFsClientConf}
+import com.datastax.bdp.fs.model.HostAndPort
+import com.datastax.bdp.fs.model.FilePath
 
 @RunWith(classOf[JUnitRunner])
 class WriteTaskTests extends FlatSpec
@@ -48,6 +51,17 @@ class WriteTaskTests extends FlatSpec
     session.execute(s"""CREATE KEYSPACE test6 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
     session.execute(s"""CREATE KEYSPACE test7 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
   }
+
+  // Wipe content from DSEFS too
+  val dseFsClient = new DseFsClient(new DseFsClientConf(Seq(HostAndPort.defaultPublicDseFsEndpoint("localhost"))))
+  val parquetTableName = "parquet_test"
+  val textTableName = "text_test"
+  val jsonTableName = "json_test"
+  val csvTableName = "csv_test"
+  dseFsClient.deleteRecursive(FilePath(s"/$parquetTableName"))
+  dseFsClient.deleteRecursive(FilePath(s"/test2.$textTableName"))
+  dseFsClient.deleteRecursive(FilePath(s"/test2.$jsonTableName"))
+  dseFsClient.deleteRecursive(FilePath(s"/test2.$csvTableName"))
 
   val ss = ConnectHelper.getSparkSession(sparkConf)
 
@@ -163,7 +177,7 @@ class WriteTaskTests extends FlatSpec
     val config = new Config(
       testName = "WritePerfRow_Parquet",
       keyspace = "test2",
-      table = "parquet_test",
+      table = parquetTableName,
       numPartitions = 10,
       totalOps = 1000,
       numTotalKeys = 200,
@@ -178,7 +192,7 @@ class WriteTaskTests extends FlatSpec
     val config = new Config(
       testName = "WritePerfRow_Text",
       keyspace = "test2",
-      table = "text_test",
+      table = textTableName,
       numPartitions = 10,
       totalOps = 1000,
       numTotalKeys = 200,
@@ -193,7 +207,7 @@ class WriteTaskTests extends FlatSpec
     val config = new Config(
       testName = "WritePerfRow_JSON",
       keyspace = "test2",
-      table = "json_test",
+      table = jsonTableName,
       numPartitions = 10,
       totalOps = 1000,
       numTotalKeys = 200,
@@ -208,7 +222,7 @@ class WriteTaskTests extends FlatSpec
     val config = new Config(
       testName = "WritePerfRow_CSV",
       keyspace = "test2",
-      table = "csv_test",
+      table = csvTableName,
       numPartitions = 10,
       totalOps = 1000,
       numTotalKeys = 200,
