@@ -30,7 +30,9 @@ case class Config(
   numReceivers: Int = 1,
   receiverThroughputPerBatch: Long = 100000,
   terminationTimeMinutes: Long = 0,
-  streamingBatchIntervalSeconds:  Int = 5
+  streamingBatchIntervalSeconds:  Int = 5,
+  rddSaveMethods: Seq[String] = Seq("driver", "bulk"),
+  datasetSaveMethods: Seq[String] = Seq("driver", "parquet", "text", "json", "csv")
 )
 
 case class TestResult ( time: Long, ops: Long )
@@ -75,23 +77,24 @@ object SparkCassandraStress {
       opt[String]('e',"distributedDataType") optional() action { (arg,config) =>
         config.copy(distributedDataType = arg)
       } text {
-        """See 'saveMethod'. **Note**: Use for both read and write workloads.
+        """See 'saveMethod'. **Note**: Use for write workloads.
           |                           rdd: Resilient Distributed Dataset, the basic abstraction in Spark.
           |                           dataset: A DataSet is a strongly typed collection of domain-specific objects.""".stripMargin}
 
       opt[String]('s',"saveMethod") optional() action { (arg,config) =>
         config.copy(saveMethod = arg)
       } text {
-        """See 'distributedDataType'. **Note**: Use for both read and write workloads.
+        """See 'distributedDataType'. **Note**: Use for write workloads.
           |                           rdd save methods:
           |                             bulk: bulkSaveToCassandra
           |                             driver: saveToCassandra
+          |                           **Note**: Folder for DSEFS writes will be named: keyspace.tablename (Default: ks.tab)
           |                           dataset save methods:
-          |                             driver: ds.write...save() or ds.read...load()
-          |                             parquet: data format in dsefs
-          |                             text: data format in dsefs
-          |                             json: data format in dsefs
-          |                             csv: data format in dsefs""".stripMargin}
+          |                             driver: ds.write...save()
+          |                             parquet: data format in DSEFS
+          |                             text: data format in DSEFS
+          |                             json: data format in DSEFS
+          |                             csv: data format in DSEFS""".stripMargin}
 
       opt[Int]('n',"trials")optional() action { (arg,config) =>
         config.copy(trials = arg)
@@ -155,7 +158,11 @@ object SparkCassandraStress {
         println("\nERROR: A termination time was specified with multiple trials, this is not supported yet.\n")
       } else if (ReadTask.ValidTasks(config.testName) && config.terminationTimeMinutes > 0) {
         println(s"\nERROR: A termination time was specified with '${config.testName} which is a Read test, this is not supported yet.\n")
-      } else {
+      } else if (config.distributedDataType == "rdd" && !config.rddSaveMethods.contains(config.saveMethod)) {
+        println(s"\nERROR: The saveMethod (${config.saveMethod}) provided is not valid with distributedDataType (${config.distributedDataType}). Use on of these: "+config.rddSaveMethods.mkString(", ")+".\n")
+      } else if (config.distributedDataType == "dataset" && !config.datasetSaveMethods.contains(config.saveMethod)) {
+        println(s"\nERROR: The saveMethod (${config.saveMethod}) provided is not valid with distributedDataType (${config.distributedDataType}). Use on of these: "+config.datasetSaveMethods.mkString(", ")+".\n")
+      }else {
         runTask(config)
       }
     } getOrElse {
@@ -234,5 +241,4 @@ object SparkCassandraStress {
       }
     }
  }
-
 }
