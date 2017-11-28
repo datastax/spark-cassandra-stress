@@ -7,6 +7,7 @@ import org.scalatest._
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
 import com.datastax.sparkstress._
+import org.apache.spark.SparkConf
 
 @RunWith(classOf[JUnitRunner])
 class WriteTaskTests extends FlatSpec
@@ -15,9 +16,15 @@ class WriteTaskTests extends FlatSpec
   with BeforeAndAfterAll
   with Matchers{
 
+  val sparkConf =
+    new SparkConf()
+      .setAppName("SparkStressTest")
+      .set("spark.master", "local[*]") // without we get: 'org.apache.spark.SparkException: A master URL must be set in your configuration'
+      .set("spark.hadoop.fs.dsefs.impl", "com.datastax.bdp.fs.hadoop.DseFileSystem") // without we get: 'java.io.IOException: No FileSystem for scheme: dsefs'
+
   def clearCache(): Unit = CassandraConnector.evictCache()
   useCassandraConfig(Seq("cassandra-default.yaml.template"))
-  useSparkConf(defaultSparkConf)
+  useSparkConf(sparkConf)
 
   // Allow us to rerun tests with a clean slate
   val conn = CassandraConnector(Set(EmbeddedCassandra.getHost(0)))
@@ -42,7 +49,7 @@ class WriteTaskTests extends FlatSpec
     session.execute(s"""CREATE KEYSPACE test7 WITH REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """)
   }
 
-  val ss = ConnectHelper.getSparkSession(defaultSparkConf)
+  val ss = ConnectHelper.getSparkSession(sparkConf)
 
   "The RDD" should "have the correct configurations" in {
     val config = new Config(keyspace = "test1", numPartitions = 1, totalOps = 20, numTotalKeys = 1)
@@ -152,20 +159,63 @@ class WriteTaskTests extends FlatSpec
     ss.sparkContext.cassandraTable(config.keyspace, config.table).count should be (1000)
   }
 
-  /* WIP: need to resolve `java.io.IOException: No FileSystem for scheme: dsefs`
   it should " save to DSEFS using parquet format" in {
     val config = new Config(
-      testName = "WritePerfRow",
+      testName = "WritePerfRow_Parquet",
       keyspace = "test2",
+      table = "parquet_test",
       numPartitions = 10,
       totalOps = 1000,
       numTotalKeys = 200,
       distributedDataType = "dataset",
       saveMethod = "parquet")
-
     val writer = new WritePerfRow(config, ss)
     writer.run
     ss.read.parquet(s"dsefs:///${config.keyspace}.${config.table}").count should be (1000)
   }
-  */
+
+  it should " save to DSEFS using text format" in {
+    val config = new Config(
+      testName = "WritePerfRow_Text",
+      keyspace = "test2",
+      table = "text_test",
+      numPartitions = 10,
+      totalOps = 1000,
+      numTotalKeys = 200,
+      distributedDataType = "dataset",
+      saveMethod = "text")
+    val writer = new WritePerfRow(config, ss)
+    writer.run
+    ss.read.text(s"dsefs:///${config.keyspace}.${config.table}").count should be (1000)
+  }
+
+  it should " save to DSEFS using json format" in {
+    val config = new Config(
+      testName = "WritePerfRow_JSON",
+      keyspace = "test2",
+      table = "json_test",
+      numPartitions = 10,
+      totalOps = 1000,
+      numTotalKeys = 200,
+      distributedDataType = "dataset",
+      saveMethod = "json")
+    val writer = new WritePerfRow(config, ss)
+    writer.run
+    ss.read.json(s"dsefs:///${config.keyspace}.${config.table}").count should be (1000)
+  }
+
+  it should " save to DSEFS using csv format" in {
+    val config = new Config(
+      testName = "WritePerfRow_CSV",
+      keyspace = "test2",
+      table = "csv_test",
+      numPartitions = 10,
+      totalOps = 1000,
+      numTotalKeys = 200,
+      distributedDataType = "dataset",
+      saveMethod = "csv")
+    val writer = new WritePerfRow(config, ss)
+    writer.run
+    ss.read.csv(s"dsefs:///${config.keyspace}.${config.table}").count should be (1000)
+  }
 }
