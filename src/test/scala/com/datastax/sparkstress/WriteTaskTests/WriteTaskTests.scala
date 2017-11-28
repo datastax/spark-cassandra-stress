@@ -58,10 +58,11 @@ class WriteTaskTests extends FlatSpec
   val textTableName = "text_test"
   val jsonTableName = "json_test"
   val csvTableName = "csv_test"
-  dseFsClient.deleteRecursive(FilePath(s"/$parquetTableName"))
-  dseFsClient.deleteRecursive(FilePath(s"/test2.$textTableName"))
-  dseFsClient.deleteRecursive(FilePath(s"/test2.$jsonTableName"))
-  dseFsClient.deleteRecursive(FilePath(s"/test2.$csvTableName"))
+  val datasetTestKS = "test2"
+  dseFsClient.deleteRecursive(FilePath(s"/$datasetTestKS.$parquetTableName"))
+  dseFsClient.deleteRecursive(FilePath(s"/$datasetTestKS.$textTableName"))
+  dseFsClient.deleteRecursive(FilePath(s"/$datasetTestKS.$jsonTableName"))
+  dseFsClient.deleteRecursive(FilePath(s"/$datasetTestKS.$csvTableName"))
 
   val ss = ConnectHelper.getSparkSession(sparkConf)
 
@@ -161,7 +162,7 @@ class WriteTaskTests extends FlatSpec
   it should " save to C* using Dataset API" in {
     val config = new Config(
       testName = "WritePerfRow_DS_Cass",
-      keyspace = "test2",
+      keyspace = datasetTestKS,
       numPartitions = 10,
       totalOps = 1000,
       numTotalKeys = 200,
@@ -176,7 +177,7 @@ class WriteTaskTests extends FlatSpec
   it should " save to DSEFS using parquet format" in {
     val config = new Config(
       testName = "WritePerfRow_Parquet",
-      keyspace = "test2",
+      keyspace = datasetTestKS,
       table = parquetTableName,
       numPartitions = 10,
       totalOps = 1000,
@@ -191,7 +192,7 @@ class WriteTaskTests extends FlatSpec
   it should " save to DSEFS using text format" in {
     val config = new Config(
       testName = "WritePerfRow_Text",
-      keyspace = "test2",
+      keyspace = datasetTestKS,
       table = textTableName,
       numPartitions = 10,
       totalOps = 1000,
@@ -206,7 +207,7 @@ class WriteTaskTests extends FlatSpec
   it should " save to DSEFS using json format" in {
     val config = new Config(
       testName = "WritePerfRow_JSON",
-      keyspace = "test2",
+      keyspace = datasetTestKS,
       table = jsonTableName,
       numPartitions = 10,
       totalOps = 1000,
@@ -221,7 +222,7 @@ class WriteTaskTests extends FlatSpec
   it should " save to DSEFS using csv format" in {
     val config = new Config(
       testName = "WritePerfRow_CSV",
-      keyspace = "test2",
+      keyspace = datasetTestKS,
       table = csvTableName,
       numPartitions = 10,
       totalOps = 1000,
