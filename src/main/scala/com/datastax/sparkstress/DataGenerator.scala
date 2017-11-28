@@ -175,14 +175,7 @@ object RowGenerator {
 
   def getPerfRowDataset(ss: SparkSession, seed: Long, numPartitions: Int, numTotalRows: Long, numTotalKeys: Long): org.apache.spark.sql.Dataset[PerfRowClass] = {
     import ss.implicits._
-
-    val perfRowGenerator = new PerfRowGenerator(numPartitions, numTotalRows, numTotalKeys)
-
-    ss.sparkContext.parallelize(Seq[Int](), numPartitions).mapPartitionsWithIndex {
-      case (index, n) => {
-        perfRowGenerator.generatePartition(seed, index)
-      }
-    }.toDS()
+    getPerfRowRdd(ss, seed, numPartitions, numTotalRows, numTotalKeys).toDS()
   }
 
 }
