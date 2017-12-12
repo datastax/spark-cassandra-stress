@@ -20,16 +20,6 @@ import org.apache.commons.io.IOUtils
 import scala.util.parsing.json.{JSON, JSONType, JSONArray, JSONObject}
 import java.net.URL
 
-object WriteTask {
-  val ValidTasks = Set(
-    "WriteShortRow",
-    "WritePerfRow",
-    "WriteWideRow",
-    "WriteRandomWideRow",
-    "WriteWideRowByPartition"
-  )
-}
-
 abstract class WriteTask[rowType](
   val config: Config,
   val ss: SparkSession)

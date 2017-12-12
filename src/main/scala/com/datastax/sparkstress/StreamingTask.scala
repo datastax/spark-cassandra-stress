@@ -13,12 +13,6 @@ import org.apache.spark.streaming.dstream.DStream
 import java.util.concurrent.TimeUnit
 import scala.reflect.ClassTag
 
-object StreamingTask {
-  val ValidTasks = Set(
-    "StreamingWrite"
-  )
-}
-
 abstract class StreamingTask[rowType](
   val config: Config,
   val ss: SparkSession)

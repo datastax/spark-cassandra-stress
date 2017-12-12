@@ -3,12 +3,15 @@ package com.datastax.sparkstress
 import java.io.{FileWriter, Writer}
 import java.lang.Math.round
 import org.apache.spark.SparkConf
-import scala.reflect.runtime.{universe, _}
+import org.reflections.Reflections
+import org.apache.spark.sql.SparkSession
+import collection.JavaConversions._
+import com.datastax.sparkstress.RowTypes._
 
 case class Config(
   //Test Options
   seed: Long = System.currentTimeMillis(),
-  testName: String ="writeshortrow",
+  testName: String ="WriteShortRow",
   keyspace: String = "ks",
   table: String = "tab",
   trials: Int = 1,
@@ -38,8 +41,8 @@ case class Config(
 case class TestResult ( time: Long, ops: Long )
 
 object SparkCassandraStress {
-  val VALID_TESTS =
-    WriteTask.ValidTasks ++ ReadTask.ValidTasks ++ StreamingTask.ValidTasks
+  val reflections = new Reflections("com.datastax.sparkstress")
+  val VALID_TESTS = getValidTestNames()
 
   val KeyGroupings = Seq("none", "replica_set", "partition")
 
@@ -51,9 +54,9 @@ object SparkCassandraStress {
       arg[String]("testName") optional() action { (arg,config) =>
         config.copy(testName = arg)
       } text {  s"""Tests :
-              |Write Tests:  ${WriteTask.ValidTasks.mkString(" , ")}
-              |Read Tests: ${ReadTask.ValidTasks.mkString(" , ")}
-              |Streaming Tests: ${StreamingTask.ValidTasks.mkString(" , ")}""".stripMargin}
+              |Write Tests:  ${getWriteTestNames.mkString(" , ")}
+              |Read Tests: ${getReadTestNames.mkString(" , ")}
+              |Streaming Tests: ${getStreamingTestNames.mkString(" , ")}""".stripMargin}
       arg[String]("master") optional() action { (arg,config) =>
         config.copy(sparkOps = config.sparkOps + ("spark.master" -> arg))
       } text {"Spark Address of Master Node"}
@@ -149,14 +152,15 @@ object SparkCassandraStress {
       help("help") text {"CLI Help"}
       checkConfig{ c => if (VALID_TESTS.contains(c.testName)) success else failure(
         s"""${c.testName} is not a valid test :
-           |Write Tests:  ${WriteTask.ValidTasks.mkString(" , ")}
-           |Read Tests: ${ReadTask.ValidTasks.mkString(" , ")}""".stripMargin)}
+           |Streaming Tests:  ${getStreamingTestNames.mkString(" , ")}
+           |Write Tests:  ${getWriteTestNames.mkString(" , ")}
+           |Read Tests: ${getReadTestNames.mkString(" , ")}""".stripMargin)}
     }
 
     parser.parse(args, Config()) map { config =>
       if (config.trials > 1 && config.terminationTimeMinutes > 0) {
         println("\nERROR: A termination time was specified with multiple trials, this is not supported yet.\n")
-      } else if (ReadTask.ValidTasks(config.testName) && config.terminationTimeMinutes > 0) {
+      } else if (getReadTestNames.contains(config.testName) && config.terminationTimeMinutes > 0) {
         println(s"\nERROR: A termination time was specified with '${config.testName} which is a Read test, this is not supported yet.\n")
       } else if (config.distributedDataType == "rdd" && !config.rddSaveMethods.contains(config.saveMethod)) {
         println(s"\nERROR: The saveMethod (${config.saveMethod}) provided is not valid with distributedDataType (${config.distributedDataType}). Use on of these: "+config.rddSaveMethods.mkString(", ")+".\n")
@@ -168,6 +172,48 @@ object SparkCassandraStress {
     } getOrElse {
       System.exit(1)
     }
+  }
+
+  def getReadTests() = {
+    reflections.getSubTypesOf(classOf[ReadTask]).toSet
+  }
+
+  def getWriteTests() = {
+    reflections.getSubTypesOf(classOf[WriteTask[StressRow]]).toSet
+  }
+
+  def getStreamingTests() = {
+    reflections.getSubTypesOf(classOf[StreamingTask[StressRow]]).toSet
+  }
+
+  def getValidTests() = {
+    Set.empty ++ getReadTests() ++ getWriteTests() ++ getStreamingTests()
+  }
+
+  def getReadTestNames(): Set[String] = {
+    getReadTests.map(_.getSimpleName)
+  }
+
+  def getWriteTestNames(): Set[String] = {
+    getWriteTests.map(_.getSimpleName)
+  }
+
+  def getStreamingTestNames(): Set[String] = {
+    getStreamingTests.map(_.getSimpleName)
+  }
+
+  def getValidTestNames(): Set[String] = {
+    getReadTestNames() ++ getWriteTestNames() ++ getStreamingTestNames()
+  }
+
+  def getStressTest(config: Config, ss: SparkSession) : StressTask = {
+    val subClasses = getValidTests.toList
+    val classMap = subClasses.map(_.getSimpleName).zip(subClasses).toMap
+    classMap(config.testName)
+      .getConstructors
+      .maxBy(_.getParameterTypes.length)
+      .newInstance(config, ss)
+      .asInstanceOf[StressTask]
   }
 
   def csvResults(config: Config, time: Seq[Long]) : String = {
@@ -197,19 +243,8 @@ object SparkCassandraStress {
       println(ss.sparkContext.getConf.toDebugString+"\n")
     }
 
-    val test: StressTask = {
-      val cl = getClass.getClassLoader
-      val m = universe.runtimeMirror(cl)
-      val className = Class.forName(List(getClass.getPackage.getName, config.testName).mkString("."))
-      val classSymbol = m.classSymbol(className)
-      val classMirror = m.reflectClass(classSymbol)
-      val methodSymbol = classSymbol.selfType.decl(universe.termNames.CONSTRUCTOR).asMethod
-      val methodMirror = classMirror.reflectConstructor(methodSymbol)
-      methodMirror(config, ss).asInstanceOf[StressTask]
-    }
-
+    val test: StressTask = getStressTest(config, ss)
     val wallClockStartTime = System.nanoTime()
-
     val timesAndOps: Seq[TestResult]= test.runTrials(ss)
     val time = for (x <- timesAndOps) yield {x.time}
     val totalCompletedOps = for (x <- timesAndOps) yield {x.ops}

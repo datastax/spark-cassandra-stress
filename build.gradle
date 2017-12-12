@@ -135,6 +135,10 @@ dependencies {
     testCompile "org.scala-lang:scala-library:2.10.5"
     testCompile "com.datastax.spark:spark-cassandra-connector-embedded_2.10:1.2.1"
     testCompile "org.scalatest:scalatest_2.10:2.2.4"
+    compile("org.reflections:reflections:0.9.11") {
+        exclude group: 'dom4j', module: 'dom4j'
+        exclude group: 'org.javassist', module: 'javassist'
+    }
     compile "com.github.scopt:scopt_2.10:3.2.0"
     compile "joda-time:joda-time:2.8.1"
 

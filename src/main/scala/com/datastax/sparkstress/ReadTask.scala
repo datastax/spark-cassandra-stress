@@ -9,27 +9,6 @@ import com.datastax.spark.connector._
 import com.datastax.sparkstress.SparkStressImplicits._
 import org.joda.time.DateTime
 
-object ReadTask {
-  val ValidTasks = Set(
-    "FTSAllColumns",
-    "FTSFiveColumns",
-    "FTSOneColumn",
-    "FTSPDClusteringAllColumns",
-    "FTSPDClusteringFiveColumns",
-    "JWCAllColumns",
-    "JWCPDClusteringAllColumns",
-    "JWCRPAllColumns",
-    "PDCount",
-    "FTSOneColumn_DS",
-    "FTSTwoColumns_DS",
-    "FTSThreeColumns_DS",
-    "FTSFourColumns_DS",
-    "FTSFiveColumns_DS",
-    "FTSAllColumns_DS",
-    "RetrieveSinglePartition"
-  )
-}
-
 abstract class ReadTask(config: Config, ss: SparkSession) extends StressTask {
 
   val sc = ss.sparkContext
