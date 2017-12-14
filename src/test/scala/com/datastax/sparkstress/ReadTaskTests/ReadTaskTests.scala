@@ -19,12 +19,21 @@ class ReadTaskTests extends FlatSpec
   useCassandraConfig(Seq("cassandra-default.yaml.template"))
   useSparkConf(defaultSparkConf)
 
-  val config = new Config(
+  val rdd_config = new Config(
     testName = "readperfks",
     keyspace = "readperfks",
     numPartitions = 10,
     totalOps = 10000,
-    numTotalKeys = 200)
+    numTotalKeys = 200,
+    distributedDataType = "rdd")
+
+  val dataset_config = new Config(
+    testName = "readperfks",
+    keyspace = "readperfks",
+    numPartitions = 10,
+    totalOps = 10000,
+    numTotalKeys = 200,
+    distributedDataType = "dataset")
 
   val ss = ConnectHelper.getSparkSession(defaultSparkConf)
 
@@ -41,74 +50,58 @@ class ReadTaskTests extends FlatSpec
            |REPLICATION = { 'class': 'SimpleStrategy', 'replication_factor': 1 } """
           .stripMargin)}
 
-    val writer = new WritePerfRow(config, ss)
+    val writer = new WritePerfRow(rdd_config, ss)
     writer.setupCQL
     writer.run
   }
 
   "FTSOneColumn" should " be able to run" in {
-    new FTSOneColumn(config, ss).run
+    new FTSOneColumn(rdd_config, ss).run
+    new FTSOneColumn(dataset_config, ss).run
   }
 
   "FTSAllColumns" should " be able to run" in {
-    new FTSAllColumns(config, ss).run
+    new FTSAllColumns(rdd_config, ss).run
+    new FTSAllColumns(dataset_config, ss).run
   }
 
   "PDCount" should " be able to run" in {
-    new PDCount(config, ss).run
+    new PDCount(rdd_config, ss).run
+    new PDCount(dataset_config, ss).run
   }
 
   "FTSFiveColumns" should " be able to run " in {
-    new FTSFiveColumns(config, ss).run
+    new FTSFiveColumns(rdd_config, ss).run
+    new FTSFiveColumns(dataset_config, ss).run
   }
 
   "FTSPDClusteringAllColumns" should " be able to run" in {
-    new FTSPDClusteringAllColumns(config, ss).run
+    new FTSPDClusteringAllColumns(rdd_config, ss).run
+    new FTSPDClusteringAllColumns(dataset_config, ss).run
   }
 
   "FTSPDClusteringFiveColumns" should " be able to run" in {
-    new FTSPDClusteringFiveColumns(config, ss).run
+    new FTSPDClusteringFiveColumns(rdd_config, ss).run
+    new FTSPDClusteringFiveColumns(dataset_config, ss).run
   }
 
   "JWCAllColumns" should " be able to run" in {
-    new JWCAllColumns(config, ss).run
+    new JWCAllColumns(rdd_config, ss).run
+    new JWCAllColumns(dataset_config, ss).run
   }
 
   "JWCRPAllColumns" should " be able to run " in {
-    new JWCRPAllColumns(config, ss).run
+    new JWCRPAllColumns(rdd_config, ss).run
+    new JWCRPAllColumns(dataset_config, ss).run
   }
 
   "JWCPDClusteringAllColumns" should " be able to run " in {
-    new JWCPDClusteringAllColumns(config, ss).run
+    new JWCPDClusteringAllColumns(rdd_config, ss).run
+    new JWCPDClusteringAllColumns(dataset_config, ss).run
   }
 
   "RetrieveSinglePartiton" should " be able to run " in {
-    new RetrieveSinglePartition(config,ss).run
+    new RetrieveSinglePartition(rdd_config,ss).run
+    new RetrieveSinglePartition(dataset_config,ss).run
   }
-
-  // Dataset tests
-  "FTSOneColumn_DS" should " be able to run" in {
-    new FTSOneColumn_DS(config, ss).run
-  }
-
-  "FTSTwoColumns_DS" should " be able to run" in {
-    new FTSTwoColumns_DS(config, ss).run
-  }
-
-  "FTSThreeColumns_DS" should " be able to run" in {
-    new FTSThreeColumns_DS(config, ss).run
-  }
-
-  "FTSFourColumns_DS" should " be able to run" in {
-    new FTSFourColumns_DS(config, ss).run
-  }
-
-  "FTSFiveColumns_DS" should " be able to run" in {
-    new FTSFiveColumns_DS(config, ss).run
-  }
-
-  "FTSAllColumns_DS" should " be able to run" in {
-    new FTSAllColumns_DS(config, ss).run
-  }
-
 }

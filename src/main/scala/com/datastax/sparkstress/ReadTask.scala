@@ -57,25 +57,14 @@ abstract class DatasetReadTask(config: Config, ss: SparkSession) extends ReadTas
 }
 
 /**
-  * Full Table Scan One Column using DataSets
-  * Performs a full table scan but only retrieves a single column from the underlying
-  * table.
-  */
-class FTSOneColumn_DS(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
-  override def run(): Unit = {
-    val count = read_columns(Seq("color"))
-    println(s"Loaded $count rows")
-  }
-}
-
-/**
   * Full Table Scan Two Columns using DataSets
   * Performs a full table scan retrieving two columns from the underlying
   * table.
   */
-class FTSTwoColumns_DS(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
-  override def run(): Unit = {
-    val count = read_columns(Seq("color", "size"))
+class FTSTwoColumns(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
+  override def run(): Unit = config.saveMethod match {
+    case "rdd" => val count = sc.cassandraTable[String](keyspace, table).select("color", "size").count
+    case _ => val count = read_columns(Seq("color", "size"))
     println(s"Loaded $count rows")
   }
 }
@@ -85,9 +74,10 @@ class FTSTwoColumns_DS(config: Config, ss: SparkSession) extends DatasetReadTask
   * Performs a full table scan but only retrieves a single column from the underlying
   * table.
   */
-class FTSThreeColumns_DS(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
-  override def run(): Unit = {
-    val count = read_columns(Seq("color", "size", "qty"))
+class FTSThreeColumns(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
+  override def run(): Unit = config.saveMethod match {
+    case "rdd" => val count = sc.cassandraTable[String](keyspace, table).select("color", "size", "qty").count
+    case _ => val count = read_columns(Seq("color", "size", "qty"))
     println(s"Loaded $count rows")
   }
 }
@@ -97,33 +87,10 @@ class FTSThreeColumns_DS(config: Config, ss: SparkSession) extends DatasetReadTa
   * Performs a full table scan but only retrieves a single column from the underlying
   * table.
   */
-class FTSFourColumns_DS(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
-  override def run(): Unit = {
-    val count = read_columns(Seq("color", "size", "qty", "order_number"))
-    println(s"Loaded $count rows")
-  }
-}
-
-/**
-  * Full Table Scan Five Columns using DataSets
-  * Performs a full table scan but only retrieves a single column from the underlying
-  * table.
-  */
-class FTSFiveColumns_DS(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
-  override def run(): Unit = {
-    val count = read_columns(Seq("order_number", "qty", "color", "size", "order_time"))
-    println(s"Loaded $count rows")
-  }
-}
-
-/**
-  * Full Table Scan All Columns using DataSets
-  * Performs a full table scan but only retrieves a single column from the underlying
-  * table.
-  */
-class FTSAllColumns_DS(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
-  def run(): Unit = {
-    val count = read_columns(Seq("order_number", "qty", "color", "size", "order_time", "store"))
+class FTSFourColumns(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
+  override def run(): Unit = config.saveMethod match {
+    case "rdd" => val count = sc.cassandraTable[String](keyspace, table).select("color", "size", "qty", "order_number").count
+    case _ => val count = read_columns(Seq("color", "size", "qty", "order_number"))
     println(s"Loaded $count rows")
   }
 }
@@ -135,11 +102,27 @@ class FTSAllColumns_DS(config: Config, ss: SparkSession) extends DatasetReadTask
  */
 class PDCount(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
 
-  def run(): Unit = {
-    val count = sc.cassandraTable(keyspace, table).cassandraCount()
-    if (config.totalOps != count) {
-      println(s"Read verification failed! Expected ${config.totalOps}, returned $count");
-    }
+  def run(): Unit = config.saveMethod match {
+    case "rdd" =>
+      val count = sc.cassandraTable(keyspace, table).cassandraCount()
+      if (config.totalOps != count) {
+        println(s"Read verification failed! Expected ${config.totalOps}, returned $count");
+      }
+      println(s"Loaded $count rows")
+    case _ => println("This test is not supported with the dataset API.")
+  }
+}
+
+/**
+ * Full Table Scan One Column
+ * Performs a full table scan but only retreives a single column from the underlying
+ * table.
+ */
+class FTSOneColumn(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
+
+  def run(): Unit = config.saveMethod match {
+    case "rdd" => val count = sc.cassandraTable[String](keyspace, table).select("color").count
+    case _ => val count = read_columns(Seq("color"))
     println(s"Loaded $count rows")
   }
 }
@@ -149,36 +132,26 @@ class PDCount(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
  * Performs a full table scan but only retreives a single column from the underlying
  * table.
  */
-class FTSOneColumn(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
-
-  def run(): Unit = {
-    val count = sc.cassandraTable[String](keyspace, table).select("color").count
-    println(s"Loaded $count rows")
-  }
-}
-
-/**
- * Full Table Scan One Column
- * Performs a full table scan but only retreives a single column from the underlying
- * table.
- */
-class FTSAllColumns(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
-  def run(): Unit = {
-    val count = sc.cassandraTable[PerfRowClass](keyspace, table).count
+class FTSAllColumns(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
+  def run(): Unit = config.distributedDataType match {
+    case "rdd" => val count = sc.cassandraTable[PerfRowClass](keyspace, table).count
+    case _ => val count = read_columns(Seq("order_number", "qty", "color", "size", "order_time", "store"))
     println(s"Loaded $count rows")
   }
 }
 
 /**
  * Full Table Scan Five Columns
- * Performs a full table scan and only retreives 5 of the coulmns for each row
+ * Performs a full table scan and only retreives 5 of the columns for each row
  */
-class FTSFiveColumns(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
-  def run(): Unit = {
-    val count = sc.cassandraTable[(UUID, Int, String, String, org.joda.time.DateTime)](keyspace,
-      table)
-      .select("order_number", "qty", "color", "size", "order_time")
-      .count
+class FTSFiveColumns(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
+  def run(): Unit = config.distributedDataType match {
+    case "rdd" =>
+      val count = sc.cassandraTable[(UUID, Int, String, String, org.joda.time.DateTime)](keyspace,
+        table)
+        .select("order_number", "qty", "color", "size", "order_time")
+        .count
+    case _ => val count = read_columns(Seq("order_number", "qty", "color", "size", "order_time"))
     println(s"Loaded $count rows")
   }
 }
@@ -188,11 +161,13 @@ class FTSFiveColumns(config: Config, ss: SparkSession) extends ReadTask(config, 
  */
 class FTSPDClusteringAllColumns(config: Config, ss: SparkSession) extends ReadTask(config,
   ss) {
-  def run(): Unit = {
-    val count = sc.cassandraTable[PerfRowClass](keyspace, table)
-      .where("order_time < ?", timePivot)
-      .count
-    println(s"Loaded $count rows")
+  def run(): Unit = config.distributedDataType match {
+    case "rdd" =>
+      val count = sc.cassandraTable[PerfRowClass](keyspace, table)
+        .where("order_time < ?", timePivot)
+        .count
+      println(s"Loaded $count rows")
+    case _ => println("This test is not supported with the dataset API.")
   }
 }
 
@@ -201,13 +176,14 @@ class FTSPDClusteringAllColumns(config: Config, ss: SparkSession) extends ReadTa
  * Only 5 columns retreived per row
  */
 class FTSPDClusteringFiveColumns(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
-  def run(): Unit = {
-    val count = sc.cassandraTable[(UUID, Int, String, String, org.joda.time.DateTime)](keyspace,
-      table)
-      .where("order_time < ?", timePivot)
-      .select("order_number", "qty", "color", "size", "order_time")
-      .count
-    println(s"Loaded $count rows")
+  def run(): Unit = config.distributedDataType match {
+    case "rdd" =>
+      val count = sc.cassandraTable[(UUID, Int, String, String, org.joda.time.DateTime)](keyspace, table)
+        .where("order_time < ?", timePivot)
+        .select("order_number", "qty", "color", "size", "order_time")
+        .count
+      println(s"Loaded $count rows")
+    case _ => println("This test is not supported with the dataset API.")
   }
 }
 
@@ -215,12 +191,14 @@ class FTSPDClusteringFiveColumns(config: Config, ss: SparkSession) extends ReadT
  * Join With C* with 1M Partition Key requests
  */
 class JWCAllColumns(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
-  def run(): Unit = {
-    val count = sc.parallelize(1 to tenthKeys)
-      .map(num => Tuple1(s"Store $num"))
-      .joinWithCassandraTable[PerfRowClass](keyspace, table)
-      .count
-    println(s"Loaded $count rows")
+  def run(): Unit = config.saveMethod match {
+    case "rdd" =>
+      val count = sc.parallelize(1 to tenthKeys)
+        .map(num => Tuple1(s"Store $num"))
+        .joinWithCassandraTable[PerfRowClass](keyspace, table)
+        .count
+      println(s"Loaded $count rows")
+    case _ => println("This test is not supported with the dataset API.")
   }
 }
 
@@ -230,13 +208,15 @@ class JWCAllColumns(config: Config, ss: SparkSession) extends ReadTask(config, s
  */
 class JWCRPAllColumns(config: Config, ss: SparkSession) extends
 ReadTask(config, ss) {
-  def run(): Unit = {
-    val count = sc.parallelize(1 to tenthKeys)
-      .map(num => Tuple1(s"Store $num"))
-      .repartitionByCassandraReplica(keyspace, table, coresPerNode)
-      .joinWithCassandraTable[PerfRowClass](keyspace, table)
-      .count
-    println(s"Loaded $count rows")
+  def run(): Unit = config.saveMethod match {
+    case "rdd" =>
+      val count = sc.parallelize(1 to tenthKeys)
+        .map(num => Tuple1(s"Store $num"))
+        .repartitionByCassandraReplica(keyspace, table, coresPerNode)
+        .joinWithCassandraTable[PerfRowClass](keyspace, table)
+        .count
+      println(s"Loaded $count rows")
+    case _ => println("This test is not supported with the dataset API.")
   }
 }
 
@@ -245,13 +225,15 @@ ReadTask(config, ss) {
  * A clustering column predicate is pushed down to limit data retrevial
  */
 class JWCPDClusteringAllColumns(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
-  def run(): Unit = {
-    val count = sc.parallelize(1 to tenthKeys)
-      .map(num => Tuple1(s"Store $num"))
-      .joinWithCassandraTable[PerfRowClass](keyspace, table)
-      .where("order_time < ?", timePivot)
-      .count
-    println(s"Loaded $count rows")
+  def run(): Unit = config.saveMethod match {
+    case "rdd" =>
+      val count = sc.parallelize(1 to tenthKeys)
+        .map(num => Tuple1(s"Store $num"))
+        .joinWithCassandraTable[PerfRowClass](keyspace, table)
+        .where("order_time < ?", timePivot)
+        .count
+      println(s"Loaded $count rows")
+    case _ => println("This test is not supported with the dataset API.")
   }
 }
 
@@ -259,11 +241,13 @@ class JWCPDClusteringAllColumns(config: Config, ss: SparkSession) extends ReadTa
  * A single C* partition is retreivied in an RDD
  */
 class RetrieveSinglePartition(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
-  def run(): Unit = {
-    val filterResults = sc.cassandraTable[String](keyspace, table)
-      .where("store = ? ", "Store 5")
-      .collect
-    println(filterResults.length)
+  def run(): Unit = config.saveMethod match {
+    case "rdd" =>
+      val filterResults = sc.cassandraTable[String](keyspace, table)
+        .where("store = ? ", "Store 5")
+        .collect
+      println(filterResults.length)
+    case _ => println("This test is not supported with the dataset API.")
   }
 }
 
