@@ -15,7 +15,7 @@ class StressReceiver[T](
 
   class EmitterThread(receiver: StressReceiver[_]) extends Thread(s"Emitter$index") {
     override def run(): Unit = {
-      val rowIterator = rowGenerator.generatePartition(index)
+      val rowIterator = rowGenerator.generatePartition(config.seed, index)
       val throughPutPerBlockInterval = (blockIntervalInMs / (config.streamingBatchIntervalSeconds * 1000.0) * config.receiverThroughputPerBatch).toLong
       while (rowIterator.hasNext) {
         val batchBegin = System.currentTimeMillis()

@@ -38,7 +38,7 @@ CLASS=com.datastax.sparkstress.SparkCassandraStress
 SUBMIT="spark-submit $sparkmaster $connectorArgs --class $CLASS $JAR $stressArgs"
 
 if [[ $1 == "dse" ]]; then
-  dse $SUBMIT 
+  dse $SUBMIT
 elif [[ $1 == "apache" ]]; then
   $SPARK_HOME/bin/$SUBMIT 
 else
