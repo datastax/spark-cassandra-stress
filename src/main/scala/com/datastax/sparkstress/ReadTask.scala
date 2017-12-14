@@ -61,6 +61,7 @@ abstract class DatasetReadTask(config: Config, ss: SparkSession) extends ReadTas
   * Performs a full table scan retrieving two columns from the underlying
   * table.
   */
+@ReadTest
 class FTSTwoColumns(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
   override def run(): Unit = {
     println("Loaded %d rows".format(
@@ -77,6 +78,7 @@ class FTSTwoColumns(config: Config, ss: SparkSession) extends DatasetReadTask(co
   * Performs a full table scan but only retrieves a single column from the underlying
   * table.
   */
+@ReadTest
 class FTSThreeColumns(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
   override def run(): Unit = {
     println("Loaded %d rows".format(
@@ -93,6 +95,7 @@ class FTSThreeColumns(config: Config, ss: SparkSession) extends DatasetReadTask(
   * Performs a full table scan but only retrieves a single column from the underlying
   * table.
   */
+@ReadTest
 class FTSFourColumns(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
   override def run(): Unit = {
     println("Loaded %d rows".format(
@@ -109,6 +112,7 @@ class FTSFourColumns(config: Config, ss: SparkSession) extends DatasetReadTask(c
  * Uses our internally cassandra count pushdown, this means all of the aggregation
  * is done on the C* side
  */
+@ReadTest
 class PDCount(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
 
   def run(): Unit = config.saveMethod match {
@@ -127,6 +131,7 @@ class PDCount(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
  * Performs a full table scan but only retrieves a single column from the underlying
  * table.
  */
+@ReadTest
 class FTSOneColumn(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
 
   def run(): Unit = {
@@ -143,6 +148,7 @@ class FTSOneColumn(config: Config, ss: SparkSession) extends DatasetReadTask(con
  * Full Table Scan One Column
  * Performs a full table scan but only retrieves all columns from the underlying table.
  */
+@ReadTest
 class FTSAllColumns(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
   def run(): Unit = {
     println("Loaded %d rows".format(
@@ -158,6 +164,7 @@ class FTSAllColumns(config: Config, ss: SparkSession) extends DatasetReadTask(co
  * Full Table Scan Five Columns
  * Performs a full table scan and only retrieves 5 of the columns for each row
  */
+@ReadTest
 class FTSFiveColumns(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
   def run(): Unit = {
     println("Loaded %d rows".format(
@@ -176,6 +183,7 @@ class FTSFiveColumns(config: Config, ss: SparkSession) extends DatasetReadTask(c
 /**
  * Full Table Scan with a Clustering Column Predicate Pushed down to C*
  */
+@ReadTest
 class FTSPDClusteringAllColumns(config: Config, ss: SparkSession) extends ReadTask(config,
   ss) {
   def run(): Unit = config.distributedDataType match {
@@ -192,6 +200,7 @@ class FTSPDClusteringAllColumns(config: Config, ss: SparkSession) extends ReadTa
  * Full Table Scan with a Clustering Column Predicate Pushed down to C*
  * Only 5 columns retrieved per row
  */
+@ReadTest
 class FTSPDClusteringFiveColumns(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
   def run(): Unit = config.distributedDataType match {
     case "rdd" =>
@@ -207,6 +216,7 @@ class FTSPDClusteringFiveColumns(config: Config, ss: SparkSession) extends ReadT
 /**
  * Join With C* with 1M Partition Key requests
  */
+@ReadTest
 class JWCAllColumns(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
   def run(): Unit = config.saveMethod match {
     case "rdd" =>
@@ -223,6 +233,7 @@ class JWCAllColumns(config: Config, ss: SparkSession) extends ReadTask(config, s
  * Join With C* with 1M Partition Key requests
  * A repartitionByCassandraReplica occurs before retrieving the data
  */
+@ReadTest
 class JWCRPAllColumns(config: Config, ss: SparkSession) extends
 ReadTask(config, ss) {
   def run(): Unit = config.saveMethod match {
@@ -241,6 +252,7 @@ ReadTask(config, ss) {
  * Join With C* with 1M Partition Key requests
  * A clustering column predicate is pushed down to limit data retrevial
  */
+@ReadTest
 class JWCPDClusteringAllColumns(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
   def run(): Unit = config.saveMethod match {
     case "rdd" =>
@@ -257,6 +269,7 @@ class JWCPDClusteringAllColumns(config: Config, ss: SparkSession) extends ReadTa
 /**
  * A single C* partition is retrieved in an RDD
  */
+@ReadTest
 class RetrieveSinglePartition(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
   def run(): Unit = config.saveMethod match {
     case "rdd" =>
@@ -267,4 +280,3 @@ class RetrieveSinglePartition(config: Config, ss: SparkSession) extends ReadTask
     case _ => println("This test is not supported with the dataset API.")
   }
 }
-

@@ -180,15 +180,15 @@ object SparkCassandraStress {
   }
 
   def getReadTests() = {
-    reflections.getSubTypesOf(classOf[ReadTask]).toSet
+    reflections.getTypesAnnotatedWith(classOf[ReadTest]).toSet
   }
 
   def getWriteTests() = {
-    reflections.getSubTypesOf(classOf[WriteTask[StressRow]]).toSet
+    reflections.getTypesAnnotatedWith(classOf[WriteTest]).toSet
   }
 
   def getStreamingTests() = {
-    reflections.getSubTypesOf(classOf[StreamingTask[StressRow]]).toSet
+    reflections.getTypesAnnotatedWith(classOf[StreamingTest]).toSet
   }
 
   def getValidTests() = {

@@ -84,6 +84,7 @@ abstract class StreamingTask[rowType](
   }
 }
 
+@StreamingTest
 class StreamingWrite(config: Config, ss: SparkSession) extends
   StreamingTask[PerfRowClass](config,ss)(implicitly[ClassTag[PerfRowClass]]){
 

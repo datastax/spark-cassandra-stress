@@ -132,6 +132,7 @@ abstract class WriteTask[rowType](
  * Writes data to a schema which contains no clustering keys, no partitions will be
  * overwritten.
  */
+@WriteTest
 class WriteShortRow(config: Config, ss: SparkSession) extends
   WriteTask[ShortRowClass](config, ss)(implicitly[RowWriterFactory[ShortRowClass]]) {
 
@@ -157,6 +158,7 @@ class WriteShortRow(config: Config, ss: SparkSession) extends
 /**
  * Writes data in a format similar to the DataStax legacy 'tshirt' schema
  */
+@WriteTest
 class WritePerfRow(config: Config, ss: SparkSession) extends
   WriteTask[PerfRowClass](config, ss)(implicitly[RowWriterFactory[PerfRowClass]]) {
 
@@ -190,6 +192,7 @@ class WritePerfRow(config: Config, ss: SparkSession) extends
  * Runs inserts to partitions in a round robin fashion. This means partition key 1 will not
  * be written to twice until partition key n is written to once.
  */
+@WriteTest
 class WriteWideRow(config: Config, ss: SparkSession) extends
   WriteTask[WideRowClass](config, ss)(implicitly[RowWriterFactory[WideRowClass]]) {
 
@@ -219,6 +222,7 @@ class WriteWideRow(config: Config, ss: SparkSession) extends
  * Runs inserts to partitions in a random fashion. The chance that any particular partition
  * key will be written to at a time is 1/N. (flat distribution)
  */
+@WriteTest
 class WriteRandomWideRow(config: Config, ss: SparkSession) extends
   WriteTask[WideRowClass](config, ss)(implicitly[RowWriterFactory[WideRowClass]]) {
 
@@ -247,6 +251,7 @@ class WriteRandomWideRow(config: Config, ss: SparkSession) extends
  *  Runs inserts to partitions in an ordered fashion. All writes to partition 1 occur before any
  *  writes to partition 2.
  */
+@WriteTest
 class WriteWideRowByPartition(config: Config, ss: SparkSession) extends
   WriteTask[WideRowClass](config, ss)(implicitly[RowWriterFactory[WideRowClass]]) {
 
