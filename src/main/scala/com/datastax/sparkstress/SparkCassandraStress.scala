@@ -53,7 +53,7 @@ object SparkCassandraStress {
       head("SparkCassandraStress", "1.0")
 
       arg[String]("testName") optional() action { (arg,config) =>
-        config.copy(testName = arg)
+        config.copy(testName = arg.toLowerCase)
       } text {  s"""Tests :
               |Write Tests:  ${getWriteTestNames.mkString(" , ")}
               |Read Tests: ${getReadTestNames.mkString(" , ")}
@@ -196,15 +196,15 @@ object SparkCassandraStress {
   }
 
   def getReadTestNames(): Set[String] = {
-    getReadTests.map(_.getSimpleName)
+    getReadTests.map(_.getSimpleName.toLowerCase)
   }
 
   def getWriteTestNames(): Set[String] = {
-    getWriteTests.map(_.getSimpleName)
+    getWriteTests.map(_.getSimpleName.toLowerCase)
   }
 
   def getStreamingTestNames(): Set[String] = {
-    getStreamingTests.map(_.getSimpleName)
+    getStreamingTests.map(_.getSimpleName.toLowerCase)
   }
 
   def getValidTestNames(): Set[String] = {
@@ -213,7 +213,7 @@ object SparkCassandraStress {
 
   def getStressTest(config: Config, ss: SparkSession) : StressTask = {
     val subClasses = getValidTests.toList
-    val classMap = subClasses.map(_.getSimpleName).zip(subClasses).toMap
+    val classMap = subClasses.map(_.getSimpleName.toLowerCase).zip(subClasses).toMap
     classMap(config.testName)
       .getConstructors
       .maxBy(_.getParameterTypes.length)
