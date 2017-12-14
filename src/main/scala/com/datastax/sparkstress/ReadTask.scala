@@ -62,10 +62,13 @@ abstract class DatasetReadTask(config: Config, ss: SparkSession) extends ReadTas
   * table.
   */
 class FTSTwoColumns(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
-  override def run(): Unit = config.saveMethod match {
-    case "rdd" => val count = sc.cassandraTable[String](keyspace, table).select("color", "size").count
-    case _ => val count = read_columns(Seq("color", "size"))
-    println(s"Loaded $count rows")
+  override def run(): Unit = {
+    println("Loaded %d rows".format(
+      config.saveMethod match {
+        case "rdd" => sc.cassandraTable[String](keyspace, table).select("color", "size").count
+        case _ => read_columns(Seq("color", "size"))
+      })
+    )
   }
 }
 
@@ -75,10 +78,13 @@ class FTSTwoColumns(config: Config, ss: SparkSession) extends DatasetReadTask(co
   * table.
   */
 class FTSThreeColumns(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
-  override def run(): Unit = config.saveMethod match {
-    case "rdd" => val count = sc.cassandraTable[String](keyspace, table).select("color", "size", "qty").count
-    case _ => val count = read_columns(Seq("color", "size", "qty"))
-    println(s"Loaded $count rows")
+  override def run(): Unit = {
+    println("Loaded %d rows".format(
+      config.saveMethod match {
+        case "rdd" => sc.cassandraTable[String](keyspace, table).select("color", "size", "qty").count
+        case _ => read_columns(Seq("color", "size", "qty"))
+      })
+    )
   }
 }
 
@@ -88,10 +94,13 @@ class FTSThreeColumns(config: Config, ss: SparkSession) extends DatasetReadTask(
   * table.
   */
 class FTSFourColumns(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
-  override def run(): Unit = config.saveMethod match {
-    case "rdd" => val count = sc.cassandraTable[String](keyspace, table).select("color", "size", "qty", "order_number").count
-    case _ => val count = read_columns(Seq("color", "size", "qty", "order_number"))
-    println(s"Loaded $count rows")
+  override def run(): Unit = {
+    println("Loaded %d rows".format(
+      config.saveMethod match {
+        case "rdd" => sc.cassandraTable[String](keyspace, table).select("color", "size", "qty", "order_number").count
+        case _ => read_columns(Seq("color", "size", "qty", "order_number"))
+      })
+    )
   }
 }
 
@@ -120,10 +129,13 @@ class PDCount(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
  */
 class FTSOneColumn(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
 
-  def run(): Unit = config.saveMethod match {
-    case "rdd" => val count = sc.cassandraTable[String](keyspace, table).select("color").count
-    case _ => val count = read_columns(Seq("color"))
-    println(s"Loaded $count rows")
+  def run(): Unit = {
+    println("Loaded %d rows".format(
+      config.saveMethod match {
+        case "rdd" => sc.cassandraTable[String](keyspace, table).select("color").count
+        case _ => read_columns(Seq("color"))
+      })
+    )
   }
 }
 
@@ -133,10 +145,13 @@ class FTSOneColumn(config: Config, ss: SparkSession) extends DatasetReadTask(con
  * table.
  */
 class FTSAllColumns(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
-  def run(): Unit = config.distributedDataType match {
-    case "rdd" => val count = sc.cassandraTable[PerfRowClass](keyspace, table).count
-    case _ => val count = read_columns(Seq("order_number", "qty", "color", "size", "order_time", "store"))
-    println(s"Loaded $count rows")
+  def run(): Unit = {
+    println("Loaded %d rows".format(
+      config.distributedDataType match {
+        case "rdd" => sc.cassandraTable[PerfRowClass](keyspace, table).count
+        case _ => read_columns(Seq("order_number", "qty", "color", "size", "order_time", "store"))
+      })
+    )
   }
 }
 
@@ -145,14 +160,17 @@ class FTSAllColumns(config: Config, ss: SparkSession) extends DatasetReadTask(co
  * Performs a full table scan and only retreives 5 of the columns for each row
  */
 class FTSFiveColumns(config: Config, ss: SparkSession) extends DatasetReadTask(config, ss) {
-  def run(): Unit = config.distributedDataType match {
-    case "rdd" =>
-      val count = sc.cassandraTable[(UUID, Int, String, String, org.joda.time.DateTime)](keyspace,
-        table)
-        .select("order_number", "qty", "color", "size", "order_time")
-        .count
-    case _ => val count = read_columns(Seq("order_number", "qty", "color", "size", "order_time"))
-    println(s"Loaded $count rows")
+  def run(): Unit = {
+    println("Loaded %d rows".format(
+      config.distributedDataType match {
+        case "rdd" =>
+          sc.cassandraTable[(UUID, Int, String, String, org.joda.time.DateTime)](keyspace,
+            table)
+            .select("order_number", "qty", "color", "size", "order_time")
+            .count
+        case _ => read_columns(Seq("order_number", "qty", "color", "size", "order_time"))
+      })
+    )
   }
 }
 

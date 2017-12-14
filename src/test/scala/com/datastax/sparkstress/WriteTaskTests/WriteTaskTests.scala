@@ -1,16 +1,21 @@
 package com.datastax.sparkstress.WriteTaskTests
 
+import java.util.concurrent.TimeoutException
+
 import com.datastax.spark.connector._
 import com.datastax.spark.connector.cql.CassandraConnector
-import com.datastax.spark.connector.embedded.{SparkTemplate, EmbeddedCassandra}
+import com.datastax.spark.connector.embedded.{EmbeddedCassandra, SparkTemplate}
 import org.scalatest._
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
 import com.datastax.sparkstress._
-import org.apache.spark.SparkConf
-import com.datastax.bdp.fs.client.{DseFsClient,DseFsClientConf}
+import org.apache.spark.{ExposeJobListener, SparkConf}
+import com.datastax.bdp.fs.client.{DseFsClient, DseFsClientConf}
 import com.datastax.bdp.fs.model.HostAndPort
 import com.datastax.bdp.fs.model.FilePath
+import scala.concurrent.{Await,Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.{Duration, SECONDS}
 
 @RunWith(classOf[JUnitRunner])
 class WriteTaskTests extends FlatSpec
@@ -59,10 +64,18 @@ class WriteTaskTests extends FlatSpec
   val jsonTableName = "json_test"
   val csvTableName = "csv_test"
   val datasetTestKS = "test2"
-  dseFsClient.deleteRecursive(FilePath(s"/$datasetTestKS.$parquetTableName"))
-  dseFsClient.deleteRecursive(FilePath(s"/$datasetTestKS.$textTableName"))
-  dseFsClient.deleteRecursive(FilePath(s"/$datasetTestKS.$jsonTableName"))
-  dseFsClient.deleteRecursive(FilePath(s"/$datasetTestKS.$csvTableName"))
+
+  try {
+    Await.result(Future {dseFsClient.deleteRecursive(FilePath(s"/$datasetTestKS.$parquetTableName"))}, Duration(60, SECONDS))
+    Await.result(Future {dseFsClient.deleteRecursive(FilePath(s"/$datasetTestKS.$textTableName"))}, Duration(60, SECONDS))
+    Await.result(Future {dseFsClient.deleteRecursive(FilePath(s"/$datasetTestKS.$jsonTableName"))}, Duration(60, SECONDS))
+    Await.result(Future {dseFsClient.deleteRecursive(FilePath(s"/$datasetTestKS.$csvTableName"))}, Duration(60, SECONDS))
+
+  } catch {
+    case ex: TimeoutException => {
+      println(s"We timed out waiting to clear DSEFS before testing.")
+    }
+  }
 
   val ss = ConnectHelper.getSparkSession(sparkConf)
 
