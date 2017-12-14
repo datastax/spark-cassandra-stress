@@ -15,7 +15,7 @@ import scala.concurrent.duration._
 import java.util.concurrent.TimeoutException
 import scala.concurrent.{Await,Future}
 import scala.concurrent.ExecutionContext.Implicits.global
-
+import org.apache.spark.sql.cassandra._
 import org.apache.commons.io.IOUtils
 import scala.util.parsing.json.{JSON, JSONType, JSONArray, JSONObject}
 import java.net.URL
@@ -64,8 +64,7 @@ abstract class WriteTask[rowType](
       // regular save method to DSE/Cassandra
       case _ => getDataset
         .write
-        .format("org.apache.spark.sql.cassandra")
-        .options(Map("table" -> config.table, "keyspace" -> config.keyspace))
+        .cassandraFormat(config.table, config.keyspace)
         .mode("append")
         .save()
     }

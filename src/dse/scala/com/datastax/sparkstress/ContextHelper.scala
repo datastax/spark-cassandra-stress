@@ -13,5 +13,5 @@ object ConnectHelper {
     this.getSparkSession(conf).sparkContext
 
   def getSparkSession(conf: SparkConf): SparkSession =
-    SparkSession.builder().config(conf.forDse).getOrCreate()
+    SparkSession.builder().config(conf).getOrCreate()
 }

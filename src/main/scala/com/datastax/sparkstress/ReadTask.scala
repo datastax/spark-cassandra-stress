@@ -8,6 +8,7 @@ import org.apache.spark.SparkContext
 import com.datastax.spark.connector._
 import com.datastax.sparkstress.SparkStressImplicits._
 import org.joda.time.DateTime
+import org.apache.spark.sql.cassandra._
 
 abstract class ReadTask(config: Config, ss: SparkSession) extends StressTask {
 
@@ -41,19 +42,16 @@ abstract class DatasetReadTask(config: Config, ss: SparkSession) extends ReadTas
   def read_columns(columnNames: Seq[String]): Long = {
     val columns: Seq[org.apache.spark.sql.Column] = columnNames.map(col(_))
     config.saveMethod match {
-      // filesystem read methods
-      case "parquet" => ss.read.parquet(s"dsefs:///${keyspace}.${table}").select(columnNames.head, columnNames.tail:_*).count
-      case "text" => ss.read.text(s"dsefs:///${keyspace}.${table}").select(columnNames.head, columnNames.tail:_*).count
-      case "json" => ss.read.json(s"dsefs:///${keyspace}.${table}").select(columnNames.head, columnNames.tail:_*).count
-      case "csv" => ss.read.csv(s"dsefs:///${keyspace}.${table}").select(columnNames.head, columnNames.tail:_*).count
       // regular read method from DSE/Cassandra
-      case _ => ss
+      case "driver" => ss
         .read
-        .format("org.apache.spark.sql.cassandra")
-        .options(Map("table" -> table, "keyspace" -> keyspace))
+        .cassandraFormat(table, keyspace)
         .load()
         .select(columns:_*)
-        .count()
+        .rdd
+        .count
+      // filesystem read methods
+      case _ => ss.read.format(config.saveMethod).load(s"dsefs:///${keyspace}.${table}").select(columns:_*).rdd.count
     }
   }
 }
