@@ -1,10 +1,12 @@
 package com.datastax.sparkstress
 
+import java.sql.Timestamp
 import java.util.UUID
 
 import org.apache.spark.SparkContext
 import org.apache.spark.sql.SparkSession
-import scala.util.{Random, Failure, Success, Try}
+
+import scala.util.{Failure, Random, Success, Try}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Dataset
 import com.datastax.sparkstress.RowTypes._
@@ -136,7 +138,7 @@ object RowGenerator {
         val qty = qtys(r.nextInt(qtys.size))
         val store = s"Store ${pk + offset}"
         val order_number = UUID.randomUUID().toString()
-        val order_time = perftime.plusSeconds(r.nextInt(1000)).toString()
+        val order_time = new Timestamp(perftime.plusSeconds(r.nextInt(1000)).getMillis)
         PerfRowClass(store, order_time, order_number, color, size, qty)
       }
     }

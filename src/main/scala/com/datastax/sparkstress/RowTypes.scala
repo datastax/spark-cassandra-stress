@@ -10,7 +10,7 @@ object RowTypes {
 
   case class PerfRowClass(
    store: String,
-   order_time:String,   // org.joda.time.DateTime format
+   order_time: java.sql.Timestamp,
    order_number:String, // java.util.UUID format
    color: String,
    size: String,
