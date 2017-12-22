@@ -2,7 +2,6 @@ package com.datastax.sparkstress.WriteTaskTests.NonDseWriteTaskTests
 
 import com.datastax.spark.connector._
 import com.datastax.spark.connector.cql.CassandraConnector
-import com.datastax.spark.connector.embedded.{SparkTemplate, EmbeddedCassandra}
 import org.scalatest._
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
@@ -10,14 +9,10 @@ import com.datastax.sparkstress._
 
 @RunWith(classOf[JUnitRunner])
 class NonDseWriteTaskTests extends FlatSpec
-  with EmbeddedCassandra
-  with SparkTemplate
   with BeforeAndAfterAll
   with Matchers{
 
   def clearCache(): Unit = CassandraConnector.evictCache()
-  useCassandraConfig(Seq("cassandra-default.yaml.template"))
-  useSparkConf(defaultSparkConf)
 /**
   val conn = CassandraConnector(Set(EmbeddedCassandra.getHost(0)))
   conn.withSessionDo { session =>
