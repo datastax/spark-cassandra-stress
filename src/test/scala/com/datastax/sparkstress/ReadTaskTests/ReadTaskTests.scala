@@ -1,7 +1,6 @@
 package com.datastax.sparkstress.ReadTaskTests
 
 import com.datastax.spark.connector.cql.CassandraConnector
-import com.datastax.spark.connector.embedded.{SparkTemplate, EmbeddedCassandra}
 import com.datastax.sparkstress.Config
 import org.junit.runner.RunWith
 import org.scalatest.{Matchers, BeforeAndAfterAll, FlatSpec}
@@ -10,14 +9,10 @@ import com.datastax.sparkstress._
 
 @RunWith(classOf[JUnitRunner])
 class ReadTaskTests extends FlatSpec
-  with EmbeddedCassandra
-  with SparkTemplate
   with BeforeAndAfterAll
   with Matchers{
 
   def clearCache(): Unit = CassandraConnector.evictCache()
-  useCassandraConfig(Seq("cassandra-default.yaml.template"))
-  useSparkConf(defaultSparkConf)
 
   val rdd_config = new Config(
     testName = "readperfks",
@@ -25,7 +20,7 @@ class ReadTaskTests extends FlatSpec
     numPartitions = 10,
     totalOps = 10000,
     numTotalKeys = 200,
-    distributedDataType = "rdd")
+    distributedDataType = DistributedDataType.RDD)
 
   val dataset_config = new Config(
     testName = "readperfks",
@@ -33,13 +28,13 @@ class ReadTaskTests extends FlatSpec
     numPartitions = 10,
     totalOps = 10000,
     numTotalKeys = 200,
-    distributedDataType = "dataset")
+    distributedDataType = DistributedDataType.DataFrame)
 
-  val ss = ConnectHelper.getSparkSession(defaultSparkConf)
+  val ss = ConnectHelper.getSparkSession()
 
   override def beforeAll(): Unit = {
     // Allow us to rerun tests with a clean slate
-    val conn = CassandraConnector(Set(EmbeddedCassandra.getHost(0)))
+    val conn = CassandraConnector(ss.sparkContext.getConf)
     conn.withSessionDo { session => session.execute(s"""DROP KEYSPACE IF EXISTS readperfks """)}
     Thread.sleep(5000)
 
@@ -55,53 +50,57 @@ class ReadTaskTests extends FlatSpec
     writer.run
   }
 
-  "FTSOneColumn" should " be able to run" in {
-    new FTSOneColumn(rdd_config, ss).run
-    new FTSOneColumn(dataset_config, ss).run
-  }
+  val testMatrix = Seq(
+    (rdd_config, DistributedDataType.RDD),
+    (dataset_config, DistributedDataType.DataFrame)
+  )
 
-  "FTSAllColumns" should " be able to run" in {
-    new FTSAllColumns(rdd_config, ss).run
-    new FTSAllColumns(dataset_config, ss).run
-  }
+  for ((conf, confName) <- testMatrix) {
 
-  "PDCount" should " be able to run" in {
-    new PDCount(rdd_config, ss).run
-    new PDCount(dataset_config, ss).run
-  }
+    val testDescription = s" be able to run with $confName"
 
-  "FTSFiveColumns" should " be able to run " in {
-    new FTSFiveColumns(rdd_config, ss).run
-    new FTSFiveColumns(dataset_config, ss).run
-  }
+    "FTSOneColumn" should s" be able to run with $confName" in {
+      new FTSOneColumn(conf, ss).run should be > 0L
+    }
 
-  "FTSPDClusteringAllColumns" should " be able to run" in {
-    new FTSPDClusteringAllColumns(rdd_config, ss).run
-    new FTSPDClusteringAllColumns(dataset_config, ss).run
-  }
+    "FTSAllColumns" should s" be able to run with $confName" in {
+      new FTSAllColumns(conf, ss).run should be > 0L
+    }
 
-  "FTSPDClusteringFiveColumns" should " be able to run" in {
-    new FTSPDClusteringFiveColumns(rdd_config, ss).run
-    new FTSPDClusteringFiveColumns(dataset_config, ss).run
-  }
+    "PDCount" should s" be able to run with $confName" in {
+      new PDCount(conf, ss).run should be > 0L
+    }
 
-  "JWCAllColumns" should " be able to run" in {
-    new JWCAllColumns(rdd_config, ss).run
-    new JWCAllColumns(dataset_config, ss).run
-  }
+    "FTSFiveColumns" should s" be able to run with $confName" in {
+      new FTSFiveColumns(conf, ss).run should be > 0L
+    }
 
-  "JWCRPAllColumns" should " be able to run " in {
-    new JWCRPAllColumns(rdd_config, ss).run
-    new JWCRPAllColumns(dataset_config, ss).run
-  }
+    "FTSPDClusteringAllColumns" should s" be able to run with $confName" in {
+      new FTSPDClusteringAllColumns(conf, ss).run should be > 0L
+    }
 
-  "JWCPDClusteringAllColumns" should " be able to run " in {
-    new JWCPDClusteringAllColumns(rdd_config, ss).run
-    new JWCPDClusteringAllColumns(dataset_config, ss).run
-  }
+    "FTSPDClusteringFiveColumns" should s" be able to run with $confName" in {
+      new FTSPDClusteringFiveColumns(conf, ss).run should be > 0L
+    }
 
-  "RetrieveSinglePartiton" should " be able to run " in {
-    new RetrieveSinglePartition(rdd_config,ss).run
-    new RetrieveSinglePartition(dataset_config,ss).run
+    "JWCAllColumns" should s" be able to run with $confName" in {
+      new JWCAllColumns(conf, ss).run should be > 0L
+    }
+
+    "JWCRPAllColumns" should s" be able to run with $confName" in {
+      confName match {
+        case DistributedDataType.RDD => new JWCRPAllColumns(conf, ss).run should be > 0L
+        case DistributedDataType.DataFrame =>
+          intercept[IllegalArgumentException] { new JWCRPAllColumns(conf, ss).run }
+      }
+    }
+
+    "JWCPDClusteringAllColumns" should s" be able to run with $confName" in {
+      new JWCPDClusteringAllColumns(conf, ss).run should be > 0L
+    }
+
+    "RetrieveSinglePartiton" should s" be able to run with $confName" in {
+      new RetrieveSinglePartition(conf, ss).run should be > 0L
+    }
   }
 }

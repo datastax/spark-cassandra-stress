@@ -3,12 +3,8 @@ package com.datastax.sparkstress
 import java.sql.Timestamp
 import java.util.UUID
 
-import org.apache.spark.SparkContext
-import org.apache.spark.sql.SparkSession
-
-import scala.util.{Failure, Random, Success, Try}
+import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.Dataset
 import com.datastax.sparkstress.RowTypes._
 import org.joda.time.DateTime
 
@@ -39,9 +35,9 @@ object RowGenerator {
     }
   }
 
-  def getShortRowDataset(ss: SparkSession, seed: Long, numPartitions: Int, numTotalRows: Long): org.apache.spark.sql.Dataset[ShortRowClass] = {
+  def getShortRowDataFrame(ss: SparkSession, seed: Long, numPartitions: Int, numTotalRows: Long): DataFrame = {
     import ss.implicits._
-    getShortRowRDD(ss, seed, numPartitions, numTotalRows).toDS()
+    getShortRowRDD(ss, seed, numPartitions, numTotalRows).toDF()
   }
 
   def generateWideRowByPartitionPartition(seed: Long, index: Int, numPartitions: Int, numTotalKeys: Long, numTotalOps: Long) = {
@@ -61,9 +57,9 @@ object RowGenerator {
       .mapPartitionsWithIndex { case (index, n) => generateWideRowByPartitionPartition(seed, index, numPartitions, numTotalKeys, numTotalOps) }
   }
 
-  def getWideRowByPartitionDataset(ss: SparkSession, seed: Long, numPartitions: Int, numTotalOps: Long, numTotalKeys: Long): org.apache.spark.sql.Dataset[WideRowClass] = {
+  def getWideRowByPartitionDataFrame(ss: SparkSession, seed: Long, numPartitions: Int, numTotalOps: Long, numTotalKeys: Long): DataFrame = {
     import ss.implicits._
-    getWideRowByPartition(ss, seed, numPartitions, numTotalOps, numTotalKeys).toDS()
+    getWideRowByPartition(ss, seed, numPartitions, numTotalOps, numTotalKeys).toDF()
   }
 
   def generateWideRowPartition(seed: Long, index: Int, numTotalKeys: Long, opsPerPartition: Long) = {
@@ -85,9 +81,9 @@ object RowGenerator {
     }
   }
 
-  def getWideRowDataset(ss: SparkSession, seed: Long, numPartitions: Int, numTotalOps: Long, numTotalKeys: Long): org.apache.spark.sql.Dataset[WideRowClass] = {
+  def getWideRowDataFrame(ss: SparkSession, seed: Long, numPartitions: Int, numTotalOps: Long, numTotalKeys: Long): DataFrame = {
     import ss.implicits._
-    getWideRowRdd(ss, seed, numPartitions, numTotalOps, numTotalKeys).toDS()
+    getWideRowRdd(ss, seed, numPartitions, numTotalOps, numTotalKeys).toDF()
   }
 
   def generateRandomWideRowPartition(seed: Long, index: Int, numTotalKeys: Long, opsPerPartition: Long) = {
@@ -108,9 +104,9 @@ object RowGenerator {
     }
   }
 
-  def getRandomWideRowDataset(ss: SparkSession, seed: Long, numPartitions: Int, numTotalOps: Long, numTotalKeys: Long): org.apache.spark.sql.Dataset[WideRowClass] = {
+  def getRandomWideRowDataFrame(ss: SparkSession, seed: Long, numPartitions: Int, numTotalOps: Long, numTotalKeys: Long): DataFrame = {
     import ss.implicits._
-    getRandomWideRow(ss, seed, numPartitions, numTotalOps, numTotalKeys).toDS()
+    getRandomWideRow(ss, seed, numPartitions, numTotalOps, numTotalKeys).toDF()
   }
 
   /**
@@ -137,8 +133,8 @@ object RowGenerator {
         val size = sizes(r.nextInt(sizes.size))
         val qty = qtys(r.nextInt(qtys.size))
         val store = s"Store ${pk + offset}"
-        val order_number = new UUID(pk,ck).toString
-        val order_time = new Timestamp(perftime.plusSeconds(r.nextInt(1000)).getMillis)
+        val order_number = new UUID(pk,ck)
+        val order_time = perftime.plusSeconds(r.nextInt(1000))
         PerfRowClass(store, order_time, order_number, color, size, qty)
       }
     }
@@ -153,9 +149,12 @@ object RowGenerator {
     }
   }
 
-  def getPerfRowDataset(ss: SparkSession, seed: Long, numPartitions: Int, numTotalRows: Long, numTotalKeys: Long): org.apache.spark.sql.Dataset[PerfRowClass] = {
+  def getPerfRowDataFrame(ss: SparkSession, seed: Long, numPartitions: Int, numTotalRows: Long, numTotalKeys: Long): DataFrame = {
     import ss.implicits._
-    getPerfRowRdd(ss, seed, numPartitions, numTotalRows, numTotalKeys).toDS()
+    // There exists no encoder for Joda DateTimeObjects so let's build a tuple that the encoders can handle
+    getPerfRowRdd(ss, seed, numPartitions, numTotalRows, numTotalKeys).mapPartitions(
+      it => it.map( p => (p.store, new Timestamp(p.order_time.getMillis), p.order_number.toString, p.color, p.size, p.qty))
+    ).toDF("store", "order_time", "order_number", "color", "size", "qty")
   }
 
 }
