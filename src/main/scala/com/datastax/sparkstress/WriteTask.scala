@@ -3,12 +3,11 @@ package com.datastax.sparkstress
 import com.datastax.spark.connector.cql.CassandraConnector
 import com.datastax.spark.connector.writer.RowWriterFactory
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.Dataset
+import org.apache.spark.sql.DataFrame
 import org.apache.spark.{ExposeJobListener, SparkContext}
 import org.apache.spark.sql.SparkSession
 import com.datastax.sparkstress.RowTypes._
 import com.datastax.spark.connector._
-import com.datastax.spark.connector.RDDFunctions
 import com.datastax.bdp.spark.writer.BulkTableWriter._
 import java.util.concurrent.TimeUnit
 import scala.concurrent.duration._
@@ -16,9 +15,6 @@ import java.util.concurrent.TimeoutException
 import scala.concurrent.{Await,Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import org.apache.spark.sql.cassandra._
-import org.apache.commons.io.IOUtils
-import scala.util.parsing.json.{JSON, JSONType, JSONArray, JSONObject}
-import java.net.URL
 
 abstract class WriteTask[rowType](
   val config: Config,
@@ -52,21 +48,22 @@ abstract class WriteTask[rowType](
 
   def getRDD: RDD[rowType]
 
-  def getDataset: org.apache.spark.sql.Dataset[rowType]
+  def getDataFrame: org.apache.spark.sql.DataFrame
 
   def save_dataset(): Unit = {
     config.saveMethod match {
       // filesystem save methods
-      case "parquet" => getDataset.write.parquet(s"dsefs:///${config.keyspace}.${config.table}")
-      case "text" => getDataset.map(row => row.toString()).write.text(s"dsefs:///${config.keyspace}.${config.table}") // requires a single column so we convert to a string
-      case "json" => getDataset.write.json(s"dsefs:///${config.keyspace}.${config.table}")
-      case "csv" => getDataset.write.csv(s"dsefs:///${config.keyspace}.${config.table}")
+      case SaveMethod.Parquet => getDataFrame.write.parquet(s"dsefs:///${config.keyspace}.${config.table}")
+      case SaveMethod.Text => getDataFrame.map(row => row.toString()).write.text(s"dsefs:///${config.keyspace}.${config.table}") // requires a single column so we convert to a string
+      case SaveMethod.Json => getDataFrame.write.json(s"dsefs:///${config.keyspace}.${config.table}")
+      case SaveMethod.Csv => getDataFrame.write.csv(s"dsefs:///${config.keyspace}.${config.table}")
       // regular save method to DSE/Cassandra
-      case _ => getDataset
+      case SaveMethod.Driver => getDataFrame
         .write
         .cassandraFormat(config.table, config.keyspace)
         .mode("append")
         .save()
+      case unimplementedMode => throw new UnsupportedOperationException(s"Saving a Dataset with $unimplementedMode is not implemented")
     }
   }
 
@@ -79,13 +76,13 @@ abstract class WriteTask[rowType](
     val runtime = time({
       val fs = Future {
         config.distributedDataType match {
-          case "rdd" => {
+          case DistributedDataType.RDD => {
             config.saveMethod match {
-              case "bulk" => getRDD.bulkSaveToCassandra(config.keyspace, config.table)
-              case _ => new RDDFunctions(getRDD).saveToCassandra(config.keyspace, config.table)
+              case SaveMethod.Bulk => getRDD.bulkSaveToCassandra(config.keyspace, config.table)
+              case SaveMethod.Driver => getRDD.saveToCassandra(config.keyspace, config.table)
             }
           }
-          case _ => {
+          case DistributedDataType.DataFrame => {
             save_dataset()
           }
         }
@@ -149,8 +146,8 @@ class WriteShortRow(config: Config, ss: SparkSession) extends
     RowGenerator.getShortRowRDD(ss, config.seed, config.numPartitions, config.totalOps)
   }
 
-  def getDataset: org.apache.spark.sql.Dataset[ShortRowClass] = {
-    RowGenerator.getShortRowDataset(ss, config.seed, config.numPartitions, config.totalOps)
+  def getDataFrame: DataFrame = {
+    RowGenerator.getShortRowDataFrame(ss, config.seed, config.numPartitions, config.totalOps)
   }
 
 }
@@ -182,8 +179,8 @@ class WritePerfRow(config: Config, ss: SparkSession) extends
   def getRDD: RDD[PerfRowClass] =
     RowGenerator.getPerfRowRdd(ss, config.seed, config.numPartitions, config.totalOps, config.numTotalKeys)
 
-  def getDataset: org.apache.spark.sql.Dataset[PerfRowClass] = {
-    RowGenerator.getPerfRowDataset(ss, config.seed, config.numPartitions, config.totalOps, config.numTotalKeys)
+  def getDataFrame: DataFrame = {
+    RowGenerator.getPerfRowDataFrame(ss, config.seed, config.numPartitions, config.totalOps, config.numTotalKeys)
   }
 
 }
@@ -212,8 +209,8 @@ class WriteWideRow(config: Config, ss: SparkSession) extends
       .getWideRowRdd(ss, config.seed, config.numPartitions, config.totalOps, config.numTotalKeys)
   }
 
-  def getDataset: org.apache.spark.sql.Dataset[WideRowClass] = {
-    RowGenerator.getWideRowDataset(ss, config.seed, config.numPartitions, config.totalOps, config.numTotalKeys)
+  def getDataFrame: DataFrame = {
+    RowGenerator.getWideRowDataFrame(ss, config.seed, config.numPartitions, config.totalOps, config.numTotalKeys)
   }
 
 }
@@ -241,8 +238,8 @@ class WriteRandomWideRow(config: Config, ss: SparkSession) extends
     RowGenerator.getRandomWideRow(ss, config.seed, config.numPartitions, config.totalOps, config.numTotalKeys)
   }
 
-  def getDataset: org.apache.spark.sql.Dataset[WideRowClass] = {
-    RowGenerator.getRandomWideRowDataset(ss, config.seed, config.numPartitions, config.totalOps, config.numTotalKeys)
+  def getDataFrame: org.apache.spark.sql.DataFrame = {
+    RowGenerator.getRandomWideRowDataFrame(ss, config.seed, config.numPartitions, config.totalOps, config.numTotalKeys)
   }
 
 }
@@ -270,8 +267,8 @@ class WriteWideRowByPartition(config: Config, ss: SparkSession) extends
     RowGenerator.getWideRowByPartition(ss, config.seed, config.numPartitions, config.totalOps, config.numTotalKeys)
   }
 
-  def getDataset: org.apache.spark.sql.Dataset[WideRowClass] = {
-    RowGenerator.getWideRowByPartitionDataset(ss, config.seed, config.numPartitions, config.totalOps, config.numTotalKeys)
+  def getDataFrame: org.apache.spark.sql.DataFrame = {
+    RowGenerator.getWideRowByPartitionDataFrame(ss, config.seed, config.numPartitions, config.totalOps, config.numTotalKeys)
   }
 
 }

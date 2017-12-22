@@ -19,23 +19,15 @@ import scala.concurrent.duration.{Duration, SECONDS}
 
 @RunWith(classOf[JUnitRunner])
 class WriteTaskTests extends FlatSpec
-  with EmbeddedCassandra
-  with SparkTemplate
   with BeforeAndAfterAll
   with Matchers{
 
-  val sparkConf =
-    new SparkConf()
-      .setAppName("SparkStressTest")
-      .set("spark.master", "local[*]") // without we get: 'org.apache.spark.SparkException: A master URL must be set in your configuration'
-      .set("spark.hadoop.fs.dsefs.impl", "com.datastax.bdp.fs.hadoop.DseFileSystem") // without we get: 'java.io.IOException: No FileSystem for scheme: dsefs'
+  val ss = ConnectHelper.getSparkSession()
 
   def clearCache(): Unit = CassandraConnector.evictCache()
-  useCassandraConfig(Seq("cassandra-default.yaml.template"))
-  useSparkConf(sparkConf)
 
   // Allow us to rerun tests with a clean slate
-  val conn = CassandraConnector(Set(EmbeddedCassandra.getHost(0)))
+  val conn = CassandraConnector(ss.sparkContext.getConf)
   conn.withSessionDo { session =>
     session.execute(s"""DROP KEYSPACE IF EXISTS test1 """)
     session.execute(s"""DROP KEYSPACE IF EXISTS test2 """)
@@ -77,7 +69,6 @@ class WriteTaskTests extends FlatSpec
     }
   }
 
-  val ss = ConnectHelper.getSparkSession(sparkConf)
 
   "The RDD" should "have the correct configurations" in {
     val config = new Config(keyspace = "test1", numPartitions = 1, totalOps = 20, numTotalKeys = 1)
@@ -179,8 +170,8 @@ class WriteTaskTests extends FlatSpec
       numPartitions = 10,
       totalOps = 1000,
       numTotalKeys = 200,
-      distributedDataType = "dataset",
-      saveMethod = "driver")
+      distributedDataType = DistributedDataType.DataFrame,
+      saveMethod = SaveMethod.Driver)
     val writer = new WritePerfRow(config, ss)
     writer.setupCQL
     writer.run
@@ -195,8 +186,8 @@ class WriteTaskTests extends FlatSpec
       numPartitions = 10,
       totalOps = 1000,
       numTotalKeys = 200,
-      distributedDataType = "dataset",
-      saveMethod = "parquet")
+      distributedDataType = DistributedDataType.DataFrame,
+      saveMethod = SaveMethod.Parquet)
     val writer = new WritePerfRow(config, ss)
     writer.run
     ss.read.parquet(s"dsefs:///${config.keyspace}.${config.table}").count should be (1000)
@@ -210,8 +201,8 @@ class WriteTaskTests extends FlatSpec
       numPartitions = 10,
       totalOps = 1000,
       numTotalKeys = 200,
-      distributedDataType = "dataset",
-      saveMethod = "text")
+      distributedDataType = DistributedDataType.DataFrame,
+      saveMethod = SaveMethod.Text)
     val writer = new WritePerfRow(config, ss)
     writer.run
     ss.read.text(s"dsefs:///${config.keyspace}.${config.table}").count should be (1000)
@@ -225,8 +216,8 @@ class WriteTaskTests extends FlatSpec
       numPartitions = 10,
       totalOps = 1000,
       numTotalKeys = 200,
-      distributedDataType = "dataset",
-      saveMethod = "json")
+      distributedDataType = DistributedDataType.DataFrame,
+      saveMethod = SaveMethod.Json)
     val writer = new WritePerfRow(config, ss)
     writer.run
     ss.read.json(s"dsefs:///${config.keyspace}.${config.table}").count should be (1000)
@@ -240,8 +231,8 @@ class WriteTaskTests extends FlatSpec
       numPartitions = 10,
       totalOps = 1000,
       numTotalKeys = 200,
-      distributedDataType = "dataset",
-      saveMethod = "csv")
+      distributedDataType = DistributedDataType.DataFrame,
+      saveMethod = SaveMethod.Csv)
     val writer = new WritePerfRow(config, ss)
     writer.run
     ss.read.csv(s"dsefs:///${config.keyspace}.${config.table}").count should be (1000)

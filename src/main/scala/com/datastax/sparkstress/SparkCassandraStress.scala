@@ -6,7 +6,20 @@ import org.apache.spark.SparkConf
 import org.reflections.Reflections
 import org.apache.spark.sql.SparkSession
 import collection.JavaConversions._
-import com.datastax.sparkstress.RowTypes._
+
+object DistributedDataType extends Enumeration {
+  val RDD  = Value("rdd")
+  val DataFrame = Value("dataframe")
+}
+
+object SaveMethod extends Enumeration {
+  val Driver = Value("driver")
+  val Bulk = Value("bulk")
+  val Parquet = Value("parquet")
+  val Json = Value("json")
+  val Csv = Value("csv")
+  val Text = Value("text")
+}
 
 case class Config(
   //Test Options
@@ -25,8 +38,8 @@ case class Config(
   secondaryIndex: Boolean = false,
   // csv file to append results
   file: Option[Writer] = Option.empty,
-  saveMethod: String = "driver",
-  distributedDataType: String = "rdd",
+  saveMethod: SaveMethod.Value = SaveMethod.Driver,
+  distributedDataType: DistributedDataType.Value = DistributedDataType.RDD,
   //Spark Options
   sparkOps: Map[String,String] = Map.empty,
   //Streaming Params
@@ -79,14 +92,14 @@ object SparkCassandraStress {
       } text {"Name of the keyspace to use/create"}
 
       opt[String]('e',"distributedDataType") optional() action { (arg,config) =>
-        config.copy(distributedDataType = arg)
+        config.copy(distributedDataType = DistributedDataType.withName(arg.toLowerCase))
       } text {
         """See 'saveMethod'. **Note**: Use for write workloads.
           |                           rdd: Resilient Distributed Dataset, the basic abstraction in Spark.
-          |                           dataset: A DataSet is a strongly typed collection of domain-specific objects.""".stripMargin}
+          |                           dataframe: A Dataframe is a catalyst backed optimized container.""".stripMargin}
 
       opt[String]('s',"saveMethod") optional() action { (arg,config) =>
-        config.copy(saveMethod = arg)
+        config.copy(saveMethod = SaveMethod.withName(arg.toLowerCase))
       } text {
         """See 'distributedDataType'. **Note**: Use for write workloads.
           |                           rdd save methods:
