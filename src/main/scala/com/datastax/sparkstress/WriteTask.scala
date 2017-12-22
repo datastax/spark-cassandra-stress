@@ -117,7 +117,7 @@ abstract class WriteTask[rowType](
   def runTrials(ss: SparkSession): Seq[TestResult] = {
     println("About to Start Trials")
     for (trial <- 1 to config.trials) yield {
-      if (config.saveMethod == "driver" || config.saveMethod == "bulk") setupCQL()
+      if (config.saveMethod == SaveMethod.Driver || config.saveMethod == SaveMethod.Bulk) setupCQL()
       Thread.sleep(10000)
       run()
     }

@@ -47,9 +47,9 @@ case class Config(
   receiverThroughputPerBatch: Long = 100000,
   terminationTimeMinutes: Long = 0,
   streamingBatchIntervalSeconds:  Int = 5,
-  distributedDataTypes: Seq[String] = Seq("rdd", "dataset"),
-  rddSaveMethods: Seq[String] = Seq("driver", "bulk"),
-  datasetSaveMethods: Seq[String] = Seq("driver", "parquet", "text", "json", "csv")
+  distributedDataTypes: Seq[DistributedDataType.Value] = Seq(DistributedDataType.RDD, DistributedDataType.DataFrame),
+  rddSaveMethods: Seq[SaveMethod.Value] = Seq(SaveMethod.Driver, SaveMethod.Bulk),
+  dataframeSaveMethods: Seq[SaveMethod.Value] = Seq(SaveMethod.Driver, SaveMethod.Parquet, SaveMethod.Json, SaveMethod.Csv, SaveMethod.Text)
 )
 
 case class TestResult ( time: Long, ops: Long )
@@ -178,12 +178,12 @@ object SparkCassandraStress {
         println(s"\nERROR: A termination time was specified with '${config.testName} which is a Read test, this is not supported yet.\n")
       } else if (!config.distributedDataTypes.contains(config.distributedDataType)) {
         println(s"\nERROR: The distributedDataType (${config.distributedDataType}) provided is not valid. Use one of these distributed data types: "+config.distributedDataTypes.mkString(", ")+".\n")
-      } else if (!config.rddSaveMethods.contains(config.saveMethod) && !config.datasetSaveMethods.contains(config.saveMethod)) {
-        println(s"\nERROR: The saveMethod (${config.saveMethod}) provided is not valid. Use one of these save methods: rdd: "+config.rddSaveMethods.mkString(", ")+", dataset: "+config.datasetSaveMethods.mkString(", ")+".\n")
+      } else if (!config.rddSaveMethods.contains(config.saveMethod) && !config.dataframeSaveMethods.contains(config.saveMethod)) {
+        println(s"\nERROR: The saveMethod (${config.saveMethod}) provided is not valid. Use one of these save methods: rdd: "+config.rddSaveMethods.mkString(", ")+", dataset: "+config.dataframeSaveMethods.mkString(", ")+".\n")
       } else if (config.distributedDataType == "rdd" && !config.rddSaveMethods.contains(config.saveMethod)) {
         println(s"\nERROR: The saveMethod (${config.saveMethod}) provided is not valid with distributedDataType (${config.distributedDataType}). Use one of these rdd save methods: "+config.rddSaveMethods.mkString(", ")+".\n")
-      } else if (config.distributedDataType == "dataset" && !config.datasetSaveMethods.contains(config.saveMethod)) {
-        println(s"\nERROR: The saveMethod (${config.saveMethod}) provided is not valid with distributedDataType (${config.distributedDataType}). Use one of these dataset save methods: "+config.datasetSaveMethods.mkString(", ")+".\n")
+      } else if (config.distributedDataType == "dataset" && !config.dataframeSaveMethods.contains(config.saveMethod)) {
+        println(s"\nERROR: The saveMethod (${config.saveMethod}) provided is not valid with distributedDataType (${config.distributedDataType}). Use one of these dataset save methods: "+config.dataframeSaveMethods.mkString(", ")+".\n")
       }else {
         runTask(config)
       }
