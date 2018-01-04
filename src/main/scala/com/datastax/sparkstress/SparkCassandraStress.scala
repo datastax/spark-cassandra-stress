@@ -231,6 +231,12 @@ object SparkCassandraStress {
     }}.mkString("\n") + "\n"
   }
 
+  private def percentile(p: Double, seq: Seq[Long]): Long = {
+    require(0.0 <= p && p <= 1.0)
+    val i = math.ceil((seq.length - 1) * p).toInt
+    seq.sorted.get(i)
+  }
+
   def runTask(config:Config)
   {
     val sparkConf =
@@ -263,14 +269,18 @@ object SparkCassandraStress {
     val opsPerSecond = for (i <- 0 to timeSeconds.size-1) yield {round((totalCompletedOps(i)).toDouble/timeSeconds(i))}
 
     test match {
-      case x: WriteTask[_] =>  {
+      case _: WriteTask[_] =>  {
         println(s"TimeInSeconds : ${timeSeconds.mkString(",")}\n")
         println(s"OpsPerSecond : ${opsPerSecond.mkString(",")}\n")
         config.file.map(f => {f.write(csvResults(config, time));f.flush })
         ss.stop()
       }
-      case x: ReadTask => {
+      case _: ReadTask => {
         println(s"TimeInSeconds : ${timeSeconds.mkString(",")}\n")
+        println(s"Average : ${timeSeconds.sum.toDouble / timeSeconds.size}\n")
+        println(s"50th percentile : ${percentile(0.50, timeSeconds)}\n")
+        println(s"90th percentile : ${percentile(0.90, timeSeconds)}\n")
+        println(s"99th percentile : ${percentile(0.99, timeSeconds)}\n")
         config.file.map(f => {f.write(csvResults(config, time));f.flush })
         ss.stop()
       }

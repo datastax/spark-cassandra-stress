@@ -295,3 +295,28 @@ class RetrieveSinglePartition(config: Config, ss: SparkSession) extends ReadTask
         .count
   }
 }
+
+/**
+  * Select with "in" clause with `inKeysCount` keys.
+  * Uses short row table.
+  */
+abstract class AbstractInClauseSelect(config: Config, ss: SparkSession, inKeysCount: Int)
+  extends ReadTask(config, ss) {
+
+  private val random = new scala.util.Random(config.seed)
+
+  override def performTask(): Long = config.distributedDataType match {
+    case _ =>
+      val keys = for (_ <- 0 until inKeysCount) yield random.nextLong() & config.totalOps
+      ss.sql(s"select * from $keyspace.$table where key in (${keys.mkString(",")})")
+        .count
+  }
+}
+
+@ReadTest
+class ShortInSelect(config: Config, ss: SparkSession)
+  extends AbstractInClauseSelect(config, ss, inKeysCount = 3)
+
+@ReadTest
+class WideInSelect(config: Config, ss: SparkSession)
+  extends AbstractInClauseSelect(config, ss, inKeysCount = 15)
