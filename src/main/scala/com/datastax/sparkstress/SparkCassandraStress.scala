@@ -46,7 +46,8 @@ case class Config(
   numReceivers: Int = 1,
   receiverThroughputPerBatch: Long = 100000,
   terminationTimeMinutes: Long = 0,
-  streamingBatchIntervalSeconds:  Int = 5
+  streamingBatchIntervalSeconds:  Int = 5,
+  inClauseKeys: Int = 2000
 )
 
 case class TestResult ( time: Long, ops: Long )
@@ -158,6 +159,11 @@ object SparkCassandraStress {
         config.copy(terminationTimeMinutes = arg)
       } text { "The desired runtime (in minutes) for a given workload. WARNING: Not supported with multiple trials or read workloads."}
 
+      opt[Int]("inClauseKeys") optional() action { (arg,config) =>
+        config.copy(inClauseKeys = arg)
+      } text {s"Number of keys in 'IN' clause, applicable only for tests that execute select queries " +
+        s"with 'IN' clause."}
+
       arg[String]("connectorOpts") optional() text { """spark-cassandra-connector configs, Ex: --conf "conf1=val1" --conf "conf2=val2" """}
 
       help("help") text {"CLI Help"}
@@ -256,17 +262,20 @@ object SparkCassandraStress {
     val totalCompletedOps = for (x <- timesAndOps) yield {x.ops}
 
     val timeSeconds = time.map{ x => round( x / 1000000000.0 ) }
+    val timeMillis = time.map{ x => round( x / 1000000.0 ) }
     val opsPerSecond = for (i <- timeSeconds.indices) yield {round(totalCompletedOps(i).toDouble/timeSeconds(i))}
 
     test match {
-      case x: WriteTask[_] =>  {
+      case _: WriteTask[_] =>  {
         println(s"TimeInSeconds : ${timeSeconds.mkString(",")}\n")
         println(s"OpsPerSecond : ${opsPerSecond.mkString(",")}\n")
         config.file.map(f => {f.write(csvResults(config, time));f.flush })
         ss.stop()
       }
-      case x: ReadTask => {
+      case _: ReadTask => {
         println(s"TimeInSeconds : ${timeSeconds.mkString(",")}\n")
+        println(s"TimeInMillis : ${timeMillis.mkString(",")}\n")
+        println(s"Average [ms]: ${timeMillis.sum.toDouble / timeSeconds.size}\n")
         config.file.map(f => {f.write(csvResults(config, time));f.flush })
         ss.stop()
       }
