@@ -14,7 +14,7 @@ else
   connectorArgs=${*:$((startConnIdx))} 
 fi
 
-echo "$lastParam" | grep -E "^(yarn|spark|mesos|local)" >& /dev/null
+echo "$lastParam" | grep -E "^(yarn|spark|mesos|local|dse)" >& /dev/null
 noMasterProvided=$? 
 if [ $noMasterProvided -eq 1 ]; then
   sparkmaster=""
