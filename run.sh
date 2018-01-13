@@ -1,45 +1,47 @@
 #!/usr/bin/env bash
 
-startConnIdx=0
-connectorArgsFound=0
-for i in "$@"; do
-  startConnIdx=$((startConnIdx+1))
-  if [ $i == "--conf" ]; then connectorArgsFound=1; break; fi
-  lastParam=$i
+PRE_JAR=""
+POST_JAR=""
+
+TARGET=$1
+shift
+
+while [[ $# -gt 0 ]]
+do
+key="$1"
+
+case $key in
+    --conf) # SparkConf Options go first
+        PRE_JAR+=" --conf $2"
+        shift # past argument
+        shift # past value
+        ;;
+    --master) # As do master control options
+        PRE_JAR+=" --master $2"
+        shift # past argument
+        shift # past value
+        ;;
+    dse*|spark*|yarn*|mesos*|local*) #We supported master urls without flags
+        PRE_JAR+=" --master $1"
+        shift
+        ;;
+    *) # All other items are Jar args
+        POST_JAR+=" $1"
+        shift # past arg
+        ;;
+esac
 done
-
-if [ $connectorArgsFound -eq 0 ]; then 
-  connectorArgs="" 
-else 
-  connectorArgs=${*:$((startConnIdx))} 
-fi
-
-echo "$lastParam" | grep -E "^(yarn|spark|mesos|local|dse)" >& /dev/null
-noMasterProvided=$? 
-if [ $noMasterProvided -eq 1 ]; then
-  sparkmaster=""
-  if [ $connectorArgsFound -eq 0 ]; then
-    stressArgs=${*:2:$((startConnIdx-1))}
-  else
-    stressArgs=${*:2:$((startConnIdx-2))}
-  fi
-else
-  sparkmaster="--master $lastParam" 
-  if [ $connectorArgsFound -eq 0 ]; then
-    stressArgs=${*:2:$((startConnIdx-2))}
-  else
-    stressArgs=${*:2:$((startConnIdx-3))}
-  fi
-fi
 
 JAR=build/libs/SparkCassandraStress-1.0.jar
 CLASS=com.datastax.sparkstress.SparkCassandraStress
 
-SUBMIT="spark-submit $sparkmaster $connectorArgs --class $CLASS $JAR $stressArgs"
+SUBMIT="spark-submit $PRE_JAR --class $CLASS $JAR $POST_JAR"
 
-if [[ $1 == "dse" ]]; then
+echo "Submit Script:: $SUBMIT"
+
+if [[ $TARGET == "dse" ]]; then
   dse $SUBMIT
-elif [[ $1 == "apache" ]]; then
+elif [[ $TARGET == "apache" ]]; then
   $SPARK_HOME/bin/$SUBMIT 
 else
   echo "dse or apache required as the first argument"
