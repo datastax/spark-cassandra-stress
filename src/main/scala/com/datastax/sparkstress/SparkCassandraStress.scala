@@ -24,7 +24,7 @@ object SaveMethod extends Enumeration {
 case class Config(
   //Test Options
   seed: Long = System.currentTimeMillis(),
-  testName: String ="WriteShortRow",
+  testName: String ="writeshortrow",
   keyspace: String = "ks",
   table: String = "tab",
   trials: Int = 1,

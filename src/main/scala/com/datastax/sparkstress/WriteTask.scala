@@ -16,6 +16,8 @@ import scala.concurrent.{Await,Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import org.apache.spark.sql.cassandra._
 
+import collection.JavaConverters._
+
 abstract class WriteTask[rowType](
   val config: Config,
   val ss: SparkSession)
@@ -26,12 +28,24 @@ abstract class WriteTask[rowType](
   import sqlContext.implicits._
 
   def setupCQL() = {
-    CassandraConnector(sc.getConf).withSessionDo{ session =>
+    val cc = CassandraConnector(sc.getConf)
+
+    val hostsInProvidedDC = cc.hosts
+    val localDC = cc.withClusterDo(cluster =>
+      cluster
+        .getMetadata
+        .getAllHosts.asScala
+        .find( node => hostsInProvidedDC.contains(node.getAddress))
+        .map(_.getDatacenter)
+        .getOrElse("Analytics")
+    )
+
+    cc.withSessionDo{ session =>
       if (config.deleteKeyspace){
         println(s"Destroying Keyspace")
         session.execute(s"DROP KEYSPACE IF EXISTS ${config.keyspace}")
       }
-      val kscql = getKeyspaceCql(config.keyspace)
+      val kscql = getKeyspaceCql(config.keyspace, localDC)
       val tbcql = getTableCql(config.table)
       println(s"""Running the following create statements\n$kscql\n${tbcql.mkString("\n")})""")
       session.execute(kscql)
@@ -42,7 +56,9 @@ abstract class WriteTask[rowType](
     printf("Done Setting up CQL Keyspace/Table\n")
   }
 
-  def getKeyspaceCql(ksName: String): String = s"CREATE KEYSPACE IF NOT EXISTS $ksName WITH replication = {'class': 'NetworkTopologyStrategy', 'Analytics': ${config.replicationFactor} }"
+  def getKeyspaceCql(ksName: String, localDC: String): String =
+    s"""CREATE KEYSPACE IF NOT EXISTS $ksName
+       |WITH replication = {'class': 'NetworkTopologyStrategy', '$localDC': ${config.replicationFactor} }""".stripMargin
 
   def getTableCql(tbName: String): Seq[String]
 
