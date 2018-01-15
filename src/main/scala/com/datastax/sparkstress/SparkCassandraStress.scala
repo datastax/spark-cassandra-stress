@@ -257,16 +257,12 @@ object SparkCassandraStress {
     }
 
     val test: StressTask = getStressTest(config, ss)
-    val wallClockStartTime = System.nanoTime()
     val timesAndOps: Seq[TestResult]= test.runTrials(ss)
     val time = for (x <- timesAndOps) yield {x.time}
     val totalCompletedOps = for (x <- timesAndOps) yield {x.ops}
 
-    val wallClockStopTime = System.nanoTime() 
-    val wallClockTimeDiff = wallClockStopTime - wallClockStartTime
-    val wallClockTimeSeconds = (wallClockTimeDiff / 1000000000.0) 
     val timeSeconds = time.map{ x => round( x / 1000000000.0 ) }
-    val opsPerSecond = for (i <- 0 to timeSeconds.size-1) yield {round((totalCompletedOps(i)).toDouble/timeSeconds(i))}
+    val opsPerSecond = for (i <- timeSeconds.indices) yield {round(totalCompletedOps(i).toDouble/timeSeconds(i))}
 
     test match {
       case _: WriteTask[_] =>  {
