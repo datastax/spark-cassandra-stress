@@ -262,6 +262,7 @@ object SparkCassandraStress {
     val totalCompletedOps = for (x <- timesAndOps) yield {x.ops}
 
     val timeSeconds = time.map{ x => round( x / 1000000000.0 ) }
+    val timeMillis = time.map{ x => round( x / 1000000.0 ) }
     val opsPerSecond = for (i <- timeSeconds.indices) yield {round(totalCompletedOps(i).toDouble/timeSeconds(i))}
 
     test match {
@@ -273,10 +274,11 @@ object SparkCassandraStress {
       }
       case _: ReadTask => {
         println(s"TimeInSeconds : ${timeSeconds.mkString(",")}\n")
-        println(s"Average : ${timeSeconds.sum.toDouble / timeSeconds.size}\n")
-        println(s"50th percentile : ${percentile(0.50, timeSeconds)}\n")
-        println(s"90th percentile : ${percentile(0.90, timeSeconds)}\n")
-        println(s"99th percentile : ${percentile(0.99, timeSeconds)}\n")
+        println(s"TimeInMillis : ${timeMillis.mkString(",")}\n")
+        println(s"Average [ms]: ${timeMillis.sum.toDouble / timeSeconds.size}\n")
+        println(s"50th percentile [ms] : ${percentile(0.50, timeMillis)}\n")
+        println(s"90th percentile [ms]: ${percentile(0.90, timeMillis)}\n")
+        println(s"99th percentile [ms]: ${percentile(0.99, timeMillis)}\n")
         config.file.map(f => {f.write(csvResults(config, time));f.flush })
         ss.stop()
       }
