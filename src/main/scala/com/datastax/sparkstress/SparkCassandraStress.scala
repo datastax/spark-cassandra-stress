@@ -37,7 +37,7 @@ case class Config(
   deleteKeyspace: Boolean = false,
   secondaryIndex: Boolean = false,
   // csv file to append results
-  file: Option[Writer] = Option.empty,
+  @transient file: Option[Writer] = Option.empty,
   saveMethod: SaveMethod.Value = SaveMethod.Driver,
   distributedDataType: DistributedDataType.Value = DistributedDataType.RDD,
   //Spark Options
