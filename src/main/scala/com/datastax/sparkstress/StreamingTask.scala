@@ -13,6 +13,8 @@ import org.apache.spark.streaming.dstream.DStream
 import java.util.concurrent.TimeUnit
 import scala.reflect.ClassTag
 
+import StressTask._
+
 abstract class StreamingTask[rowType](
   val config: Config,
   val ss: SparkSession)
@@ -37,12 +39,13 @@ abstract class StreamingTask[rowType](
   }
 
   def setupCQL() = {
-    CassandraConnector(ss.sparkContext.getConf).withSessionDo { session =>
+    val cc = CassandraConnector(ss.sparkContext.getConf)
+    cc.withSessionDo { session =>
       if (config.deleteKeyspace) {
         println(s"Destroying Keyspace")
         session.execute(s"DROP KEYSPACE IF EXISTS ${config.keyspace}")
       }
-      val kscql = getKeyspaceCql(config.keyspace)
+      val kscql = getKeyspaceCql(config.keyspace, getLocalDC(cc), config.replicationFactor)
       val tbcql = getTableCql(config.table)
       println( s"""Running the following create statements\n$kscql\n${tbcql.mkString("\n")}""")
       session.execute(kscql)
@@ -52,8 +55,6 @@ abstract class StreamingTask[rowType](
     }
     printf("Done Setting up CQL Keyspace/Table\n")
   }
-
-  def getKeyspaceCql(ksName: String): String = s"CREATE KEYSPACE IF NOT EXISTS $ksName WITH replication = {'class': 'NetworkTopologyStrategy', 'Analytics': ${config.replicationFactor} }"
 
   def getTableCql(tbName: String): Seq[String]
 
