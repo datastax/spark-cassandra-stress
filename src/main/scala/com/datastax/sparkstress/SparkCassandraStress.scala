@@ -23,7 +23,7 @@ object SaveMethod extends Enumeration {
 
 case class Config(
   //Test Options
-  seed: Long = System.currentTimeMillis(),
+  seed: Long = 4L, // lock in a default for better repeatability, lucky number 4
   testName: String ="writeshortrow",
   keyspace: String = "ks",
   table: String = "tab",
