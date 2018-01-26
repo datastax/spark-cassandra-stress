@@ -21,6 +21,8 @@ object SaveMethod extends Enumeration {
   val Text = Value("text")
 }
 
+case class TableLocation(keyspace: String, table: String)
+
 case class Config(
   //Test Options
   seed: Long = 4L, // lock in a default for better repeatability, lucky number 4

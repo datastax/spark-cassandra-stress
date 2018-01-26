@@ -12,7 +12,8 @@ import org.apache.spark.{ExposeJobListener, SparkConf}
 import com.datastax.bdp.fs.client.{DseFsClient, DseFsClientConf}
 import com.datastax.bdp.fs.model.HostAndPort
 import com.datastax.bdp.fs.model.FilePath
-import scala.concurrent.{Await,Future}
+
+import scala.concurrent.{Await, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.{Duration, SECONDS}
 
@@ -175,6 +176,47 @@ class WriteTaskTests extends FlatSpec
     writer.setupCQL
     writer.run
     ss.sparkContext.cassandraTable(config.keyspace, config.table).count should be (1000)
+  }
+
+  it should " copy a table using Dataset API" in {
+    val config = new Config(
+      testName = "CopyTable",
+      table = "copyds",
+      keyspace = datasetTestKS,
+      numPartitions = 10,
+      totalOps = 1000,
+      numTotalKeys = 200,
+      distributedDataType = DistributedDataType.DataFrame,
+      saveMethod = SaveMethod.Driver)
+
+    val writer = new WritePerfRow(config, ss)
+    writer.setupCQL
+    writer.run
+    val copier = new CopyTable(config, ss)
+    copier.setupCQL
+    copier.run
+    ss.sparkContext.cassandraTable(config.keyspace, s"${config.table}_copy").count should be (1000)
+  }
+
+  it should " copy a table using RDD API" in {
+    val config = new Config(
+      testName = "CopyTableRDD",
+      table = "copyrdd",
+      keyspace = datasetTestKS,
+      numPartitions = 10,
+      totalOps = 1000,
+      numTotalKeys = 200,
+      distributedDataType = DistributedDataType.RDD,
+      saveMethod = SaveMethod.Driver)
+
+    val writer = new WritePerfRow(config, ss)
+    writer.setupCQL
+    writer.run
+    val copier = new CopyTable(config, ss)
+    copier.setupCQL
+    copier.run
+
+    ss.sparkContext.cassandraTable(config.keyspace, s"${config.table}_copy").count should be (1000)
   }
 
   it should " save to DSEFS using parquet format" in {

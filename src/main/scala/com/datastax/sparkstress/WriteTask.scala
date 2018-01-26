@@ -56,17 +56,19 @@ abstract class WriteTask[rowType](
 
   def getDataFrame: org.apache.spark.sql.DataFrame
 
+  def destination: TableLocation = TableLocation(config.keyspace, config.table)
+
   def save_dataset(): Unit = {
     config.saveMethod match {
       // filesystem save methods
-      case SaveMethod.Parquet => getDataFrame.write.parquet(s"dsefs:///${config.keyspace}.${config.table}")
-      case SaveMethod.Text => getDataFrame.map(row => row.toString()).write.text(s"dsefs:///${config.keyspace}.${config.table}") // requires a single column so we convert to a string
-      case SaveMethod.Json => getDataFrame.write.json(s"dsefs:///${config.keyspace}.${config.table}")
-      case SaveMethod.Csv => getDataFrame.write.csv(s"dsefs:///${config.keyspace}.${config.table}")
+      case SaveMethod.Parquet => getDataFrame.write.parquet(s"dsefs:///${destination.keyspace}.${destination.table}")
+      case SaveMethod.Text => getDataFrame.map(row => row.toString()).write.text(s"dsefs:///${destination.keyspace}.${destination.table}") // requires a single column so we convert to a string
+      case SaveMethod.Json => getDataFrame.write.json(s"dsefs:///${destination.keyspace}.${destination.table}")
+      case SaveMethod.Csv => getDataFrame.write.csv(s"dsefs:///${destination.keyspace}.${destination.table}")
       // regular save method to DSE/Cassandra
       case SaveMethod.Driver => getDataFrame
         .write
-        .cassandraFormat(config.table, config.keyspace)
+        .cassandraFormat(destination.table, destination.keyspace)
         .mode("append")
         .save()
       case unimplementedMode => throw new UnsupportedOperationException(s"Saving a Dataset with $unimplementedMode is not implemented")
@@ -84,8 +86,8 @@ abstract class WriteTask[rowType](
         config.distributedDataType match {
           case DistributedDataType.RDD => {
             config.saveMethod match {
-              case SaveMethod.Bulk => getRDD.bulkSaveToCassandra(config.keyspace, config.table)
-              case SaveMethod.Driver => getRDD.saveToCassandra(config.keyspace, config.table)
+              case SaveMethod.Bulk => getRDD.bulkSaveToCassandra(destination.keyspace, destination.table)
+              case SaveMethod.Driver => getRDD.saveToCassandra(destination.keyspace, destination.table)
             }
           }
           case DistributedDataType.DataFrame => {
@@ -274,7 +276,33 @@ class WriteWideRowByPartition(config: Config, ss: SparkSession) extends
   }
 
   def getDataFrame: org.apache.spark.sql.DataFrame = {
-    RowGenerator.getWideRowByPartitionDataFrame(ss, config.seed, config.numPartitions, config.totalOps, config.numTotalKeys)
+    RowGenerator.getWideRowByPartitionDataFrame(ss, config.seed, config.numPartitions, config.totalOps, config.numTotalKeys
+    )
   }
-
 }
+
+@WriteTest
+class CopyTable(config: Config, ss: SparkSession) extends
+  WriteTask[PerfRowClass](config, ss)(implicitly[RowWriterFactory[PerfRowClass]]) {
+
+  override def getTableCql(tbName: String): Seq[String] =
+    Seq(
+      s"""CREATE TABLE IF NOT EXISTS ${tbName}_copy
+       |(store text,
+       |order_time timestamp,
+       |order_number uuid,
+       |color text,
+       |size text,
+       |qty int,
+       |PRIMARY KEY (store, order_time, order_number))
+     """.stripMargin)
+
+  override def destination: TableLocation = TableLocation(config.keyspace, s"${config.table}_copy")
+
+  override def getRDD: RDD[PerfRowClass] =
+    sc.cassandraTable[PerfRowClass](config.keyspace, config.table)
+
+  override def getDataFrame: DataFrame =
+    ss.read.cassandraFormat(config.table, config.keyspace).load()
+}
+
