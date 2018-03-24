@@ -61,15 +61,15 @@ abstract class WriteTask[rowType](
   def save_dataset(): Unit = {
     config.saveMethod match {
       // filesystem save methods
-      case SaveMethod.Parquet => getDataFrame.write.parquet(s"dsefs:///${destination.keyspace}.${destination.table}")
-      case SaveMethod.Text => getDataFrame.map(row => row.toString()).write.text(s"dsefs:///${destination.keyspace}.${destination.table}") // requires a single column so we convert to a string
-      case SaveMethod.Json => getDataFrame.write.json(s"dsefs:///${destination.keyspace}.${destination.table}")
-      case SaveMethod.Csv => getDataFrame.write.csv(s"dsefs:///${destination.keyspace}.${destination.table}")
+      case SaveMethod.Parquet => getDataFrame.write.mode(config.dataframeSaveMode).parquet(s"dsefs:///${destination.keyspace}.${destination.table}")
+      case SaveMethod.Text => getDataFrame.map(row => row.toString()).write.mode(config.dataframeSaveMode).text(s"dsefs:///${destination.keyspace}.${destination.table}") // requires a single column so we convert to a string
+      case SaveMethod.Json => getDataFrame.write.mode(config.dataframeSaveMode).json(s"dsefs:///${destination.keyspace}.${destination.table}")
+      case SaveMethod.Csv => getDataFrame.write.mode(config.dataframeSaveMode).csv(s"dsefs:///${destination.keyspace}.${destination.table}")
       // regular save method to DSE/Cassandra
       case SaveMethod.Driver => getDataFrame
         .write
         .cassandraFormat(destination.table, destination.keyspace)
-        .mode("append")
+        .mode(config.dataframeSaveMode)
         .save()
       case unimplementedMode => throw new UnsupportedOperationException(s"Saving a Dataset with $unimplementedMode is not implemented")
     }
