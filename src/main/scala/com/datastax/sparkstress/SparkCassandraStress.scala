@@ -4,7 +4,7 @@ import java.io.{FileWriter, Writer}
 import java.lang.Math.round
 import org.apache.spark.SparkConf
 import org.reflections.Reflections
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{SparkSession, SaveMode}
 import collection.JavaConversions._
 
 object DistributedDataType extends Enumeration {
@@ -41,6 +41,7 @@ case class Config(
   // csv file to append results
   @transient file: Option[Writer] = Option.empty,
   saveMethod: SaveMethod.Value = SaveMethod.Driver,
+  dataframeSaveMode: SaveMode = SaveMode.Append,
   distributedDataType: DistributedDataType.Value = DistributedDataType.RDD,
   //Spark Options
   sparkOps: Map[String,String] = Map.empty,
@@ -105,12 +106,21 @@ object SparkCassandraStress {
           |                             bulk: bulkSaveToCassandra
           |                             driver: saveToCassandra
           |                           **Note**: Folder for DSEFS writes will be named: keyspace.tablename (Default: ks.tab)
-          |                           dataset save methods:
+          |                           dataframe save methods:
           |                             driver: ds.write...save()
           |                             parquet: data format in DSEFS
           |                             text: data format in DSEFS
           |                             json: data format in DSEFS
           |                             csv: data format in DSEFS""".stripMargin}
+
+      opt[String]('u',"dataframeSaveMode") optional() action { (arg,config) =>
+        config.copy(dataframeSaveMode = SaveMode.valueOf(arg.toLowerCase.capitalize))
+      } text {
+        """See 'distributedDataType'. Specifies the behavior when data or table already exists. Options include:
+          |                             overwrite: overwrite the existing data
+          |                             append: (default) append the data
+          |                             ignore: ignore the operation (i.e. no-op)
+          |                             error: throw an exception at runtime""".stripMargin}
 
       opt[Int]('n',"trials")optional() action { (arg,config) =>
         config.copy(trials = arg)
