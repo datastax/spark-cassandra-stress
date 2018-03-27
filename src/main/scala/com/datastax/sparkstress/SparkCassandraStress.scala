@@ -4,7 +4,7 @@ import java.io.{FileWriter, Writer}
 import java.lang.Math.round
 import org.apache.spark.SparkConf
 import org.reflections.Reflections
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{SparkSession, SaveMode}
 import collection.JavaConversions._
 
 object DistributedDataType extends Enumeration {
@@ -19,13 +19,6 @@ object SaveMethod extends Enumeration {
   val Json = Value("json")
   val Csv = Value("csv")
   val Text = Value("text")
-}
-
-object DataframeSaveMode extends Enumeration {
-  val Overwrite = Value("overwrite")
-  val Append = Value("append")
-  val Ignore = Value("ignore")
-  val Error = Value("error")
 }
 
 case class TableLocation(keyspace: String, table: String)
@@ -48,7 +41,7 @@ case class Config(
   // csv file to append results
   @transient file: Option[Writer] = Option.empty,
   saveMethod: SaveMethod.Value = SaveMethod.Driver,
-  dataframeSaveMode: String = DataframeSaveMode.Append.toString,
+  dataframeSaveMode: SaveMode = SaveMode.Append,
   distributedDataType: DistributedDataType.Value = DistributedDataType.RDD,
   //Spark Options
   sparkOps: Map[String,String] = Map.empty,
@@ -121,7 +114,7 @@ object SparkCassandraStress {
           |                             csv: data format in DSEFS""".stripMargin}
 
       opt[String]('u',"dataframeSaveMode") optional() action { (arg,config) =>
-        config.copy(dataframeSaveMode = DataframeSaveMode.withName(arg.toLowerCase).toString)
+        config.copy(dataframeSaveMode = SaveMode.valueOf(arg.toLowerCase.capitalize))
       } text {
         """See 'distributedDataType'. Specifies the behavior when data or table already exists. Options include:
           |                             overwrite: overwrite the existing data
