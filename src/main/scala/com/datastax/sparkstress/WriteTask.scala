@@ -62,12 +62,25 @@ abstract class WriteTask[rowType](
     config.saveMethod match {
       // filesystem save methods
       case SaveMethod.Parquet => getDataFrame.write.mode(config.dataframeSaveMode).parquet(s"dsefs:///${destination.keyspace}.${destination.table}")
-      case SaveMethod.Text => getDataFrame.map(row => row.toString()).write.mode(config.dataframeSaveMode).text(s"dsefs:///${destination.keyspace}.${destination.table}") // requires a single column so we convert to a string
-      case SaveMethod.Json => getDataFrame.write.mode(config.dataframeSaveMode).json(s"dsefs:///${destination.keyspace}.${destination.table}")
-//      case SaveMethod.Csv => getDataFrame.write.mode(config.dataframeSaveMode).csv(s"dsefs:///${destination.keyspace}.${destination.table}")
 
 
+
+
+      //      case SaveMethod.Text => getDataFrame.map(row => row.toString()).write.mode(config.dataframeSaveMode).text(s"dsefs:///${destination.keyspace}.${destination.table}") // requires a single column so we convert to a string
+      case SaveMethod.Text => getDataFrame.write.mode(config.dataframeSaveMode).csv(s"noop:///${destination.keyspace}.${destination.table}")
+
+
+      //      case SaveMethod.Json => getDataFrame.write.mode(config.dataframeSaveMode).json(s"dsefs:///${destination.keyspace}.${destination.table}")
+      case SaveMethod.Json => getDataFrame.write.mode(config.dataframeSaveMode).parquet(s"noop:///${destination.keyspace}.${destination.table}")
+
+
+
+      //      case SaveMethod.Csv => getDataFrame.write.mode(config.dataframeSaveMode).csv(s"dsefs:///${destination.keyspace}.${destination.table}")
       case SaveMethod.Csv => getDataFrame.write.mode(config.dataframeSaveMode).parquet(s"file:///mnt/cass_data_disks/data1/${destination.keyspace}.${destination.table}")
+
+
+
+
       // regular save method to DSE/Cassandra
       case SaveMethod.Driver => getDataFrame
         .write
