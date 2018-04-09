@@ -6,6 +6,7 @@ import org.apache.spark.SparkConf
 import org.reflections.Reflections
 import org.apache.spark.sql.{SparkSession, SaveMode}
 import collection.JavaConversions._
+import scala.math._
 
 object DistributedDataType extends Enumeration {
   val RDD  = Value("rdd")
@@ -19,6 +20,14 @@ object SaveMethod extends Enumeration {
   val Json = Value("json")
   val Csv = Value("csv")
   val Text = Value("text")
+}
+
+object ValidNumericAnnotations extends Enumeration {
+  val k = Value("k")
+  val m = Value("m")
+  val b = Value("b")
+  val t = Value("t")
+  val q = Value("q")
 }
 
 case class TableLocation(keyspace: String, table: String)
@@ -59,6 +68,7 @@ object SparkCassandraStress {
   val VALID_TESTS = getValidTestNames()
 
   val KeyGroupings = Seq("none", "replica_set", "partition")
+  val supportedAnnotationsMsg = s"Ex. 1000, 1k (thousand), 2m (million), 3B (billion), 4q (quadrillion)"
 
   def main(args: Array[String]) {
 
@@ -126,13 +136,13 @@ object SparkCassandraStress {
         config.copy(trials = arg)
       } text {"Trials to run"}
 
-      opt[Long]('o',"totalOps") optional() action { (arg,config) =>
-        config.copy(totalOps = arg)
-      } text {"Total number of operations to execute"}
+      opt[String]('o',"totalOps") optional() action { (arg,config) =>
+        config.copy(totalOps = unpackAnnotatedNumeric(arg))
+      } text {s"Total number of operations to execute. ${supportedAnnotationsMsg}"}
 
       opt[Int]('p',"numPartitions") optional() action { (arg,config) =>
         config.copy(numPartitions = arg)
-      } text {"Number of Spark Partitions To Create"}
+      } text {s"Number of Spark Partitions To Create."}
 
       opt[Long]('c',"seed") optional() action { (arg,config) =>
         config.copy(seed = arg)
@@ -150,9 +160,9 @@ object SparkCassandraStress {
         config.copy(verboseOutput = true)
       } text {"Display verbose output for debugging."}
 
-      opt[Long]('y',"numTotalKeys") optional() action { (arg,config) =>
-        config.copy(numTotalKeys = arg)
-      } text {"Total Number of CQL Partition Key Values"}
+      opt[String]('y',"numTotalKeys") optional() action { (arg,config) =>
+        config.copy(numTotalKeys = unpackAnnotatedNumeric(arg))
+      } text {s"Total Number of CQL Partition Key Values. ${supportedAnnotationsMsg}"}
 
       opt[Int]('w',"numReceivers") optional() action { (arg,config) =>
         config.copy(numReceivers = arg)
@@ -190,6 +200,31 @@ object SparkCassandraStress {
       }
     } getOrElse {
       System.exit(1)
+    }
+  }
+
+  def unpackAnnotatedNumeric(num: String): Long = {
+
+    if (num forall Character.isDigit) {
+      num.toLong
+    } else {
+      val numericPortion = num.init
+      assert(numericPortion forall Character.isDigit)
+
+      val numericAnnotation = num.toLowerCase.last
+      assert(Character.isLetter(numericAnnotation))
+
+      try {
+        ValidNumericAnnotations.withName(numericAnnotation.toString) match {
+          case ValidNumericAnnotations.k => numericPortion.toLong * pow(10, 3).toLong // thousand
+          case ValidNumericAnnotations.m => numericPortion.toLong * pow(10, 6).toLong // million
+          case ValidNumericAnnotations.b => numericPortion.toLong * pow(10, 9).toLong // billion
+          case ValidNumericAnnotations.t => numericPortion.toLong * pow(10, 12).toLong // trillion
+          case ValidNumericAnnotations.q => numericPortion.toLong * pow(10, 15).toLong // quadrillion
+        }
+      } catch {
+        case ex: NoSuchElementException => throw new UnsupportedOperationException(s"${ex}: ${supportedAnnotationsMsg}")
+      }
     }
   }
 
