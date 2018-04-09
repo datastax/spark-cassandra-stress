@@ -8,6 +8,8 @@ import org.apache.spark.rdd.RDD
 import com.datastax.sparkstress.RowTypes._
 import org.joda.time.DateTime
 
+import scala.collection.mutable.ArrayBuffer
+
 abstract class RowGenerator[T] extends Serializable{
   def generatePartition(seed: Long, index: Int) : Iterator[T]
 }
@@ -113,10 +115,19 @@ object RowGenerator {
    * This code mimics an internal DataStax perf row format. Since we are mainly using this to test
    * Read speeds we will generate by C* partition.
    */
-  val colors = List("red", "green", "blue", "yellow", "purple", "pink", "grey", "black", "white", "brown").view
-  val sizes = List("P", "S", "M", "L", "XL", "XXL", "XXXL").view
-  val qtys = (5 to 10000 by 5).view
+  val colors = ArrayBuffer("red", "green", "blue", "yellow", "purple", "pink", "grey", "black", "white", "brown")
+  val sizes = ArrayBuffer("P", "S", "M", "L", "XL", "XXL", "XXXL")
+  val qtys = 5 to 10000 by 5
   val perftime = new DateTime(2000,1,1,0,0,0,0)
+
+  val color = colors(3)
+  val size = sizes(3)
+  val qty = qtys(4)
+  val store = s"Store 23523"
+  val order_number = new UUID(5325235,23523443)
+  val order_time = perftime.plusSeconds(4)
+  val row = PerfRowClass(store, order_time, order_number, color, size, qty)
+  val tuple = (row.store, new Timestamp(row.order_time.getMillis), row.order_number.toString, row.color, row.size, row.qty)
 
   class PerfRowGenerator(numPartitions: Int, numTotalRows: Long, numTotalKeys: Long)
     extends RowGenerator[PerfRowClass]() {
@@ -128,15 +139,9 @@ object RowGenerator {
       val offset = partitionKeysPerSparkPartition * index;
       val r = new scala.util.Random(index * seed)
 
-      for ( pk <- (1L to partitionKeysPerSparkPartition).iterator; ck <- (1L to clusteringKeysPerPartitionKey).iterator) yield {
-        val color = colors(r.nextInt(colors.size))
-        val size = sizes(r.nextInt(sizes.size))
-        val qty = qtys(r.nextInt(qtys.size))
-        val store = s"Store ${pk + offset}"
-        val order_number = new UUID(pk,ck)
-        val order_time = perftime.plusSeconds(r.nextInt(1000))
-        PerfRowClass(store, order_time, order_number, color, size, qty)
-      }
+      (for ( pk <- 1L to partitionKeysPerSparkPartition; ck <- 1L to clusteringKeysPerPartitionKey) yield {
+        row
+      }).iterator
     }
   }
 
@@ -153,7 +158,7 @@ object RowGenerator {
     import ss.implicits._
     // There exists no encoder for Joda DateTimeObjects so let's build a tuple that the encoders can handle
     getPerfRowRdd(ss, seed, numPartitions, numTotalRows, numTotalKeys).mapPartitions(
-      it => it.map( p => (p.store, new Timestamp(p.order_time.getMillis), p.order_number.toString, p.color, p.size, p.qty))
+      it => it.map( p => tuple)
     ).toDF("store", "order_time", "order_number", "color", "size", "qty")
   }
 
