@@ -32,7 +32,7 @@ case $key in
 esac
 done
 
-JAR=build/libs/SparkCassandraStress-1.0.jar
+JAR=build/libs/spark-cassandra-stress-1.0-all.jar
 CLASS=com.datastax.sparkstress.SparkCassandraStress
 
 SUBMIT="spark-submit $PRE_JAR --class $CLASS $JAR $POST_JAR"

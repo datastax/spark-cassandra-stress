@@ -1,5 +1,8 @@
-apply plugin: 'java'
-apply plugin: 'scala'
+plugins {
+    id 'java'
+    id 'scala'
+    id "com.github.johnrengelman.shadow" version "1.2.3"
+}
 
 version = '1.0'
 
@@ -72,7 +75,7 @@ def deps = [
         },
         maven : {
             println "Using Maven Libraries"
-            compile "com.datastax.spark:spark-cassandra-connector_$ScalaVersionShort:$ConnectorVersion"
+            assembly "com.datastax.spark:spark-cassandra-connector_$ScalaVersionShort:$ConnectorVersion"
             provided "org.apache.spark:spark-core_$ScalaVersionShort:$SparkVersion"
             provided "org.apache.spark:spark-streaming_$ScalaVersionShort:$SparkVersion"
             provided "org.apache.spark:spark-sql_$ScalaVersionShort:$SparkVersion"
@@ -80,7 +83,7 @@ def deps = [
         source: {
             println "Using Assembly Jar from Source Repo"
 
-            compile fileTree(dir: "$SparkCCHome/spark-cassandra-connector/target/scala-$ScalaVersionShort/", include: "*.jar")
+            assembly fileTree(dir: "$SparkCCHome/spark-cassandra-connector/target/scala-$ScalaVersionShort/", include: "*.jar")
             provided "org.apache.spark:spark-core_$ScalaVersionShort:$SparkVersion"
             provided "org.apache.spark:spark-streaming_$ScalaVersionShort:$SparkVersion"
             provided "org.apache.spark:spark-sql_$ScalaVersionShort:$SparkVersion"
@@ -91,7 +94,7 @@ def deps = [
 task build_connector(type: Exec) {
     workingDir SparkCCHome
     commandLine 'sbt/sbt', 'clean'
-    commandLine 'sbt/sbt', 'assembly'
+    commandLine 'sbt/sbt', 'jar'
 }
 
 if (against == 'source') {
@@ -115,7 +118,9 @@ jar {
 
 configurations {
     provided
+    assembly
     compile.extendsFrom provided
+    compile.extendsFrom assembly
 }
 
 
@@ -136,12 +141,12 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile "org.scala-lang:scala-library:$scalaVersion"
     testCompile "org.scalatest:scalatest_$ScalaVersionShort:2.2.4"
-    compile("org.reflections:reflections:0.9.11") {
+    assembly("org.reflections:reflections:0.9.11") {
         exclude group: 'dom4j', module: 'dom4j'
         exclude group: 'org.javassist', module: 'javassist'
     }
-    compile "com.github.scopt:scopt_$ScalaVersionShort:3.2.0"
-    compile "joda-time:joda-time:2.8.1"
+    assembly "com.github.scopt:scopt_$ScalaVersionShort:3.2.0"
+    assembly "joda-time:joda-time:2.8.1"
 
     println "Checking dependency flag: $against"
 
@@ -172,4 +177,10 @@ sourceSets {
 
         }
     }
+}
+
+
+shadowJar {
+    configurations = [project.configurations.assembly]
+    relocate 'com.google.common', 'shaded.stress.org.google.guava'
 }
