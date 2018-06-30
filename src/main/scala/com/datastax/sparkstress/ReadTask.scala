@@ -14,6 +14,9 @@ import org.apache.spark.sql.functions._
 import SaveMethod._
 import DistributedDataType._
 
+import scala.collection.mutable
+import scala.util.Random
+
 abstract class ReadTask(config: Config, ss: SparkSession) extends StressTask {
 
   val sc = ss.sparkContext
@@ -295,3 +298,46 @@ class RetrieveSinglePartition(config: Config, ss: SparkSession) extends ReadTask
         .count
   }
 }
+
+/**
+  * Select with "in" clause with `inKeysCount` keys.
+  * Uses writewiderowbypartition table.
+  */
+abstract class AbstractInClauseSelect(config: Config, ss: SparkSession, inKeysCount: Int)
+  extends ReadTask(config, ss) {
+
+  private val random = new Random(config.seed)
+
+  private def uniqueKeys(r: Random, upperBound: Long, count: Int): Seq[Long] = {
+    val result = mutable.Set[Long]()
+    while (result.size != count) {
+      result.add(Math.floorMod(Math.abs(r.nextLong()), upperBound))
+    }
+    result.toSeq
+  }
+
+  override def performTask(): Long = config.distributedDataType match {
+    case _ =>
+      val keysPerPartition = config.numTotalKeys / config.numPartitions
+      val ckeysPerPkey = config.totalOps / config.numTotalKeys
+      val sparkPartitionIndex = random.nextInt(config.numPartitions)
+      val partitionKeyStart = keysPerPartition * sparkPartitionIndex
+
+      val partitionKey = partitionKeyStart + Math.floorMod(Math.abs(random.nextLong()), keysPerPartition)
+      val clusteringKeys =
+        if (inKeysCount > ckeysPerPkey)
+          for (i <- 0L until ckeysPerPkey) yield i
+        else
+          uniqueKeys(random, ckeysPerPkey, inKeysCount)
+      val ck = clusteringKeys.mkString(",")
+      ss.sql(s"select * from $keyspace.$table where key = $partitionKey and col1 in ($ck)").count
+  }
+}
+
+@ReadTest
+class ShortInSelect(config: Config, ss: SparkSession)
+  extends AbstractInClauseSelect(config, ss, inKeysCount = 3)
+
+@ReadTest
+class WideInSelect(config: Config, ss: SparkSession)
+  extends AbstractInClauseSelect(config, ss, inKeysCount = 15)
