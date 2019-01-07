@@ -4,7 +4,6 @@ import com.datastax.spark.connector.cql.CassandraConnector
 import com.datastax.spark.connector.writer.RowWriterFactory
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.DataFrame
-import org.apache.spark.{ExposeJobListener, SparkContext}
 import org.apache.spark.sql.SparkSession
 import com.datastax.sparkstress.RowTypes._
 import com.datastax.spark.connector._
@@ -17,8 +16,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import org.apache.spark.sql.cassandra._
 
 import StressTask._
-
-import collection.JavaConverters._
 
 abstract class WriteTask[rowType](
   val config: Config,
@@ -104,18 +101,10 @@ abstract class WriteTask[rowType](
       } catch {
         case ex: TimeoutException => {
           println(s"We hit our timeout limit for this test (${config.terminationTimeMinutes} min), shutting down.")
-          val host: String = sys.props.get("spark.master").getOrElse(sc.getConf.getOption("spark.master")).toString.split("://|:")(1)
-          val appId: String = sc.getConf.getAppId
-
-          /* Follow-up: For now we're only pulling stage id 0, if/when we want to support multiple trials we may want to
-          pass in the trial number to run() and use that as the stage id. */
-          val stageId = 0
-          val stageAttemptId = 0
-          val stageDataOption = ExposeJobListener.getjobListener(sc).stageIdToData.get((stageId, stageAttemptId))
-          val stageData = stageDataOption.get
-          val outputRecords = stageData.outputRecords
-          println(s"\n\noutputRecords: ${outputRecords}\n\n")
-          totalCompletedOps = outputRecords
+          val stageInfo = sc.statusTracker.getStageInfo(0).get
+          println(s"Completed ${stageInfo.numCompletedTasks()} tasks of ${stageInfo.numTasks()}")
+          println(s"Estimating records written based on ${config.totalOps} total ops")
+          totalCompletedOps = (config.totalOps * (stageInfo.numCompletedTasks().toDouble / stageInfo.numTasks().toDouble)).toLong
         }
       }
     })
