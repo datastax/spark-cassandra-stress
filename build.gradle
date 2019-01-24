@@ -136,7 +136,7 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile "org.scala-lang:scala-library:$scalaVersion"
     testCompile "org.scalatest:scalatest_$ScalaVersionShort:2.2.4"
-    compile("org.reflections:reflections:0.9.11") {
+    compile("org.reflections:reflections:0.9.9") {
         exclude group: 'dom4j', module: 'dom4j'
         exclude group: 'org.javassist', module: 'javassist'
     }
