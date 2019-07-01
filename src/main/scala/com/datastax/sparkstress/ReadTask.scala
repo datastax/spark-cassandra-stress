@@ -14,6 +14,9 @@ import org.apache.spark.sql.functions._
 import SaveMethod._
 import DistributedDataType._
 
+import scala.collection.mutable
+import scala.util.Random
+
 abstract class ReadTask(config: Config, ss: SparkSession) extends StressTask {
 
   val sc = ss.sparkContext
@@ -293,5 +296,73 @@ class RetrieveSinglePartition(config: Config, ss: SparkSession) extends ReadTask
         .filter(col("store") === "Store 5")
         .rdd
         .count
+  }
+}
+
+abstract class AbstractInSelect(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
+
+  val random = new Random(config.seed)
+  val clusteringKeysCount = config.totalOps / config.numTotalKeys
+
+  def seqOfUnique(f: () => Long, count: Int) = {
+    val result = mutable.Set[Long]()
+    while (result.size != count) {
+      result.add(f())
+    }
+    result.toSeq
+  }
+
+  def randomPartitionKey(): Long = {
+    Math.floorMod(Math.abs(random.nextLong()), config.numTotalKeys)
+  }
+
+  def randomClusteringKey(): Long = {
+    Math.floorMod(Math.abs(random.nextLong()), clusteringKeysCount)
+  }
+
+}
+
+/** Query with "IN" clause with `config.inKeysCount` keys for partition column.
+  * Requires writewiderowbypartition table created via invocation with exact same parameters as this run. */
+@ReadTest
+class ShortInSelect(config: Config, ss: SparkSession)
+  extends AbstractInSelect(config, ss) {
+
+  override def performTask(): Long = config.distributedDataType match {
+    case _ =>
+      assert(config.numTotalKeys > config.inClauseKeys, s"Number of C* partitions " +
+        s"${config.numTotalKeys} is to small for this test, it should be greater than " +
+        s"${config.inClauseKeys}")
+
+      val partitionKeys = seqOfUnique(randomPartitionKey, config.inClauseKeys).mkString(",")
+      val clusteringKey = randomClusteringKey()
+
+      ss.sql(s"select * from $keyspace.$table where key in ($partitionKeys) and col1 = '$clusteringKey'").count
+  }
+}
+
+/** Query with "IN" clause with `config.inKeysCount`/2 keys for partition column and clustering column.
+  * Requires writewiderowbypartition table created via invocation with exact same parameters as this run. */
+@ReadTest
+class WideInSelect(config: Config, ss: SparkSession)
+  extends AbstractInSelect(config, ss) {
+
+  override def performTask(): Long = config.distributedDataType match {
+    case _ =>
+
+      val requestedClusteringKeys = config.inClauseKeys / 2
+      val requestedPartitionKeys = config.inClauseKeys - requestedClusteringKeys
+
+      assert(config.numTotalKeys > requestedPartitionKeys, s"Number of C* partitions " +
+        s"${config.numTotalKeys} is to small for this test, it should be greater than " +
+        s"$requestedPartitionKeys")
+      assert(clusteringKeysCount > requestedClusteringKeys, s"Number of clustering keys per " +
+        s"partition $clusteringKeysCount is to small for this test, it should be greater than " +
+        s"$requestedClusteringKeys")
+
+      val partitionKeys = seqOfUnique(randomPartitionKey, requestedPartitionKeys).mkString(",")
+      val clusteringKeys = seqOfUnique(randomClusteringKey, requestedClusteringKeys).mkString("'","','", "'")
+
+      ss.sql(s"select * from $keyspace.$table where key in ($partitionKeys) and col1 in ($clusteringKeys)").count
   }
 }
