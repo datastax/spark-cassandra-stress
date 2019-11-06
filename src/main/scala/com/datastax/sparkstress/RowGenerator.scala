@@ -6,7 +6,7 @@ import java.util.UUID
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.rdd.RDD
 import com.datastax.sparkstress.RowTypes._
-import org.joda.time.DateTime
+import java.time.{Instant, LocalDateTime, ZoneOffset}
 
 abstract class RowGenerator[T] extends Serializable{
   def generatePartition(seed: Long, index: Int) : Iterator[T]
@@ -116,7 +116,7 @@ object RowGenerator {
   val colors = List("red", "green", "blue", "yellow", "purple", "pink", "grey", "black", "white", "brown").view
   val sizes = List("P", "S", "M", "L", "XL", "XXL", "XXXL").view
   val qtys = (5 to 10000 by 5).view
-  val perftime = new DateTime(2000,1,1,0,0,0,0)
+  val perftime: Instant = LocalDateTime.of(2000,1,1,0,0,0,0).toInstant(ZoneOffset.UTC)
 
   class PerfRowGenerator(numPartitions: Int, numTotalRows: Long, numTotalKeys: Long)
     extends RowGenerator[PerfRowClass]() {
@@ -153,8 +153,12 @@ object RowGenerator {
     import ss.implicits._
     // There exists no encoder for Joda DateTimeObjects so let's build a tuple that the encoders can handle
     getPerfRowRdd(ss, seed, numPartitions, numTotalRows, numTotalKeys).mapPartitions(
-      it => it.map( p => (p.store, new Timestamp(p.order_time.getMillis), p.order_number.toString, p.color, p.size, p.qty))
+      it => it.map( p => (p.store, instantToTimestamp(p.order_time), p.order_number.toString, p.color, p.size, p.qty))
     ).toDF("store", "order_time", "order_number", "color", "size", "qty")
+  }
+
+  def instantToTimestamp(instant: Instant): Timestamp = {
+    new Timestamp(instant.toEpochMilli)
   }
 
 }

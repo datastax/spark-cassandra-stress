@@ -7,11 +7,11 @@ import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.SparkSession
 import com.datastax.sparkstress.RowTypes._
 import com.datastax.spark.connector._
-import com.datastax.bdp.spark.writer.BulkTableWriter._
 import java.util.concurrent.TimeUnit
 import scala.concurrent.duration._
 import java.util.concurrent.TimeoutException
 import scala.concurrent.{Await,Future}
+import com.datastax.sparkstress.SparkStressImplicits._
 import scala.concurrent.ExecutionContext.Implicits.global
 import org.apache.spark.sql.cassandra._
 
@@ -83,7 +83,7 @@ abstract class WriteTask[rowType](
         config.distributedDataType match {
           case DistributedDataType.RDD => {
             config.saveMethod match {
-              case SaveMethod.Bulk => getRDD.bulkSaveToCassandra(destination.keyspace, destination.table)
+              case SaveMethod.Bulk => bulkSaveToCassandra(getRDD, destination.keyspace, destination.table)
               case SaveMethod.Driver => getRDD.saveToCassandra(destination.keyspace, destination.table)
             }
           }
