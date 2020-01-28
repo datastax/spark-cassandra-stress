@@ -141,7 +141,6 @@ dependencies {
         exclude group: 'org.javassist', module: 'javassist'
     }
     compile "com.github.scopt:scopt_$ScalaVersionShort:3.2.0"
-    compile "joda-time:joda-time:2.8.1"
 
     println "Checking dependency flag: $against"
 
@@ -162,13 +161,13 @@ sourceSets {
             //Api Change Catcher -- This is done to catch the CassandraCount Change in connector 1.2.4
             println(ConnectorVersion)
             def (major, minor, patch) = ConnectorVersion.split(/\./,3).collect { (it.find(/^\d+/).toInteger()) }
-            if (major == 1 && minor == 2 && patch < 4){
-                println("using special 1.2.0 -1.2.3 stubs")
-                srcDirs += 'src/connector/1.2.0to1.2.3'
-            } else if (major <= 1 && minor <= 1 ) {
-                println("using pre-Connector 1.2.0 stubs")
-                srcDirs += 'src/connector/lessThan1.2.0'
-            } else { srcDirs += 'src/connector/default' }
+            if (major <= 6 && minor <= 8) {
+                println("using spark-cassandra-stress compatibility layer for DSE 6.8.x or older")
+                srcDirs += 'src/connector/x-6.8'
+            } else {
+                println("using spark-cassandra-stress compatibility layer for DSE 6.9.x or newer")
+                srcDirs += 'src/connector/default'
+            }
 
         }
     }

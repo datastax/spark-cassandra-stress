@@ -1,19 +1,19 @@
 package com.datastax.sparkstress
 
+import java.util.concurrent.TimeUnit
+
 import com.datastax.spark.connector.cql.CassandraConnector
 import com.datastax.spark.connector.streaming._
-import com.datastax.spark.connector.writer.RowWriterFactory
 import com.datastax.sparkstress.RowGenerator.PerfRowGenerator
 import com.datastax.sparkstress.RowTypes._
-import org.apache.spark.SparkContext
+import com.datastax.sparkstress.SparkStressImplicits._
+import com.datastax.sparkstress.StressTask._
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.storage.StorageLevel
-import org.apache.spark.streaming.{StreamingContext, _}
 import org.apache.spark.streaming.dstream.DStream
-import java.util.concurrent.TimeUnit
-import scala.reflect.ClassTag
+import org.apache.spark.streaming.{StreamingContext, _}
 
-import StressTask._
+import scala.reflect.ClassTag
 
 abstract class StreamingTask[rowType](
   val config: Config,

@@ -1,18 +1,18 @@
 package com.datastax.sparkstress
 
-import java.sql.Timestamp
+import java.time.{Instant, LocalDateTime, ZoneOffset}
 import java.util.UUID
 
-import org.apache.spark.sql.{DataFrame, SparkSession}
-import com.datastax.spark.connector.cql.CassandraConnector
-import com.datastax.sparkstress.RowTypes.PerfRowClass
 import com.datastax.spark.connector._
+import com.datastax.spark.connector.cql.CassandraConnector
+import com.datastax.sparkstress.DistributedDataType._
+import com.datastax.sparkstress.RowGenerator.instantToTimestamp
+import com.datastax.sparkstress.RowTypes.PerfRowClass
+import com.datastax.sparkstress.SaveMethod._
 import com.datastax.sparkstress.SparkStressImplicits._
-import org.joda.time.DateTime
 import org.apache.spark.sql.cassandra._
 import org.apache.spark.sql.functions._
-import SaveMethod._
-import DistributedDataType._
+import org.apache.spark.sql.{DataFrame, SparkSession}
 
 import scala.collection.mutable
 import scala.util.Random
@@ -21,11 +21,11 @@ abstract class ReadTask(config: Config, ss: SparkSession) extends StressTask {
 
   val sc = ss.sparkContext
   val uuidPivot = UUID.fromString("9b657ca1-bfb1-49c0-85f5-04b127adc6f3")
-  val timePivot = new DateTime(2000, 1, 1, 0, 0, 0, 0).plusSeconds(500)
+  val timePivot: Instant = LocalDateTime.of(2000, 1, 1, 0, 0, 0, 0).plusSeconds(500).toInstant(ZoneOffset.UTC)
   val keyspace = config.keyspace
   val table = config.table
 
-  val numberNodes = CassandraConnector(sc.getConf).withClusterDo(_.getMetadata.getAllHosts.size)
+  val numberNodes = clusterSize(CassandraConnector(sc.getConf))
   val tenthKeys: Int = config.numTotalKeys.toInt / 10
 
   val cores = sys.env.getOrElse("SPARK_WORKER_CORES", "1").toInt * numberNodes
@@ -165,7 +165,7 @@ class FTSFiveColumns(config: Config, ss: SparkSession) extends ReadTask(config, 
   override def performTask(): Long = {
     config.distributedDataType match {
       case RDD =>
-        sc.cassandraTable[(UUID, Int, String, String, org.joda.time.DateTime)](keyspace,
+        sc.cassandraTable[(UUID, Int, String, String, Instant)](keyspace,
           table)
           .select("order_number", "qty", "color", "size", "order_time")
           .count
@@ -187,7 +187,7 @@ class FTSPDClusteringAllColumns(config: Config, ss: SparkSession) extends ReadTa
           .count
       case DataFrame =>
         getDataFrame()
-          .filter(col("order_time") < lit(new Timestamp(timePivot.getMillis)))
+          .filter(col("order_time") < lit(instantToTimestamp(timePivot)))
           .rdd
           .count
     }
@@ -202,13 +202,13 @@ class FTSPDClusteringAllColumns(config: Config, ss: SparkSession) extends ReadTa
 class FTSPDClusteringFiveColumns(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
   override def performTask(): Long = config.distributedDataType match {
       case RDD =>
-        sc.cassandraTable[(UUID, Int, String, String, org.joda.time.DateTime)](keyspace, table)
+        sc.cassandraTable[(UUID, Int, String, String, Instant)](keyspace, table)
           .where("order_time < ?", timePivot)
           .select("order_number", "qty", "color", "size", "order_time")
           .count
       case DataFrame =>
         getDataFrame()
-          .filter(col("order_time") < lit(new Timestamp(timePivot.getMillis)))
+          .filter(col("order_time") < lit(instantToTimestamp(timePivot)))
           .select("order_number", "qty", "color", "size", "order_time")
           .rdd
           .count
@@ -270,7 +270,7 @@ class JWCPDClusteringAllColumns(config: Config, ss: SparkSession) extends ReadTa
         .count
     case DataFrame =>
       val joinTarget = getDataFrame()
-        .filter(col("order_time") < lit(new Timestamp(timePivot.getMillis)))
+        .filter(col("order_time") < lit(instantToTimestamp(timePivot)))
       ss
         .range(1, tenthKeys)
         .select(concat(lit("Store "), col("id")).as("key"))
