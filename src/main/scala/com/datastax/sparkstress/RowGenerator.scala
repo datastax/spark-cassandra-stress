@@ -134,7 +134,7 @@ object RowGenerator {
         val qty = qtys(r.nextInt(qtys.size))
         val store = s"Store ${pk + offset}"
         val order_number = new UUID(pk,ck)
-        val order_time = perftime.plusSeconds(r.nextInt(1000))
+        val order_time = java.util.Date.from(perftime.plusSeconds(r.nextInt(1000)))
         PerfRowClass(store, order_time, order_number, color, size, qty)
       }
     }
@@ -151,10 +151,8 @@ object RowGenerator {
 
   def getPerfRowDataFrame(ss: SparkSession, seed: Long, numPartitions: Int, numTotalRows: Long, numTotalKeys: Long): DataFrame = {
     import ss.implicits._
-    // There exists no encoder for Joda DateTimeObjects so let's build a tuple that the encoders can handle
-    getPerfRowRdd(ss, seed, numPartitions, numTotalRows, numTotalKeys).mapPartitions(
-      it => it.map( p => (p.store, instantToTimestamp(p.order_time), p.order_number.toString, p.color, p.size, p.qty))
-    ).toDF("store", "order_time", "order_number", "color", "size", "qty")
+    getPerfRowRdd(ss, seed, numPartitions, numTotalRows, numTotalKeys)
+      .toDF
   }
 
   def instantToTimestamp(instant: Instant): Timestamp = {

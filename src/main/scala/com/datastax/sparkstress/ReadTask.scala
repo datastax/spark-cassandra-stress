@@ -165,7 +165,7 @@ class FTSFiveColumns(config: Config, ss: SparkSession) extends ReadTask(config, 
   override def performTask(): Long = {
     config.distributedDataType match {
       case RDD =>
-        sc.cassandraTable[(UUID, Int, String, String, Instant)](keyspace,
+        sc.cassandraTable[(UUID, Int, String, String, java.util.Date)](keyspace,
           table)
           .select("order_number", "qty", "color", "size", "order_time")
           .count
@@ -202,7 +202,7 @@ class FTSPDClusteringAllColumns(config: Config, ss: SparkSession) extends ReadTa
 class FTSPDClusteringFiveColumns(config: Config, ss: SparkSession) extends ReadTask(config, ss) {
   override def performTask(): Long = config.distributedDataType match {
       case RDD =>
-        sc.cassandraTable[(UUID, Int, String, String, Instant)](keyspace, table)
+        sc.cassandraTable[(UUID, Int, String, String, java.util.Date)](keyspace, table)
           .where("order_time < ?", timePivot)
           .select("order_number", "qty", "color", "size", "order_time")
           .count
