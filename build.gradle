@@ -3,6 +3,24 @@ apply plugin: 'scala'
 
 version = '1.0'
 
+
+def determineDseHome() {
+    if (System.env.DSE_HOME == null && against == "dse") {
+        println("Warning: DSE_HOME not set.")
+        return "$Home/dse"
+    }
+    return System.env.DSE_HOME
+}
+
+def determineDseResources() {
+    if (System.env.DSE_RESOURCES == null && against == "dse") {
+        println("Warning: DSE_RESOURCES not set.")
+        return "$DseHome/resources"
+    }
+    return System.env.DSE_RESOURCES
+}
+
+
 if (!hasProperty('against')) {
     ext.against = 'dse'    // default
 }
@@ -12,8 +30,8 @@ ext {
     SparkVersion = '2.0.2'
     SparkConnectorVersion = '2.0.6'
     Home = System.env.HOME
-    DseHome = System.env.DSE_HOME ?: "$Home/dse"
-    DseResources = System.env.DSE_RESOURCES ?: "$Home/dse/resources/"
+    DseHome = determineDseHome()
+    DseResources = determineDseResources()
     mainClassName = "com.datastax.sparkstress.SparkCassandraStress"
 }
 
@@ -42,6 +60,9 @@ def SparkCCHome = System.env.SPARKCC_HOME ?:
 def deps = [
         dse   : {
             println "Using DSE libraries"
+            println "DSE_HOME = $DseHome"
+            println "DSE_RESOURCES = $DseResources"
+
             [
                     'dse/lib',
                     'driver/lib',
