@@ -161,7 +161,7 @@ sourceSets {
             //Api Change Catcher -- This is done to catch the CassandraCount Change in connector 1.2.4
             println(ConnectorVersion)
             def (major, minor, patch) = ConnectorVersion.split(/\./,3).collect { (it.find(/^\d+/).toInteger()) }
-            if (major <= 6 && minor <= 8) {
+            if ((against == 'dse' && major <= 6 && minor <= 8) || (major < 3)){
                 println("using spark-cassandra-stress compatibility layer for DSE 6.8.x or older")
                 srcDirs += 'src/connector/x-6.8'
             } else {

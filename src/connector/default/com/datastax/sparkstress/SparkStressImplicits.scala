@@ -26,7 +26,7 @@ object SparkStressImplicits {
         .getNodes
         .values()
         .asScala
-        .find(node => hostsInProvidedDC.contains(node.getEndPoint.resolve().asInstanceOf[InetSocketAddress].getAddress))
+        .find(node => hostsInProvidedDC.contains(node.getEndPoint.resolve().asInstanceOf[InetSocketAddress]))
         .map(_.getDatacenter)
         .getOrElse("Analytics")
     )
