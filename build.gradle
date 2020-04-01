@@ -3,14 +3,18 @@ apply plugin: 'scala'
 
 version = '1.0'
 
+def propertyOrDefault(String propertyName, String propertyDefault) {
+    project.hasProperty(propertyName) ? project.getProperty(propertyName) : propertyDefault
+}
+
 if (!hasProperty('against')) {
     ext.against = 'dse'    // default
 }
 ext {
-    scalaVersion = '2.11.12'
-    ScalaVersionShort = '2.11'
-    SparkVersion = '2.0.2'
-    SparkConnectorVersion = '2.0.6'
+    scalaVersion = propertyOrDefault("scalaVersion", '2.11.12')
+    ScalaVersionShort = scalaVersion.tokenize(".").subList(0,2).join(".")
+    SparkVersion = propertyOrDefault("sparkVersion", '2.0.2')
+    SparkConnectorVersion = propertyOrDefault("sparkConnectorVersion", '2.0.6')
     Home = System.env.HOME
     DseHome = System.env.DSE_HOME ?: "$Home/dse"
     DseResources = System.env.DSE_RESOURCES ?: "$Home/dse/resources/"
