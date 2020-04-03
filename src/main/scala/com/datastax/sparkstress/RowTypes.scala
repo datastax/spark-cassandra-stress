@@ -12,7 +12,7 @@ object RowTypes {
 
   case class PerfRowClass(
     store: String,
-    order_time: java.util.Date,
+    order_time: java.sql.Timestamp,
     order_number: UUID,
     color: String,
     size: String,

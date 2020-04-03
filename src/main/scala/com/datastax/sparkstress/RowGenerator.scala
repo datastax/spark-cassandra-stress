@@ -134,7 +134,7 @@ object RowGenerator {
         val qty = qtys(r.nextInt(qtys.size))
         val store = s"Store ${pk + offset}"
         val order_number = new UUID(pk,ck)
-        val order_time = java.util.Date.from(perftime.plusSeconds(r.nextInt(1000)))
+        val order_time = java.sql.Timestamp.from(perftime.plusSeconds(r.nextInt(1000)))
         PerfRowClass(store, order_time, order_number, color, size, qty)
       }
     }
