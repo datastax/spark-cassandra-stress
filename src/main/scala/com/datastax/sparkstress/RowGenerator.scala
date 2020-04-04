@@ -152,6 +152,7 @@ object RowGenerator {
   def getPerfRowDataFrame(ss: SparkSession, seed: Long, numPartitions: Int, numTotalRows: Long, numTotalKeys: Long): DataFrame = {
     import ss.implicits._
     getPerfRowRdd(ss, seed, numPartitions, numTotalRows, numTotalKeys)
+      .map( row => (row.store, row.order_time, row.order_number.toString, row.color, row.size, row.qty) )
       .toDF
   }
 
