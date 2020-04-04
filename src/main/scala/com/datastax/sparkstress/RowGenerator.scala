@@ -153,7 +153,7 @@ object RowGenerator {
     import ss.implicits._
     getPerfRowRdd(ss, seed, numPartitions, numTotalRows, numTotalKeys)
       .map( row => (row.store, row.order_time, row.order_number.toString, row.color, row.size, row.qty) )
-      .toDF
+      .toDF("store", "order_time", "order_number", "color", "size", "qty")
   }
 
   def instantToTimestamp(instant: Instant): Timestamp = {
