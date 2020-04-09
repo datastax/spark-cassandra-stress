@@ -3,6 +3,12 @@ apply plugin: 'scala'
 
 version = '1.0'
 
+repositories {
+    mavenCentral()
+    jcenter()
+    mavenLocal()
+}
+
 def propertyOrDefault(String propertyName, String propertyDefault) {
     project.hasProperty(propertyName) ? project.getProperty(propertyName) : propertyDefault
 }
@@ -10,6 +16,11 @@ def propertyOrDefault(String propertyName, String propertyDefault) {
 if (!hasProperty('against')) {
     ext.against = 'dse'    // default
 }
+
+// Parameter for building against Connector Repository
+def SparkCCHome = System.env.SPARKCC_HOME ?:
+        "$Home/repos/spark-cassandra-connector/"
+
 ext {
     scalaVersion = propertyOrDefault("scalaVersion", '2.11.12')
     ScalaVersionShort = scalaVersion.tokenize(".").subList(0,2).join(".")
@@ -36,12 +47,8 @@ def determineConnectorVersion() {
     }
 }
 
-// Parameters for buliding against Maven Libs
 def ConnectorVersion = determineConnectorVersion()
 
-// Parameter for building against Connector Repository
-def SparkCCHome = System.env.SPARKCC_HOME ?:
-        "$Home/repos/spark-cassandra-connector/"
 
 def deps = [
         dse   : {
@@ -163,7 +170,7 @@ sourceSets {
             }
 
             //Api Change Catcher -- This is done to catch the CassandraCount Change in connector 1.2.4
-            println(ConnectorVersion)
+            println("Connector version -> " + ConnectorVersion)
             def (major, minor, patch) = ConnectorVersion.split(/\./,3).collect { (it.find(/^\d+/).toInteger()) }
             if ((against == 'dse' && major <= 6 && minor <= 8) || (major < 3)){
                 println("using spark-cassandra-stress compatibility layer for DSE 6.8.x or older")
