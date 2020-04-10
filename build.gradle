@@ -17,10 +17,6 @@ if (!hasProperty('against')) {
     ext.against = 'dse'    // default
 }
 
-// Parameter for building against Connector Repository
-def SparkCCHome = System.env.SPARKCC_HOME ?:
-        "$Home/repos/spark-cassandra-connector/"
-
 ext {
     scalaVersion = propertyOrDefault("scalaVersion", '2.11.12')
     ScalaVersionShort = scalaVersion.tokenize(".").subList(0,2).join(".")
@@ -30,6 +26,7 @@ ext {
     DseHome = System.env.DSE_HOME ?: "$Home/dse"
     DseResources = System.env.DSE_RESOURCES ?: "$Home/dse/resources/"
     mainClassName = "com.datastax.sparkstress.SparkCassandraStress"
+    SparkCCHome =  System.env.SPARKCC_HOME ?: "$Home/repos/spark-cassandra-connector/"
 }
 
 def determineConnectorVersion() {
