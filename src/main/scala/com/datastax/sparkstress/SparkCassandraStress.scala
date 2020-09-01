@@ -5,7 +5,7 @@ import java.lang.Math.round
 import org.apache.spark.SparkConf
 import org.reflections.Reflections
 import org.apache.spark.sql.{SparkSession, SaveMode}
-import collection.JavaConversions._
+import collection.JavaConverters._
 import scala.math._
 
 object DistributedDataType extends Enumeration {
@@ -235,15 +235,15 @@ object SparkCassandraStress {
   }
 
   def getReadTests() = {
-    reflections.getTypesAnnotatedWith(classOf[ReadTest]).toSet
+    reflections.getTypesAnnotatedWith(classOf[ReadTest]).asScala.toSet
   }
 
   def getWriteTests() = {
-    reflections.getTypesAnnotatedWith(classOf[WriteTest]).toSet
+    reflections.getTypesAnnotatedWith(classOf[WriteTest]).asScala.toSet
   }
 
   def getStreamingTests() = {
-    reflections.getTypesAnnotatedWith(classOf[StreamingTest]).toSet
+    reflections.getTypesAnnotatedWith(classOf[StreamingTest]).asScala.toSet
   }
 
   def getValidTests() = {
