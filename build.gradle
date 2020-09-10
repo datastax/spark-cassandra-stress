@@ -148,7 +148,7 @@ dependencies {
         exclude group: 'dom4j', module: 'dom4j'
         exclude group: 'org.javassist', module: 'javassist'
     }
-    compile "com.github.scopt:scopt_$ScalaVersionShort:3.2.0"
+    compile "com.github.scopt:scopt_$ScalaVersionShort:3.7.0"
 
     println "Checking dependency flag: $against"
 
@@ -169,11 +169,11 @@ sourceSets {
             //Api Change Catcher -- This is done to catch the CassandraCount Change in connector 1.2.4
             println("Connector version -> " + ConnectorVersion)
             def (major, minor, patch) = ConnectorVersion.split(/\./,3).collect { (it.find(/^\d+/).toInteger()) }
-            if ((against == 'dse' && major <= 6 && minor <= 8) || (major < 3)){
-                println("using spark-cassandra-stress compatibility layer for DSE 6.8.x or older")
+            if ((against == 'dse' && major <= 6 && minor <= 8) || (major <= 2 && minor <= 4)){
+                println("using spark-cassandra-stress compatibility layer for DSE 6.8.x (or older) and SCC 2.4.x (or older)")
                 srcDirs += 'src/connector/x-6.8'
             } else {
-                println("using spark-cassandra-stress compatibility layer for DSE 6.9.x or newer")
+                println("using spark-cassandra-stress compatibility layer for DSE 6.9.x (or newer) and SCC 2.5.x (or newer)")
                 srcDirs += 'src/connector/default'
             }
 
